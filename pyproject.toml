@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vanta-admin"
-version = "0.1.3"
+version = "0.1.4"
 description = "A sharp, dark, and portable Django admin theme forged for builders who want the admin to feel less default."
 readme = "README.md"
 license = "MIT"
@@ -29,9 +29,9 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://vanta-admin.org/"
-Documentation = "https://github.com/oli-dev0/vanta-admin/blob/main/packages/vanta_admin/README.md"
-Repository = "https://github.com/oli-dev0/vanta-admin"
-Issues = "https://github.com/oli-dev0/vanta-admin/issues"
+Documentation = "https://github.com/oli-dev0/vanta-admin-theme/blob/main/README.md"
+Repository = "https://github.com/oli-dev0/vanta-admin-theme"
+Issues = "https://github.com/oli-dev0/vanta-admin-theme/issues"
 
 [tool.setuptools]
 include-package-data = false

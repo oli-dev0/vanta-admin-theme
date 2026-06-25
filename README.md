@@ -29,12 +29,12 @@ uv add vanta-admin
 
 ### Directly from GitHub with pip
 ```bash
-pip install "git+https://github.com/oli-dev0/vanta-admin.git@main#subdirectory=packages/vanta_admin"
+pip install "git+https://github.com/oli-dev0/vanta-admin-theme.git@main"
 ```
 
 ### Directly from GitHub with uv
 ```bash
-uv add "git+https://github.com/oli-dev0/vanta-admin.git@main#subdirectory=packages/vanta_admin"
+uv add "git+https://github.com/oli-dev0/vanta-admin-theme.git@main"
 ```
 
 ## Django Setup
@@ -62,5 +62,5 @@ python manage.py collectstatic
 
 ## Links
 - Website: https://vanta-admin.org/
-- Repository: https://github.com/oli-dev0/vanta-admin
-- Issues: https://github.com/oli-dev0/vanta-admin/issues
+- Repository: https://github.com/oli-dev0/vanta-admin-theme
+- Issues: https://github.com/oli-dev0/vanta-admin-theme/issues
