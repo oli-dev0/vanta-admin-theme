@@ -1,0 +1,151 @@
+{% load admin_theme %}
+
+<svg aria-hidden="true" class="admin-svg-defs" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="admin-icon-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" /></symbol>
+  <symbol id="admin-icon-arrow-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></symbol>
+  <symbol id="admin-icon-chevron" viewBox="0 0 24 24"><path d="m6 15 6-6 6 6" /></symbol>
+  <symbol id="admin-icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></symbol>
+  <symbol id="admin-icon-edit" viewBox="0 0 24 24"><path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" /></symbol>
+  <symbol id="admin-icon-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.7 2.7 8.7 7 10 4.3-1.3 7-5.3 7-10V6Z" /><path d="M12 8v8M8 12h8" /></symbol>
+  <symbol id="admin-icon-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.2a4 4 0 0 1 0 7.6" /></symbol>
+  <symbol id="admin-icon-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></symbol>
+  <symbol id="admin-icon-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" /><path d="M14 2v6h6M8 13h8M8 17h5" /></symbol>
+  <symbol id="admin-icon-card" viewBox="0 0 24 24"><path d="M4 4h16v16H4Z" /><path d="M8 8h8M8 12h8M8 16h5" /></symbol>
+  <symbol id="admin-icon-envelope" viewBox="0 0 24 24"><path d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z" /><path d="m22 8-10 6L2 8" /></symbol>
+  <symbol id="admin-icon-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" /></symbol>
+  <symbol id="admin-icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 7v6l4 2" /></symbol>
+  <symbol id="admin-icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></symbol>
+  <symbol id="admin-icon-moon" viewBox="0 0 24 24"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.7 6.7 0 0 0 21 12.8Z" /></symbol>
+  <symbol id="admin-icon-external" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><path d="M15 3h6v6M10 14 21 3" /></symbol>
+  <symbol id="admin-icon-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></symbol>
+  <symbol id="admin-icon-log-out" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><path d="M16 17l5-5-5-5M21 12H9" /></symbol>
+</svg>
+
+<nav class="admin-sidebar" id="nav-sidebar" aria-label="Admin navigation">
+  <div class="admin-sidebar__brand-row admin-sidebar-header">
+    <a class="admin-sidebar__brand" href="{% url 'admin:index' %}">{{ site_header|default:'Django admin' }}</a>
+    <div class="admin-sidebar__controls admin-sidebar-actions">
+      <button
+        class="admin-sidebar__collapse admin-sidebar-icon-btn admin-sidebar-icon-btn--collapse"
+        id="admin-sidebar-collapse"
+        type="button"
+        aria-controls="nav-sidebar"
+        aria-expanded="true"
+        aria-label="Collapse sidebar"
+      >
+        <svg class="admin-sidebar__collapse-arrow" aria-hidden="true"><use href="#admin-icon-arrow-left"></use></svg>
+        <span class="admin-sidebar__collapse-text">Collapse sidebar</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="admin-sidebar__groups">
+    {% if available_apps %}
+      {% for app in available_apps %}
+        {% if app.models %}
+          <details class="admin-sidebar__group{% if app.app_url in request.path|urlencode %} is-current-app{% endif %}" data-admin-nav-section="{{ app.app_label }}"{% if request.resolver_match.url_name == 'index' or app.app_url in request.path|urlencode %} open{% endif %}>
+            <summary class="admin-sidebar__group-title" aria-expanded="{% if request.resolver_match.url_name == 'index' or app.app_url in request.path|urlencode %}true{% else %}false{% endif %}">
+              <span>{% if app.app_label == 'auth' %}Auth{% else %}{{ app.name }}{% endif %}</span>
+              <svg class="admin-sidebar__chevron" aria-hidden="true"><use href="#admin-icon-chevron"></use></svg>
+            </summary>
+            <ul class="admin-sidebar__models">
+              {% for model in app.models %}
+                <li class="admin-sidebar__model{% if model.admin_url in request.path|urlencode %} is-current-model{% endif %}">
+                  {% if model.admin_url %}
+                    <a href="{{ model.admin_url }}"{% if model.admin_url in request.path|urlencode %} aria-current="page"{% endif %}>
+                      <svg aria-hidden="true">
+                        {% if model.object_name == 'Group' %}
+                          <use href="#admin-icon-users"></use>
+                        {% elif model.object_name == 'User' %}
+                          <use href="#admin-icon-user"></use>
+                        {% elif model.object_name == 'ContactMessage' %}
+                          <use href="#admin-icon-envelope"></use>
+                        {% elif model.object_name == 'Customer' %}
+                          <use href="#admin-icon-user"></use>
+                        {% elif model.object_name == 'MarketingCampaign' %}
+                          <use href="#admin-icon-clock"></use>
+                        {% elif model.object_name == 'Order' %}
+                          <use href="#admin-icon-file"></use>
+                        {% elif model.object_name == 'Product' %}
+                          <use href="#admin-icon-card"></use>
+                        {% elif model.object_name == 'Project' %}
+                          <use href="#admin-icon-folder"></use>
+                        {% elif model.object_name == 'Post' %}
+                          <use href="#admin-icon-card"></use>
+                        {% elif model.object_name == 'SupportTicket' %}
+                          <use href="#admin-icon-envelope"></use>
+                        {% else %}
+                          <use href="#admin-icon-file"></use>
+                        {% endif %}
+                      </svg>
+                      <span>{{ model.name }}</span>
+                    </a>
+                  {% else %}
+                    <span>
+                      <svg aria-hidden="true"><use href="#admin-icon-file"></use></svg>
+                      <span>{{ model.name }}</span>
+                    </span>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </details>
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      <p class="admin-sidebar__empty">You do not have permission to view or edit anything.</p>
+    {% endif %}
+  </div>
+
+  {% if user.is_authenticated %}
+    {% first_group_name user as group_name %}
+    <details class="admin-sidebar__account">
+      <summary class="admin-sidebar__account-summary">
+        <span class="admin-sidebar__avatar" aria-hidden="true">{{ user.get_username|first|upper }}</span>
+        <span class="admin-sidebar__account-copy">
+          <span class="admin-sidebar__username">{{ user.get_username }}</span>
+          {% if group_name %}
+            <span class="admin-sidebar__group-name">{{ group_name }}</span>
+          {% endif %}
+        </span>
+        <svg class="admin-sidebar__chevron" aria-hidden="true"><use href="#admin-icon-chevron"></use></svg>
+      </summary>
+
+      <div class="admin-sidebar__account-menu">
+        <div class="admin-sidebar__theme-controls" aria-label="Theme controls">
+          <button class="admin-sidebar__theme-button admin-sidebar__theme-button--light" type="button" data-admin-theme-value="light">
+            <svg aria-hidden="true"><use href="#admin-icon-sun"></use></svg>
+            <span>Light</span>
+          </button>
+          <button class="admin-sidebar__theme-button admin-sidebar__theme-button--dark" type="button" data-admin-theme-value="dark">
+            <svg aria-hidden="true"><use href="#admin-icon-moon"></use></svg>
+            <span>Dark</span>
+          </button>
+        </div>
+
+        <div class="admin-sidebar__account-links">
+          {% if site_url %}
+            <a href="{{ site_url }}">
+              <svg aria-hidden="true"><use href="#admin-icon-external"></use></svg>
+              <span>View site</span>
+            </a>
+          {% endif %}
+          {% if user.has_usable_password %}
+            <a href="{% url 'admin:password_change' %}">
+              <svg aria-hidden="true"><use href="#admin-icon-lock"></use></svg>
+              <span>Change password</span>
+            </a>
+          {% endif %}
+          <span class="admin-sidebar__account-divider" aria-hidden="true"></span>
+          <form method="post" action="{% url 'admin:logout' %}">
+            {% csrf_token %}
+            <button type="submit">
+              <svg aria-hidden="true"><use href="#admin-icon-log-out"></use></svg>
+              <span>Log out</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </details>
+  {% endif %}
+</nav>

@@ -1,0 +1,12 @@
+{% load i18n admin_theme %}
+<details data-filter-title="{{ title }}" open>
+  <summary>
+    {% blocktranslate with filter_title=title %} By {{ filter_title }} {% endblocktranslate %}
+  </summary>
+  <ul class="{% admin_filter_choice_layout choices %}">
+  {% for choice in choices %}
+    <li{% if choice.selected %} class="selected"{% endif %}>
+    <a href="{{ choice.query_string|iriencode }}">{{ choice.display|format_admin_facet_label }}</a></li>
+  {% endfor %}
+  </ul>
+</details>

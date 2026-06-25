@@ -1,0 +1,53 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% comment %}
+Thin local override entrypoint for admin branding and theme CSS.
+{% endcomment %}
+
+{% block extrastyle %}
+    {{ block.super }}
+{% endblock %}
+
+{% block responsive %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static "admin/css/responsive.css" %}">
+    <link rel="stylesheet" href="{% static 'admin/css/theme.css' %}">
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <script>
+      try {
+        if (localStorage.getItem('django.admin.theme.sidebar.openSections') !== null) {
+          document.documentElement.classList.add('admin-nav-state-pending');
+        }
+      } catch (error) {}
+    </script>
+    <script src="{% static 'admin/js/sidebar.js' %}" defer></script>
+{% endblock %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:'Django site admin' }}{% endblock %}
+
+{% block branding %}
+<div id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:'Django admin' }}</a></div>
+{% endblock %}
+
+{% block usertools %}
+{% if has_permission %}
+  <div id="user-tools" class="admin-header-tools">
+    <button
+      class="admin-sidebar-menu-button"
+      id="admin-sidebar-menu-button"
+      type="button"
+      aria-controls="nav-sidebar"
+      aria-expanded="false"
+      aria-label="Open admin navigation"
+    >
+      <span class="admin-sidebar-menu-icon" aria-hidden="true"></span>
+    </button>
+  </div>
+{% endif %}
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

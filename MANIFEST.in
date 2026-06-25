@@ -1,0 +1,2 @@
+recursive-include vanta_admin/templates *.html
+recursive-include vanta_admin/static *

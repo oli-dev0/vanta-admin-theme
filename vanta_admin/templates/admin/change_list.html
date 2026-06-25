@@ -1,0 +1,157 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_list %}
+
+{% block title %}{% if cl.formset and cl.formset.errors %}{% translate "Error:" %} {% endif %}{{ block.super }}{% endblock %}
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static "admin/css/changelists.css" %}">
+  {% if cl.formset %}
+    <link rel="stylesheet" href="{% static "admin/css/forms.css" %}">
+  {% endif %}
+  {% if cl.formset or action_form %}
+    <script src="{% url 'admin:jsi18n' %}"></script>
+  {% endif %}
+  {{ media.css }}
+  {% if not actions_on_top and not actions_on_bottom %}
+    <style>
+      #changelist table thead th:first-child { width: inherit; }
+    </style>
+  {% endif %}
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+{{ media.js }}
+<script src="{% static 'admin/js/filters.js' %}" defer></script>
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-list{% endblock %}
+
+{% if not is_popup %}
+{% block breadcrumbs %}
+{% include "admin/includes/breadcrumbs.html" with opts=cl.opts show_model_link=False only %}
+{% endblock %}
+{% endif %}
+
+{% block coltype %}{% endblock %}
+
+{% block content %}
+  <div id="content-main">
+    {% if cl.formset and cl.formset.errors %}
+        <p class="errornote">
+        {% blocktranslate count counter=cl.formset.total_error_count %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktranslate %}
+        </p>
+        {{ cl.formset.non_form_errors }}
+    {% endif %}
+    <div class="module{% if cl.has_filters %} filtered{% endif %}" id="changelist">
+      <div class="changelist-form-container">
+        {% block filters %}
+          {% if cl.has_filters %}
+          <search id="changelist-filter" aria-labelledby="changelist-filter-header">
+            <div class="admin-filter-header">
+              <button class="admin-filter-sections-toggle" id="admin-filter-sections-toggle" type="button" aria-label="{% translate 'Collapse all filter sections' %}" title="{% translate 'Collapse all filter sections' %}">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M3 5h18l-7 8v5l-4 2v-7Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </button>
+              <h2 id="changelist-filter-header">
+                <span>{% translate 'Filter' %}</span>
+              </h2>
+            </div>
+            {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
+            <div class="admin-filter-footer">
+              <div class="vanta-filter-actions{% if cl.add_facets or cl.has_active_filters %} has-active-action{% endif %}">
+                {% if cl.is_facets_optional %}
+                  {% if cl.add_facets %}
+                    <a class="vanta-filter-action is-active" href="{{ cl.remove_facet_link }}" aria-label="{% translate 'Hide counts' %}" title="{% translate 'Hide counts' %}">
+                      <svg aria-hidden="true" viewBox="0 0 24 24">
+                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <circle cx="12" cy="12" r="2.8" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+                      </svg>
+                    </a>
+                  {% else %}
+                    <a class="vanta-filter-action" href="{{ cl.add_facet_link }}" aria-label="{% translate 'Show counts' %}" title="{% translate 'Show counts' %}">
+                      <svg aria-hidden="true" viewBox="0 0 24 24">
+                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M4 4l16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                      </svg>
+                    </a>
+                  {% endif %}
+                {% else %}
+                  <span class="vanta-filter-action is-disabled" aria-hidden="true">
+                    <svg aria-hidden="true" viewBox="0 0 24 24">
+                      <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                      <path d="M4 4l16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                    </svg>
+                  </span>
+                {% endif %}
+                {% if cl.has_active_filters %}
+                  <a class="vanta-filter-action is-active" href="{{ cl.clear_all_filters_qs }}" aria-label="{% translate 'Clear filters' %}" title="{% translate 'Clear filters' %}">✕</a>
+                {% else %}
+                  <span class="vanta-filter-action is-disabled" aria-disabled="true" title="{% translate 'No active filters' %}">✕</span>
+                {% endif %}
+              </div>
+            </div>
+          </search>
+          {% endif %}
+        {% endblock %}
+        <div>
+          {% if cl.search_fields or has_add_permission %}
+            <div id="toolbar" class="admin-changelist-card-header">
+              {% block search %}
+                {% if cl.search_fields %}
+                  <h2 id="changelist-search-form" class="visually-hidden">{% blocktranslate with name=cl.opts.verbose_name_plural %}Search {{ name }}{% endblocktranslate %}</h2>
+                  <form id="changelist-search" method="get" role="search" aria-labelledby="changelist-search-form">
+                    <div>
+                      <span class="admin-search-field">
+                        <label for="searchbar"><img src="{% static "admin/img/search.svg" %}" alt="{% translate 'Search' %}"></label>
+                        <input type="text" size="40" name="q" value="{{ cl.query }}" id="searchbar"{% if cl.search_help_text %} aria-describedby="searchbar_helptext"{% endif %}>
+                        <input type="submit" value="{% translate 'Search' %}">
+                      </span>
+                      {% if cl.result_count != cl.full_result_count %}
+                        <span class="small quiet">{% blocktranslate count counter=cl.result_count %}{{ counter }} result{% plural %}{{ counter }} results{% endblocktranslate %} (<a href="?{% if is_popup %}_popup=1{% if cl.add_facets %}&{% endif %}{% endif %}{% if cl.add_facets %}_facets{% endif %}">{% if cl.show_full_result_count %}{% blocktranslate with full_result_count=cl.full_result_count %}{{ full_result_count }} total{% endblocktranslate %}{% else %}{% translate "Show all" %}{% endif %}</a>)</span>
+                      {% endif %}
+                      {% for pair in cl.params.items %}
+                        {% if pair.0 != "q" %}<input type="hidden" name="{{ pair.0 }}" value="{{ pair.1 }}">{% endif %}
+                      {% endfor %}
+                    </div>
+                    {% if cl.search_help_text %}
+                      <br class="clear">
+                      <div class="help" id="searchbar_helptext">{{ cl.search_help_text }}</div>
+                    {% endif %}
+                  </form>
+                {% endif %}
+              {% endblock %}
+              {% block object-tools %}
+                <ul class="object-tools">
+                  {% block object-tools-items %}
+                    {% change_list_object_tools %}
+                  {% endblock %}
+                </ul>
+              {% endblock %}
+            </div>
+          {% endif %}
+          {% block date_hierarchy %}{% if cl.date_hierarchy %}{% date_hierarchy cl %}{% endif %}{% endblock %}
+
+          <form id="changelist-form" method="post"{% if cl.formset and cl.formset.is_multipart %} enctype="multipart/form-data"{% endif %} novalidate>{% csrf_token %}
+          {% if cl.formset %}
+            <div>{{ cl.formset.management_form }}</div>
+          {% endif %}
+
+          {% block result_list %}
+            {% if action_form and actions_on_top and cl.show_admin_actions %}{% admin_actions %}{% endif %}
+            {% result_list cl %}
+            {% if action_form and actions_on_bottom and cl.show_admin_actions %}{% admin_actions %}{% endif %}
+          {% endblock %}
+          {% block pagination %}
+            <div class="changelist-footer">
+            {% pagination cl %}
+            {% if cl.formset and cl.result_count %}<input type="submit" name="_save" class="default" value="{% translate 'Save' %}">{% endif %}
+            </div>
+          {% endblock %}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vanta-admin"
+version = "0.1.3"
+description = "A sharp, dark, and portable Django admin theme forged for builders who want the admin to feel less default."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+  { name = "oli-dev0" }
+]
+classifiers = [
+  "Framework :: Django",
+  "Framework :: Django :: 6.0",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Environment :: Web Environment",
+  "Intended Audience :: Developers",
+]
+dependencies = [
+  "Django>=5.2,<7",
+]
+
+[project.urls]
+Homepage = "https://vanta-admin.org/"
+Documentation = "https://github.com/oli-dev0/vanta-admin/blob/main/packages/vanta_admin/README.md"
+Repository = "https://github.com/oli-dev0/vanta-admin"
+Issues = "https://github.com/oli-dev0/vanta-admin/issues"
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+include = ["vanta_admin*"]
+exclude = ["vanta_admin.static*", "vanta_admin.templates*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+vanta_admin = [
+  "templates/**/*.html",
+  "static/**/*",
+]
