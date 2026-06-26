@@ -163,6 +163,8 @@
 
         select.dataset.vantaEnhanced = 'true';
         select.classList.add('admin-action-select__native');
+        select.tabIndex = -1;
+        select.setAttribute('aria-hidden', 'true');
         select.required = false;
         label.classList.add('admin-action-select__label');
 

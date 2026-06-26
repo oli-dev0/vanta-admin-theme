@@ -1,0 +1,291 @@
+/* Responsive */
+
+@media (max-width: 1200px) {
+  :root {
+    --admin-sidebar-width: 260px;
+  }
+
+  #content.colMS {
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+  }
+
+  .admin-recent-card {
+    margin-top: 0;
+    max-width: 28rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  body:not(.popup) #header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 4rem;
+    width: auto;
+    padding: 0 1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--sidebar-bg);
+    backdrop-filter: blur(18px);
+  }
+
+  body:not(.popup) #header #branding {
+    flex: 1 1 auto;
+    width: auto;
+    margin: 0;
+    text-align: left;
+  }
+
+  body.login:not(.popup) #header {
+    justify-content: center;
+    min-height: 0;
+    padding: 0.45rem 1rem;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--admin-surface-raised) 92%, transparent), var(--admin-surface));
+  }
+
+  body.login:not(.popup) #header #branding {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  body.login form {
+    gap: 0.55rem;
+  }
+
+  body.login .form-row {
+    gap: 0.28rem;
+  }
+
+  body:not(.popup) #header #user-tools {
+    position: static;
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: flex-end;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .admin-header-tools {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .admin-sidebar-menu-button {
+    display: inline-grid;
+    place-items: center;
+    width: 2.65rem;
+    min-width: 2.65rem;
+    height: 2.65rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 0.39rem;
+    background: var(--surface-muted);
+    color: var(--heading);
+  }
+
+  body.admin-sidebar-mobile-open #admin-sidebar-menu-button {
+    visibility: hidden;
+  }
+
+  .admin-sidebar-menu-icon,
+  .admin-sidebar-menu-icon::before,
+  .admin-sidebar-menu-icon::after {
+    display: block;
+    width: 1.1rem;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+  }
+
+  .admin-sidebar-menu-icon {
+    position: relative;
+  }
+
+  .admin-sidebar-menu-icon::before,
+  .admin-sidebar-menu-icon::after {
+    content: "";
+    position: absolute;
+    left: 0;
+  }
+
+  .admin-sidebar-menu-icon::before {
+    top: -0.36rem;
+  }
+
+  .admin-sidebar-menu-icon::after {
+    top: 0.36rem;
+  }
+
+  .main,
+  body.admin-sidebar-collapsed .main {
+    display: block;
+  }
+
+  #content {
+    padding: 1.4rem;
+  }
+
+  #content.colMS {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(86vw, 320px);
+    max-height: none;
+    min-height: 100vh;
+    transform: translateX(-100%);
+  }
+
+  body.admin-sidebar-mobile-open .admin-sidebar {
+    transform: translateX(0);
+  }
+
+  body.admin-sidebar-mobile-open::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.42);
+  }
+
+  body.admin-sidebar-collapsed .admin-sidebar {
+    width: min(86vw, 320px);
+  }
+
+  body.admin-sidebar-collapsed .admin-sidebar__brand {
+    display: inline-block;
+  }
+
+  body.admin-sidebar-collapsed .admin-sidebar__groups,
+  body.admin-sidebar-collapsed .admin-sidebar__account {
+    display: block;
+  }
+
+  body.admin-sidebar-collapsed .admin-sidebar__sections-toggle {
+    display: inline-grid;
+  }
+
+  body.admin-sidebar-collapsed .admin-sidebar__brand-row {
+    justify-content: space-between;
+    padding: 0 1.45rem 0 1.75rem;
+  }
+
+  .admin-sidebar__account-menu {
+    right: 0;
+    left: auto;
+    bottom: calc(100% + 0.55rem);
+    width: min(12.7rem, calc(100vw - 2.4rem));
+  }
+
+  .admin-model-row {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+
+  .admin-model-actions {
+    justify-content: flex-start;
+  }
+
+  #changelist.filtered .changelist-form-container {
+    grid-template-columns: 1fr;
+  }
+
+  #changelist .changelist-form-container > div,
+  #changelist-filter {
+    grid-column: 1;
+  }
+
+  #changelist .changelist-form-container > div {
+    min-width: 0;
+  }
+
+  #changelist-filter {
+    position: static;
+  }
+}
+
+@media (max-width: 767px) {
+  body.login #content {
+    padding: 1rem;
+  }
+
+  body.login form {
+    gap: 0.5rem;
+  }
+
+  body.login .form-row {
+    gap: 0.25rem;
+  }
+
+  body.login .form-row input:not([type="hidden"]),
+  body.login .submit-row input[type="submit"] {
+    min-height: 2.25rem;
+  }
+
+  .admin-content-header {
+    margin-block: 1.4rem 1.2rem;
+  }
+
+  #content h1 {
+    font-size: clamp(1.55rem, 8vw, 2rem);
+  }
+
+  #changelist #toolbar,
+  #changelist .actions,
+  #changelist #toolbar form,
+  #changelist-search {
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  #changelist-search input[type="text"] {
+    flex: 1 1 12rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-sidebar,
+  .admin-sidebar__chevron,
+  .admin-sidebar__collapse,
+  .admin-sidebar-icon-btn,
+  .admin-sidebar__model a,
+  .admin-sidebar__account-links a,
+  .admin-sidebar__account-links button,
+  .admin-action-link {
+    transition: none;
+  }
+}
+
+/* Links are clean by default; only text-content links opt into hover underlines. */
+a,
+a *,
+a:link,
+a:visited,
+a:hover,
+a:focus,
+a:active,
+a:hover *,
+a:focus *,
+a:active * {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+}
+
+#changelist table a:hover,
+#changelist table a:focus,
+.admin-recent-action:hover strong,
+.admin-recent-action:focus strong {
+  text-decoration: underline !important;
+  text-decoration-line: underline !important;
+  text-underline-offset: 0.18em;
+}

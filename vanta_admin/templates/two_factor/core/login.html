@@ -1,0 +1,56 @@
+{% extends "two_factor/_base_focus.html" %}
+{% load i18n %}
+{% load two_factor_tags %}
+
+{% block extra_media %}
+  {{ form.media }}
+{% endblock %}
+
+{% block content %}
+  <h1>{% block title %}{% trans "Login" %}{% endblock %}</h1>
+
+  {% if wizard.steps.current == 'auth' %}
+    <p>{% blocktrans %}Enter your credentials.{% endblocktrans %}</p>
+  {% elif wizard.steps.current == 'token' %}
+    <p>{{ device|as_verbose_action }}</p>
+  {% elif wizard.steps.current == 'backup' %}
+    <p>{% blocktrans trimmed %}Use this form for entering backup tokens for logging in.
+      These tokens have been generated for you to print and keep safe. Please
+      enter one of these backup tokens to login to your account.{% endblocktrans %}</p>
+  {% endif %}
+
+  <form action="" method="post">
+    {% block main_form_content %}
+    {% csrf_token %}
+    {% include "two_factor/_wizard_forms.html" %}
+
+    <input type="submit" value="" hidden />
+
+    {% if other_devices %}
+      <p>{% trans "Or, alternatively, use one of your other authentication methods:" %}</p>
+      <p>
+        {% for other in other_devices %}
+        <button name="challenge_device" value="{{ other.persistent_id }}"
+                class="btn btn-secondary btn-block" type="submit">
+          {{ other|as_action }}
+        </button>
+      {% endfor %}</p>
+    {% endif %}
+
+    {% include "two_factor/_wizard_actions.html" %}
+    {% endblock %}
+  </form>
+
+  {% if backup_tokens %}
+    <form action="" method="post" class="vanta-two-factor-backup-form">
+      {% csrf_token %}
+      <button name="wizard_goto_step" type="submit" value="backup"
+              class="vanta-two-factor-backup-link">
+        <svg class="vanta-two-factor-backup-link__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+          <path d="M8.25 3.75a4.75 4.75 0 0 1 4.63 5.8l3.37 3.37a.75.75 0 0 1 0 1.06l-1.25 1.25a.75.75 0 0 1-1.06 0l-.69-.69-.97.97a.75.75 0 0 1-1.06 0l-.72-.72-.72.72a.75.75 0 0 1-1.06 0l-1.06-1.06a.75.75 0 0 1 0-1.06l3.37-3.37a4.75 4.75 0 1 1-2.78-6.27Zm0 1.5a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5Zm0 1.75a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" fill="currentColor"/>
+        </svg>
+        <span>{% trans "Use Backup Token" %}</span>
+      </button>
+    </form>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}{% endblock %} | Vanta Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <link rel="stylesheet" href="{% static 'admin/css/theme.css' %}">
+  <link rel="stylesheet" href="{% static 'admin/css/two_factor.css' %}">
+  {% block extra_media %}{% endblock %}
+</head>
+<body class="login vanta-two-factor">
+  {% block content_wrapper %}
+    <main id="content-start" class="vanta-two-factor-shell" tabindex="-1">
+      <section class="vanta-two-factor-panel" aria-label="Two-factor authentication">
+        <div class="vanta-two-factor-header">
+          <div class="vanta-two-factor-brand">
+            <span class="vanta-two-factor-brand__mark" aria-hidden="true"></span>
+            <span>Vanta Admin</span>
+          </div>
+          <a class="vanta-two-factor-admin-link" href="/admin/"><span class="vanta-two-factor-admin-link__arrow" aria-hidden="true">&larr;</span><span>Back to Admin</span></a>
+        </div>
+        {% block content %}{% endblock %}
+      </section>
+    </main>
+  {% endblock %}
+</body>
+</html>

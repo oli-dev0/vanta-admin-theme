@@ -5,6 +5,20 @@ and a standalone structure that stays close to Django's admin template system.
 It is designed to be portable and to avoid frontend runtime dependencies outside
 standard Django admin behavior.
 
+## What It Adds
+
+- A fixed sidebar with persistent collapsed state and remembered open sections.
+- Light and dark theme support through CSS tokens.
+- A denser dashboard, changelist, filter, message, and form presentation.
+- Default icons for common admin apps, models, and recent actions.
+- A responsive mobile sidebar overlay.
+- Optional themed templates for `django-two-factor-auth` login, setup completion,
+  account security, and backup-token flows.
+
+Vanta Admin does not replace Django admin, change your permissions, or configure
+two-factor authentication for you. If your project uses `django-two-factor-auth`,
+Vanta provides matching templates and CSS for the visible 2FA screens.
+
 ## Tested With
 Vanta Admin was created and tested with:
 
@@ -56,9 +70,32 @@ Then run your normal static asset flow for Django:
 python manage.py collectstatic
 ```
 
+## Optional Two-Factor Auth Theme Support
+
+If your project already uses `django-two-factor-auth`, place `vanta_admin` before
+the two-factor apps and before `django.contrib.admin` so Vanta's templates are
+found first:
+
+```python
+INSTALLED_APPS = [
+    'vanta_admin',
+    'django_otp',
+    'django_otp.plugins.otp_static',
+    'django_otp.plugins.otp_totp',
+    'two_factor',
+    'django.contrib.admin',
+    # ...
+]
+```
+
+Configure `django-two-factor-auth` normally in your project URLs and settings.
+Vanta only provides the theme layer.
+
 ## Notes
 - The package name on PyPI is `vanta-admin`.
 - The Django app label you add to `INSTALLED_APPS` is `vanta_admin`.
+- Two-factor auth support is visual/template support for projects that already
+  install and configure `django-two-factor-auth`.
 
 ## Links
 - Website: https://vanta-admin.org/

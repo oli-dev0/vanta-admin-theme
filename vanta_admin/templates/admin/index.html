@@ -1,4 +1,5 @@
 {% extends "admin/base_site.html" %}
+{% load admin_theme %}
 
 {% block coltype %}colMS{% endblock %}
 
@@ -16,17 +17,7 @@
     {% for app in app_list %}
       <section class="admin-module-card app-{{ app.app_label }}">
         <header class="admin-module-card__header">
-          <svg aria-hidden="true">
-            {% if app.app_label == 'auth' %}
-              <use href="#admin-icon-shield"></use>
-            {% elif app.app_label == 'contact' %}
-              <use href="#admin-icon-envelope"></use>
-            {% elif app.app_label == 'projects' %}
-              <use href="#admin-icon-folder"></use>
-            {% else %}
-              <use href="#admin-icon-file"></use>
-            {% endif %}
-          </svg>
+          <svg aria-hidden="true"><use href="#{{ app|admin_app_icon }}"></use></svg>
           <h2>{{ app.name }}</h2>
         </header>
 
@@ -35,9 +26,15 @@
             {% with model_name=model.object_name|lower %}
               <article class="admin-model-row model-{{ model_name }}">
                 {% if model.admin_url %}
-                  <a class="admin-model-name" href="{{ model.admin_url }}">{{ model.name }}</a>
+                  <a class="admin-model-name" href="{{ model.admin_url }}">
+                    <svg aria-hidden="true"><use href="#{{ model|admin_model_icon:app.app_label }}"></use></svg>
+                    <span>{{ model.name }}</span>
+                  </a>
                 {% else %}
-                  <span class="admin-model-name">{{ model.name }}</span>
+                  <span class="admin-model-name">
+                    <svg aria-hidden="true"><use href="#{{ model|admin_model_icon:app.app_label }}"></use></svg>
+                    <span>{{ model.name }}</span>
+                  </span>
                 {% endif %}
 
                 <div class="admin-model-actions">
@@ -93,7 +90,7 @@
         <li>
           {% if entry.is_deletion or not entry.get_admin_url %}
             <span class="admin-recent-action">
-              <svg aria-hidden="true"><use href="#admin-icon-file"></use></svg>
+              <svg aria-hidden="true"><use href="#{{ entry.content_type|admin_content_type_icon }}"></use></svg>
               <span>
                 <strong>{{ entry.object_repr }}</strong>
                 <small>{% if entry.content_type %}{% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}{% else %}Unknown content{% endif %}</small>

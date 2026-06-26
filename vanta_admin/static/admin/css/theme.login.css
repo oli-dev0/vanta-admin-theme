@@ -1,0 +1,231 @@
+/* Login */
+
+body.login #header {
+  display: flex;
+  justify-content: center;
+  min-height: 0;
+  padding: 0.45rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--admin-surface-raised) 92%, transparent), var(--admin-surface));
+}
+
+body.login #container {
+  min-height: 0;
+  width: min(28rem, calc(100vw - 2rem));
+  margin: clamp(2rem, 10vh, 6rem) auto;
+  overflow: hidden;
+  border: 1px solid var(--admin-border-strong);
+  border-radius: var(--admin-radius-xl);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--admin-surface-raised) 86%, transparent), var(--admin-surface));
+  box-shadow: var(--admin-shadow-card);
+  backdrop-filter: blur(18px);
+}
+
+body.login .main {
+  display: block;
+  min-height: 0;
+  width: auto;
+}
+
+body.login .main > .content,
+body.login #content {
+  width: auto;
+  max-width: none;
+}
+
+body.login #content {
+  padding: 1.25rem;
+}
+
+body.login .admin-content-header {
+  display: none;
+}
+
+body.login #branding,
+body.login #site-name,
+body.login #site-name a {
+  color: var(--admin-text);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+body.login #branding {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  justify-content: center;
+  text-align: center;
+}
+
+body.login #site-name {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  margin: 0 auto;
+}
+
+body.login #site-name a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+body.login #site-name a::before {
+  content: "";
+  width: 0.72rem;
+  height: 0.72rem;
+  border-radius: 999px;
+  background: var(--admin-accent);
+  box-shadow: 0 0 0 0.35rem var(--admin-accent-softer);
+}
+
+body.login #content-main {
+  margin: 0;
+}
+
+body.login form {
+  display: grid;
+  gap: 0.95rem;
+  margin: 0;
+}
+
+body.login .form-row {
+  display: grid;
+  gap: 0.42rem;
+  padding: 0;
+}
+
+body.login .form-row label {
+  color: var(--admin-muted);
+  font-size: 0.84rem;
+  font-weight: 760;
+  line-height: 1.25;
+}
+
+body.login .form-row input:not([type="hidden"]) {
+  min-height: 2.35rem;
+  width: 100%;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-md);
+  background: var(--input-bg);
+  color: var(--admin-text);
+  padding: 0.38rem 0.72rem;
+  font-size: 0.92rem;
+  font-weight: 650;
+}
+
+body.login .form-row #id_username,
+body.login .form-row #id_password {
+  background-position: 0.78rem center;
+  background-repeat: no-repeat;
+  background-size: 1rem;
+  padding-left: 2.45rem;
+}
+
+body.login .form-row #id_username {
+  background-image:
+    url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 21a8 8 0 0 0-16 0' stroke='%237f8a7b' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='12' cy='7' r='4' stroke='%237f8a7b' stroke-width='2'/%3E%3C/svg%3E");
+}
+
+body.login .form-row #id_password {
+  background-image:
+    url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='4' y='11' width='16' height='10' rx='2' stroke='%237f8a7b' stroke-width='2'/%3E%3Cpath d='M8 11V7a4 4 0 0 1 8 0v4' stroke='%237f8a7b' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+body.login .form-row input:not([type="hidden"]):hover {
+  border-color: var(--admin-border-strong);
+  background: var(--admin-surface-muted);
+}
+
+body.login .form-row input:not([type="hidden"]):focus {
+  outline: none;
+  border-color: var(--admin-accent-border);
+  background: var(--admin-surface);
+  box-shadow: 0 0 0 3px var(--admin-accent-soft);
+}
+
+body.login .submit-row {
+  margin: 0.25rem 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+body.login .submit-row input[type="submit"] {
+  width: 100%;
+  min-height: 2.35rem;
+  border: 0;
+  border-radius: var(--admin-radius-md);
+  background: var(--admin-accent);
+  color: var(--admin-button-text);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 820;
+  line-height: 1;
+  transition:
+    transform var(--admin-transition),
+    filter var(--admin-transition),
+    box-shadow var(--admin-transition);
+}
+
+body.login .submit-row input[type="submit"]:hover,
+body.login .submit-row input[type="submit"]:focus-visible {
+  filter: brightness(1.05);
+  box-shadow: 0 0 0 4px var(--admin-accent-soft);
+}
+
+body.login .submit-row input[type="submit"]:active {
+  transform: translateY(1px);
+}
+
+body.login .password-reset-link {
+  margin: -0.2rem 0 0;
+  text-align: right;
+}
+
+body.login .password-reset-link a {
+  color: var(--admin-link);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+body.login .password-reset-link a:hover,
+body.login .password-reset-link a:focus-visible {
+  color: var(--admin-link-strong);
+}
+
+body.login .errornote {
+  display: block;
+  margin: 0 0 0.85rem;
+  font-size: 0.92rem;
+}
+
+body.login .errornote,
+body.login ul.errorlist.nonfield {
+  border-color: rgba(255, 99, 99, 0.42);
+  border-left-color: #ff4d4d;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(122, 18, 18, 0.96),
+      rgba(155, 28, 28, 0.82)
+    );
+  color: #fff5f5;
+}
+
+body.login .errornote::before,
+body.login ul.errorlist.nonfield::before {
+  border-color: rgba(255, 143, 143, 0.92);
+  background: rgba(255, 143, 143, 0.16);
+  color: #ffd6d6;
+}
+
+body.login ul.errorlist.nonfield li {
+  color: #fff5f5;
+}

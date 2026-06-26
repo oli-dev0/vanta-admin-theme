@@ -1,0 +1,15 @@
+{% load i18n %}
+
+<div class="vanta-two-factor-actions">
+  <div class="vanta-two-factor-actions__primary">
+    {% if wizard.steps.prev %}
+      <button name="wizard_goto_step" type="submit"
+              value="{{ wizard.steps.prev }}"
+              formnovalidate
+              class="btn btn-secondary">{% trans "Back" %}</button>
+    {% else %}
+      <button disabled name="" type="button" class="btn btn-secondary">{% trans "Back" %}</button>
+    {% endif %}
+    <button type="submit" class="btn btn-primary">{% trans "Next" %}</button>
+  </div>
+</div>

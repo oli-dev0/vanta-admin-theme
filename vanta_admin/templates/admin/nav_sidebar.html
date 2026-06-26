@@ -41,7 +41,8 @@
 
   <div class="admin-sidebar__groups">
     {% if available_apps %}
-      {% for app in available_apps %}
+      {% grouped_admin_nav_apps available_apps as nav_apps %}
+      {% for app in nav_apps %}
         {% if app.models %}
           <details class="admin-sidebar__group{% if app.app_url in request.path|urlencode %} is-current-app{% endif %}" data-admin-nav-section="{{ app.app_label }}"{% if request.resolver_match.url_name == 'index' or app.app_url in request.path|urlencode %} open{% endif %}>
             <summary class="admin-sidebar__group-title" aria-expanded="{% if request.resolver_match.url_name == 'index' or app.app_url in request.path|urlencode %}true{% else %}false{% endif %}">
@@ -53,36 +54,12 @@
                 <li class="admin-sidebar__model{% if model.admin_url in request.path|urlencode %} is-current-model{% endif %}">
                   {% if model.admin_url %}
                     <a href="{{ model.admin_url }}"{% if model.admin_url in request.path|urlencode %} aria-current="page"{% endif %}>
-                      <svg aria-hidden="true">
-                        {% if model.object_name == 'Group' %}
-                          <use href="#admin-icon-users"></use>
-                        {% elif model.object_name == 'User' %}
-                          <use href="#admin-icon-user"></use>
-                        {% elif model.object_name == 'ContactMessage' %}
-                          <use href="#admin-icon-envelope"></use>
-                        {% elif model.object_name == 'Customer' %}
-                          <use href="#admin-icon-user"></use>
-                        {% elif model.object_name == 'MarketingCampaign' %}
-                          <use href="#admin-icon-clock"></use>
-                        {% elif model.object_name == 'Order' %}
-                          <use href="#admin-icon-file"></use>
-                        {% elif model.object_name == 'Product' %}
-                          <use href="#admin-icon-card"></use>
-                        {% elif model.object_name == 'Project' %}
-                          <use href="#admin-icon-folder"></use>
-                        {% elif model.object_name == 'Post' %}
-                          <use href="#admin-icon-card"></use>
-                        {% elif model.object_name == 'SupportTicket' %}
-                          <use href="#admin-icon-envelope"></use>
-                        {% else %}
-                          <use href="#admin-icon-file"></use>
-                        {% endif %}
-                      </svg>
+                      <svg aria-hidden="true"><use href="#{{ model|admin_model_icon:app.app_label }}"></use></svg>
                       <span>{{ model.name }}</span>
                     </a>
                   {% else %}
                     <span>
-                      <svg aria-hidden="true"><use href="#admin-icon-file"></use></svg>
+                      <svg aria-hidden="true"><use href="#{{ model|admin_model_icon:app.app_label }}"></use></svg>
                       <span>{{ model.name }}</span>
                     </span>
                   {% endif %}
@@ -95,6 +72,7 @@
     {% else %}
       <p class="admin-sidebar__empty">You do not have permission to view or edit anything.</p>
     {% endif %}
+
   </div>
 
   {% if user.is_authenticated %}

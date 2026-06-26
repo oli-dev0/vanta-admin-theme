@@ -1,0 +1,13 @@
+{% extends "two_factor/_base.html" %}
+
+{% block content_wrapper %}
+  <main id="content-start" class="vanta-two-factor-shell" tabindex="-1">
+    <section class="vanta-two-factor-panel" aria-label="Two-factor authentication">
+      <div class="vanta-two-factor-brand">
+        <span class="vanta-two-factor-brand__mark" aria-hidden="true"></span>
+        <span>Vanta Admin</span>
+      </div>
+      {% block content %}{% endblock %}
+    </section>
+  </main>
+{% endblock %}

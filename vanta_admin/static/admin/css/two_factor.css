@@ -1,0 +1,496 @@
+/* Two-factor authentication */
+
+body.vanta-two-factor {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--shell-bg);
+  color: var(--admin-text);
+  font-family: var(--site-font-body);
+}
+
+.vanta-two-factor-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 5vw, 3rem);
+}
+
+.vanta-two-factor-panel {
+  width: min(100%, 30rem);
+  padding: clamp(1.1rem, 4vw, 1.55rem);
+  border: 1px solid var(--admin-border-strong);
+  border-radius: var(--admin-radius-xl);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--admin-surface-raised) 86%, transparent), var(--admin-surface));
+  box-shadow: var(--admin-shadow-card);
+  backdrop-filter: blur(18px);
+}
+
+
+.vanta-two-factor-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin: 0;
+}
+
+.vanta-two-factor-admin-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.16rem;
+  margin-top: 0.08rem;
+  color: var(--admin-link);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.vanta-two-factor-admin-link:hover,
+.vanta-two-factor-admin-link:focus-visible {
+  color: var(--admin-link-strong);
+}
+
+.vanta-two-factor-admin-link__arrow {
+  display: inline-block;
+  font-size: 1.08rem;
+  line-height: 1;
+  transform: translateY(-0.20rem);
+}
+
+
+.vanta-two-factor-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 1.15rem;
+  color: var(--admin-text);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.vanta-two-factor-brand__mark {
+  width: 0.72rem;
+  height: 0.72rem;
+  border-radius: 999px;
+  background: var(--admin-accent);
+  box-shadow: 0 0 0 0.35rem var(--admin-accent-softer);
+}
+
+.vanta-two-factor h1 {
+  margin: 0 0 0.65rem;
+  color: var(--admin-text);
+  font-size: 1.35rem;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.vanta-two-factor p {
+  margin: 0 0 1rem;
+  color: var(--admin-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.vanta-two-factor form {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+}
+
+.vanta-two-factor form.vanta-two-factor-backup-form {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: -0.8rem;
+  gap: 0;
+}
+
+.vanta-two-factor button.vanta-two-factor-backup-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.34rem;
+  min-height: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--admin-link);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  box-shadow: none;
+}
+
+.vanta-two-factor button.vanta-two-factor-backup-link:hover,
+.vanta-two-factor button.vanta-two-factor-backup-link:focus-visible {
+  transform: none;
+  filter: none;
+  background: transparent;
+  color: var(--admin-link-strong);
+  box-shadow: none;
+}
+
+.vanta-two-factor-backup-link__icon {
+  width: 0.9rem;
+  height: 0.9rem;
+  flex: 0 0 auto;
+}
+
+
+.vanta-two-factor input[hidden] {
+  display: none !important;
+}
+
+.vanta-two-factor table {
+  width: 100%;
+  border-spacing: 0 0.75rem;
+}
+
+.vanta-two-factor th,
+.vanta-two-factor td {
+  display: block;
+  width: 100%;
+  padding: 0;
+  text-align: left;
+}
+
+.vanta-two-factor th {
+  margin-bottom: 0.35rem;
+  color: var(--admin-muted);
+  font-size: 0.84rem;
+  font-weight: 760;
+  line-height: 1.25;
+}
+
+.vanta-two-factor input:not([type="hidden"]),
+.vanta-two-factor select {
+  min-height: 2.35rem;
+  width: 100%;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-md);
+  background: var(--input-bg);
+  color: var(--admin-text);
+  padding: 0.38rem 0.72rem;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 650;
+}
+
+.vanta-two-factor input:not([type="hidden"]):hover,
+.vanta-two-factor select:hover {
+  border-color: var(--admin-border-strong);
+  background: var(--admin-surface-muted);
+}
+
+.vanta-two-factor input:not([type="hidden"]):focus,
+.vanta-two-factor select:focus {
+  outline: none;
+  border-color: var(--admin-accent-border);
+  background: var(--admin-surface);
+  box-shadow: 0 0 0 3px var(--admin-accent-soft);
+}
+
+.vanta-two-factor .btn,
+.vanta-two-factor button,
+.vanta-two-factor input[type="submit"]:not([hidden]) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  margin: 0.35rem 0.35rem 0 0;
+  padding: 0.52rem 0.82rem;
+  border: 1px solid transparent;
+  border-radius: var(--admin-radius-md);
+  background: linear-gradient(135deg, var(--admin-accent), var(--admin-accent-strong));
+  color: var(--admin-button-text);
+  box-shadow: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 820;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    transform var(--admin-transition),
+    filter var(--admin-transition),
+    box-shadow var(--admin-transition),
+    background-color var(--admin-transition),
+    border-color var(--admin-transition);
+}
+
+.vanta-two-factor .btn-primary,
+.vanta-two-factor .btn-success,
+.vanta-two-factor button[type="submit"]:not(.btn-secondary):not(.btn-warning):not(.btn-info):not(.btn-danger):not(.btn-link):not(.vanta-two-factor-backup-link),
+.vanta-two-factor input[type="submit"]:not([hidden]) {
+  background: linear-gradient(135deg, var(--admin-accent), var(--admin-accent-strong));
+  color: var(--admin-button-text);
+}
+
+.vanta-two-factor .btn-secondary,
+.vanta-two-factor .btn-warning,
+.vanta-two-factor .btn-info {
+  border-color: var(--admin-border-strong);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--admin-surface-raised) 94%, transparent),
+      color-mix(in srgb, var(--admin-surface-muted) 92%, transparent)
+    );
+  color: var(--admin-text);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.16);
+}
+
+.vanta-two-factor .btn-danger,
+.vanta-two-factor a.btn-danger,
+.vanta-two-factor button.btn-danger,
+.vanta-two-factor input.btn-danger {
+  border-color: color-mix(in srgb, #ff7a7a 44%, transparent);
+  background: #ff4d4d;
+  color: #ffecec !important;
+  -webkit-text-fill-color: #ffecec;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.14);
+  box-shadow: 0 12px 24px rgba(255, 77, 77, 0.18);
+}
+
+.vanta-two-factor .btn-link {
+  min-height: 38px;
+  padding: 0.52rem 0.2rem;
+  border-color: transparent;
+  background: transparent;
+  color: var(--admin-link);
+  box-shadow: none;
+}
+
+.vanta-two-factor a.btn:not(.btn-link),
+.vanta-two-factor a.btn:not(.btn-link):hover,
+.vanta-two-factor a.btn:not(.btn-link):focus-visible {
+  color: var(--admin-button-text);
+  text-decoration: none;
+}
+
+.vanta-two-factor .btn-danger *,
+.vanta-two-factor a.btn-danger,
+.vanta-two-factor a.btn-danger:hover,
+.vanta-two-factor a.btn-danger:focus-visible,
+.vanta-two-factor button.btn-danger,
+.vanta-two-factor button.btn-danger:hover,
+.vanta-two-factor button.btn-danger:focus-visible {
+  color: #ffecec !important;
+  -webkit-text-fill-color: #ffecec;
+}
+
+.vanta-two-factor a.btn-secondary:hover,
+.vanta-two-factor a.btn-secondary:focus-visible,
+.vanta-two-factor a.btn-warning:hover,
+.vanta-two-factor a.btn-warning:focus-visible,
+.vanta-two-factor a.btn-info:hover,
+.vanta-two-factor a.btn-info:focus-visible {
+  color: var(--admin-text);
+}
+
+.vanta-two-factor a.btn-danger:hover,
+.vanta-two-factor a.btn-danger:focus-visible {
+  color: #ffecec;
+}
+
+.vanta-two-factor .btn:hover,
+.vanta-two-factor button:hover,
+.vanta-two-factor input[type="submit"]:not([hidden]):hover,
+.vanta-two-factor .btn:focus-visible,
+.vanta-two-factor button:focus-visible,
+.vanta-two-factor input[type="submit"]:not([hidden]):focus-visible {
+  transform: translateY(-2px);
+  filter: brightness(1.04);
+  box-shadow: none;
+}
+
+.vanta-two-factor .btn-secondary:hover,
+.vanta-two-factor .btn-secondary:focus-visible,
+.vanta-two-factor .btn-warning:hover,
+.vanta-two-factor .btn-warning:focus-visible,
+.vanta-two-factor .btn-info:hover,
+.vanta-two-factor .btn-info:focus-visible {
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.2);
+}
+
+.vanta-two-factor .btn-danger:hover,
+.vanta-two-factor .btn-danger:focus-visible,
+.vanta-two-factor a.btn-danger:hover,
+.vanta-two-factor a.btn-danger:focus-visible,
+.vanta-two-factor button.btn-danger:hover,
+.vanta-two-factor button.btn-danger:focus-visible {
+  background: #ff5b5b;
+  color: #ffecec !important;
+  -webkit-text-fill-color: #ffecec;
+  box-shadow: 0 14px 28px rgba(255, 91, 91, 0.24);
+}
+
+.vanta-two-factor .btn:active,
+.vanta-two-factor button:active,
+.vanta-two-factor input[type="submit"]:not([hidden]):active {
+  transform: translateY(0);
+}
+
+.vanta-two-factor .btn:disabled,
+.vanta-two-factor button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.vanta-two-factor .btn-link:hover,
+.vanta-two-factor .btn-link:focus-visible {
+  transform: none;
+  filter: none;
+  color: var(--admin-link-strong);
+  box-shadow: none;
+}
+
+.vanta-two-factor .btn-block {
+  display: flex;
+  width: 100%;
+}
+
+.vanta-two-factor .btn-sm {
+  min-height: 34px;
+  padding: 0.42rem 0.68rem;
+  font-size: 0.78rem;
+}
+
+.vanta-two-factor-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0.55rem;
+}
+
+.vanta-two-factor-actions__primary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.vanta-two-factor-actions .btn,
+.vanta-two-factor-actions button,
+.vanta-two-factor-actions a.btn {
+  margin: 0;
+}
+
+.vanta-two-factor-actions .btn-link {
+  flex: 0 0 auto;
+}
+
+.vanta-two-factor p > .btn,
+.vanta-two-factor li .btn,
+.vanta-two-factor form .btn {
+  margin-top: 0;
+}
+
+.vanta-two-factor p:has(> .btn) {
+  margin-bottom: 0;
+}
+
+.vanta-two-factor .alert,
+.vanta-two-factor .errornote,
+.vanta-two-factor ul.errorlist {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 0.75rem;
+  padding: 0.22rem 0.75rem 0.22rem 2.25rem;
+  border: 1px solid var(--admin-error-border-soft);
+  border-left: 4px solid var(--admin-error);
+  border-radius: var(--admin-radius-lg);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--admin-error-surface-strong) 96%, transparent), var(--admin-error-surface));
+  color: var(--admin-error-copy);
+  font-size: 0.9rem;
+  font-family: var(--site-font-body);
+  font-weight: 560;
+  line-height: 1.45;
+  list-style: none;
+  overflow-wrap: anywhere;
+}
+
+.vanta-two-factor .alert::before,
+.vanta-two-factor .errornote::before,
+.vanta-two-factor ul.errorlist::before {
+  content: "!";
+  position: absolute;
+  top: 0.28rem;
+  left: 0.72rem;
+  display: grid;
+  place-items: center;
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 2px solid color-mix(in srgb, var(--admin-error) 90%, #fff);
+  border-radius: 999px;
+  background: var(--admin-error-icon-bg);
+  color: color-mix(in srgb, var(--admin-error) 82%, #fff);
+  font-size: 0.62rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.vanta-two-factor .errornote {
+  color: var(--admin-error-text-strong);
+  font-weight: 720;
+}
+
+.vanta-two-factor ul.errorlist li {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--admin-error-copy);
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.vanta-two-factor .bg-white,
+.vanta-two-factor img[src*="qrcode"] {
+  max-width: 100%;
+  height: auto;
+  padding: 0.65rem;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-md);
+  background: #fff;
+}
+
+.vanta-two-factor a {
+  color: var(--admin-link);
+  font-weight: 700;
+}
+
+.vanta-two-factor a:hover,
+.vanta-two-factor a:focus-visible {
+  color: var(--admin-link-strong);
+}
+
+@media (max-width: 767px) {
+  .vanta-two-factor-shell {
+    padding: 1rem;
+  }
+
+  .vanta-two-factor-panel {
+    padding: 1rem;
+  }
+
+  .vanta-two-factor-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .vanta-two-factor form {
+    gap: 0.55rem;
+  }
+}
