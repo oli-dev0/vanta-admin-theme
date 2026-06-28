@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vanta-admin"
-version = "0.1.5"
+version = "0.1.6"
 description = "A sharp, dark, and portable Django admin theme forged for builders who want the admin to feel less default."
 readme = "README.md"
 license = "MIT"
