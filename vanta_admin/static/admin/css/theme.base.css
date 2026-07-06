@@ -107,39 +107,87 @@ svg {
 
 ul.messagelist {
   position: absolute;
-  top: 1rem;
+  top: 0.9rem;
   left: clamp(1.25rem, 4vw, 4.25rem);
   z-index: 35;
   display: grid;
-  gap: 0.55rem;
+  justify-items: start;
+  gap: 0.45rem;
   margin: 0;
   padding: 0;
+  max-width: calc(100% - (2 * clamp(1.25rem, 4vw, 4.25rem)));
 }
 
 ul.messagelist li {
-  display: block;
-  width: 100%;
+  --admin-message-accent: var(--admin-error);
+  --admin-message-fill: color-mix(in srgb, var(--admin-message-accent) 16%, transparent);
+  --admin-message-icon: "!";
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 3.2rem;
+  width: fit-content;
   max-width: 100%;
   margin: 0;
-  padding: 0.22rem 0.75rem;
-  border: 1px solid var(--admin-error-border-soft);
-  border-left: 4px solid var(--admin-error);
-  border-radius: var(--admin-radius-lg);
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--admin-error-surface-strong) 96%, transparent), var(--admin-error-surface));
-  background-image: none;
-  color: var(--admin-error-copy);
+  padding: 0.62rem 1rem 0.62rem 3.85rem;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-xl);
+  background-color: var(--admin-error-surface-strong);
+  background-image: linear-gradient(90deg, var(--admin-message-fill), var(--admin-message-fill));
+  background-origin: border-box;
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: 0 100%;
+  color: var(--admin-text);
   box-shadow: none;
-  font-size: 0.92rem;
+  font-size: 0.98rem;
   font-family: var(--site-font-body);
-  font-weight: 520;
-  line-height: 1.45;
+  font-weight: 700;
+  line-height: 1.3;
   overflow-wrap: anywhere;
+  transition:
+    background-size 5000ms linear,
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+ul.messagelist li::before {
+  content: "";
+  position: absolute;
+  inset: -1px auto -1px -1px;
+  width: 0.45rem;
+  border-radius: var(--admin-radius-xl) 0 0 var(--admin-radius-xl);
+  background: var(--admin-message-accent);
+}
+
+ul.messagelist li::after {
+  content: var(--admin-message-icon);
+  position: absolute;
+  top: 50%;
+  left: 2rem;
+  display: grid;
+  place-items: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border: 2px solid var(--admin-message-accent);
+  border-radius: 999px;
+  color: var(--admin-message-accent);
+  font-size: 1.05rem;
+  font-weight: 720;
+  line-height: 1;
+  transform: translate(-50%, -50%);
 }
 
 ul.messagelist li.success {
-  background: var(--admin-success-bg);
-  color: var(--admin-accent-strong);
+  --admin-message-accent: var(--admin-success);
+  --admin-message-icon: "✓";
+  background-color: var(--admin-error-surface-strong);
+  background-image: linear-gradient(90deg, var(--admin-message-fill), var(--admin-message-fill));
+  background-origin: border-box;
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: 0 100%;
+  color: var(--admin-text);
 }
 
 ul.messagelist li.success a,
@@ -148,32 +196,36 @@ ul.messagelist li.success strong {
 }
 
 ul.messagelist li.warning {
-  background: var(--admin-error-bg);
-  color: var(--admin-error-text);
+  --admin-message-accent: var(--admin-warning);
+  --admin-message-icon: "!";
+  background-color: var(--admin-error-surface-strong);
+  background-image: linear-gradient(90deg, var(--admin-message-fill), var(--admin-message-fill));
+  background-origin: border-box;
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: 0 100%;
+  color: var(--admin-text);
 }
 
 ul.messagelist li.error {
-  position: relative;
-  padding-left: 2.55rem;
+  --admin-message-accent: var(--admin-error);
+  --admin-message-icon: "!";
+  background-color: var(--admin-error-surface-strong);
+  background-image: linear-gradient(90deg, var(--admin-message-fill), var(--admin-message-fill));
+  background-origin: border-box;
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: 0 100%;
+  color: var(--admin-text);
 }
 
-ul.messagelist li.error::before {
-  content: "!";
-  position: absolute;
-  top: 50%;
-  left: 1rem;
-  display: grid;
-  place-items: center;
-  width: 0.9rem;
-  height: 0.9rem;
-  border: 2px solid color-mix(in srgb, var(--admin-error) 90%, #fff);
-  border-radius: 999px;
-  background: var(--admin-error-icon-bg);
-  color: color-mix(in srgb, var(--admin-error) 82%, #fff);
-  font-size: 0.62rem;
-  font-weight: 800;
-  line-height: 1;
-  transform: translateY(-50%);
+ul.messagelist li.is-counting {
+  background-size: 100% 100%;
+}
+
+ul.messagelist li.is-removing {
+  opacity: 0;
+  transform: translateY(-0.2rem);
 }
 
 .errornote,
@@ -186,8 +238,7 @@ ul.errorlist li {
   border: 1px solid var(--admin-error-border-soft);
   border-left: 4px solid var(--admin-error);
   border-radius: var(--admin-radius-lg);
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--admin-error-surface-strong) 96%, transparent), var(--admin-error-surface));
+  background: var(--admin-error-surface);
   color: var(--admin-error-copy);
   box-shadow: none;
   font-size: 0.92rem;
@@ -257,7 +308,7 @@ td ul.errorlist + input,
 td ul.errorlist + select,
 td ul.errorlist + textarea {
   border-color: var(--admin-error-border-soft);
-  box-shadow: 0 0 0 1px var(--admin-error-border-soft);
+  box-shadow: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {

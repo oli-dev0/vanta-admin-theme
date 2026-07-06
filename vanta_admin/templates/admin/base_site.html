@@ -17,6 +17,7 @@ Thin local override entrypoint for admin branding and theme CSS.
 
 {% block extrahead %}
     {{ block.super }}
+    <link rel="icon" type="image/png" href="{% static 'admin/img/favicon.png' %}">
     <script>
       try {
         if (localStorage.getItem('django.admin.theme.sidebar.openSections') !== null) {

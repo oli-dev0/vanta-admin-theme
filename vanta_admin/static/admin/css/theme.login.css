@@ -6,8 +6,7 @@ body.login #header {
   min-height: 0;
   padding: 0.45rem 1rem;
   border-bottom: 1px solid var(--border);
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--admin-surface-raised) 92%, transparent), var(--admin-surface));
+  background: var(--admin-surface);
 }
 
 body.login #container {
@@ -17,10 +16,8 @@ body.login #container {
   overflow: hidden;
   border: 1px solid var(--admin-border-strong);
   border-radius: var(--admin-radius-xl);
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--admin-surface-raised) 86%, transparent), var(--admin-surface));
-  box-shadow: var(--admin-shadow-card);
-  backdrop-filter: blur(18px);
+  background: var(--admin-surface);
+  box-shadow: none;
 }
 
 body.login .main {
@@ -80,7 +77,6 @@ body.login #site-name a::before {
   height: 0.72rem;
   border-radius: 999px;
   background: var(--admin-accent);
-  box-shadow: 0 0 0 0.35rem var(--admin-accent-softer);
 }
 
 body.login #content-main {
@@ -145,7 +141,7 @@ body.login .form-row input:not([type="hidden"]):focus {
   outline: none;
   border-color: var(--admin-accent-border);
   background: var(--admin-surface);
-  box-shadow: 0 0 0 3px var(--admin-accent-soft);
+  box-shadow: none;
 }
 
 body.login .submit-row {
@@ -170,14 +166,12 @@ body.login .submit-row input[type="submit"] {
   line-height: 1;
   transition:
     transform var(--admin-transition),
-    filter var(--admin-transition),
-    box-shadow var(--admin-transition);
+    filter var(--admin-transition);
 }
 
 body.login .submit-row input[type="submit"]:hover,
 body.login .submit-row input[type="submit"]:focus-visible {
   filter: brightness(1.05);
-  box-shadow: 0 0 0 4px var(--admin-accent-soft);
 }
 
 body.login .submit-row input[type="submit"]:active {
@@ -208,24 +202,19 @@ body.login .errornote {
 
 body.login .errornote,
 body.login ul.errorlist.nonfield {
-  border-color: rgba(255, 99, 99, 0.42);
-  border-left-color: #ff4d4d;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(122, 18, 18, 0.96),
-      rgba(155, 28, 28, 0.82)
-    );
-  color: #fff5f5;
+  border-color: var(--admin-error-border-soft);
+  border-left-color: var(--admin-error);
+  background: var(--admin-error-surface);
+  color: var(--admin-error-copy);
 }
 
 body.login .errornote::before,
 body.login ul.errorlist.nonfield::before {
-  border-color: rgba(255, 143, 143, 0.92);
-  background: rgba(255, 143, 143, 0.16);
-  color: #ffd6d6;
+  border-color: var(--admin-error-border-soft);
+  background: var(--admin-error-icon-bg);
+  color: var(--admin-error-text-strong);
 }
 
 body.login ul.errorlist.nonfield li {
-  color: #fff5f5;
+  color: var(--admin-error-copy);
 }

@@ -20,10 +20,8 @@ body.vanta-two-factor {
   padding: clamp(1.1rem, 4vw, 1.55rem);
   border: 1px solid var(--admin-border-strong);
   border-radius: var(--admin-radius-xl);
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--admin-surface-raised) 86%, transparent), var(--admin-surface));
-  box-shadow: var(--admin-shadow-card);
-  backdrop-filter: blur(18px);
+  background: var(--admin-surface);
+  box-shadow: none;
 }
 
 
@@ -76,7 +74,6 @@ body.vanta-two-factor {
   height: 0.72rem;
   border-radius: 999px;
   background: var(--admin-accent);
-  box-shadow: 0 0 0 0.35rem var(--admin-accent-softer);
 }
 
 .vanta-two-factor h1 {
@@ -193,7 +190,7 @@ body.vanta-two-factor {
   outline: none;
   border-color: var(--admin-accent-border);
   background: var(--admin-surface);
-  box-shadow: 0 0 0 3px var(--admin-accent-soft);
+  box-shadow: none;
 }
 
 .vanta-two-factor .btn,
@@ -207,7 +204,7 @@ body.vanta-two-factor {
   padding: 0.52rem 0.82rem;
   border: 1px solid transparent;
   border-radius: var(--admin-radius-md);
-  background: linear-gradient(135deg, var(--admin-accent), var(--admin-accent-strong));
+  background: var(--admin-accent);
   color: var(--admin-button-text);
   box-shadow: none;
   cursor: pointer;
@@ -219,7 +216,6 @@ body.vanta-two-factor {
   transition:
     transform var(--admin-transition),
     filter var(--admin-transition),
-    box-shadow var(--admin-transition),
     background-color var(--admin-transition),
     border-color var(--admin-transition);
 }
@@ -228,7 +224,7 @@ body.vanta-two-factor {
 .vanta-two-factor .btn-success,
 .vanta-two-factor button[type="submit"]:not(.btn-secondary):not(.btn-warning):not(.btn-info):not(.btn-danger):not(.btn-link):not(.vanta-two-factor-backup-link),
 .vanta-two-factor input[type="submit"]:not([hidden]) {
-  background: linear-gradient(135deg, var(--admin-accent), var(--admin-accent-strong));
+  background: var(--admin-accent);
   color: var(--admin-button-text);
 }
 
@@ -236,26 +232,21 @@ body.vanta-two-factor {
 .vanta-two-factor .btn-warning,
 .vanta-two-factor .btn-info {
   border-color: var(--admin-border-strong);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--admin-surface-raised) 94%, transparent),
-      color-mix(in srgb, var(--admin-surface-muted) 92%, transparent)
-    );
+  background: var(--admin-surface-muted);
   color: var(--admin-text);
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.16);
+  box-shadow: none;
 }
 
 .vanta-two-factor .btn-danger,
 .vanta-two-factor a.btn-danger,
 .vanta-two-factor button.btn-danger,
 .vanta-two-factor input.btn-danger {
-  border-color: color-mix(in srgb, #ff7a7a 44%, transparent);
-  background: #ff4d4d;
-  color: #ffecec !important;
-  -webkit-text-fill-color: #ffecec;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.14);
-  box-shadow: 0 12px 24px rgba(255, 77, 77, 0.18);
+  border-color: var(--admin-error-border);
+  background: var(--admin-error);
+  color: var(--admin-error-text) !important;
+  -webkit-text-fill-color: var(--admin-error-text);
+  text-shadow: none;
+  box-shadow: none;
 }
 
 .vanta-two-factor .btn-link {
@@ -296,7 +287,7 @@ body.vanta-two-factor {
 
 .vanta-two-factor a.btn-danger:hover,
 .vanta-two-factor a.btn-danger:focus-visible {
-  color: #ffecec;
+  color: var(--admin-error-text);
 }
 
 .vanta-two-factor .btn:hover,
@@ -316,7 +307,7 @@ body.vanta-two-factor {
 .vanta-two-factor .btn-warning:focus-visible,
 .vanta-two-factor .btn-info:hover,
 .vanta-two-factor .btn-info:focus-visible {
-  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.2);
+  box-shadow: none;
 }
 
 .vanta-two-factor .btn-danger:hover,
@@ -325,10 +316,10 @@ body.vanta-two-factor {
 .vanta-two-factor a.btn-danger:focus-visible,
 .vanta-two-factor button.btn-danger:hover,
 .vanta-two-factor button.btn-danger:focus-visible {
-  background: #ff5b5b;
-  color: #ffecec !important;
-  -webkit-text-fill-color: #ffecec;
-  box-shadow: 0 14px 28px rgba(255, 91, 91, 0.24);
+  background: var(--admin-error);
+  color: var(--admin-error-text) !important;
+  -webkit-text-fill-color: var(--admin-error-text);
+  box-shadow: none;
 }
 
 .vanta-two-factor .btn:active,
@@ -409,8 +400,7 @@ body.vanta-two-factor {
   border: 1px solid var(--admin-error-border-soft);
   border-left: 4px solid var(--admin-error);
   border-radius: var(--admin-radius-lg);
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--admin-error-surface-strong) 96%, transparent), var(--admin-error-surface));
+  background: var(--admin-error-surface);
   color: var(--admin-error-copy);
   font-size: 0.9rem;
   font-family: var(--site-font-body);

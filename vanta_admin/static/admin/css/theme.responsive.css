@@ -27,7 +27,6 @@
     padding: 0 1rem;
     border-bottom: 1px solid var(--border);
     background: var(--sidebar-bg);
-    backdrop-filter: blur(18px);
   }
 
   body:not(.popup) #header #branding {
@@ -41,8 +40,7 @@
     justify-content: center;
     min-height: 0;
     padding: 0.45rem 1rem;
-    background:
-      linear-gradient(180deg, color-mix(in srgb, var(--admin-surface-raised) 92%, transparent), var(--admin-surface));
+    background: var(--admin-surface);
   }
 
   body.login:not(.popup) #header #branding {
@@ -281,8 +279,6 @@ a:active * {
   text-decoration-line: none !important;
 }
 
-#changelist table a:hover,
-#changelist table a:focus,
 .admin-recent-action:hover strong,
 .admin-recent-action:focus strong {
   text-decoration: underline !important;

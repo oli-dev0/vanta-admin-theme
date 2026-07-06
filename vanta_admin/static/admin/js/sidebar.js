@@ -16,7 +16,12 @@
     const mobileQuery = window.matchMedia('(max-width: 1024px)');
     const navSections = Array.from(document.querySelectorAll('[data-admin-nav-section]'));
     const filterSections = Array.from(document.querySelectorAll('#changelist-filter details'));
-    const actionSelects = Array.from(document.querySelectorAll('#changelist .actions select[name="action"]'));
+    const adminMessages = Array.from(document.querySelectorAll('ul.messagelist li'));
+    const customSelects = Array.from(document.querySelectorAll('select')).filter((select) => (
+        !select.multiple
+        && (!select.size || select.size <= 1)
+        && select.dataset.vantaEnhanced !== 'true'
+    ));
 
     function setCollapsed(isCollapsed, shouldPersist) {
         body.classList.toggle('admin-sidebar-collapsed', isCollapsed);
@@ -130,6 +135,35 @@
         }
     }
 
+    function dismissAdminMessage(message) {
+        message.classList.add('is-removing');
+        window.setTimeout(() => {
+            const messageList = message.closest('ul.messagelist');
+            message.remove();
+            if (messageList && messageList.children.length === 0) {
+                messageList.remove();
+            }
+        }, 180);
+    }
+
+    function startAdminMessageTimers() {
+        adminMessages.forEach((message) => {
+            message.classList.remove('is-counting', 'is-removing');
+            message.style.transition = 'none';
+            message.style.backgroundSize = '0 100%';
+            message.offsetWidth;
+
+            window.requestAnimationFrame(() => {
+                message.style.transition = '';
+                message.style.backgroundSize = '';
+                window.requestAnimationFrame(() => {
+                    message.classList.add('is-counting');
+                });
+            });
+            window.setTimeout(() => dismissAdminMessage(message), 5000);
+        });
+    }
+
     function applyTheme(theme) {
         if (!validThemeValues.has(theme)) {
             return;
@@ -148,11 +182,13 @@
 
     function enhanceActionSelect(select, index) {
         const label = select.closest('label');
-        if (!label || select.dataset.vantaEnhanced === 'true') {
+        if (select.dataset.vantaEnhanced === 'true') {
             return null;
         }
 
         const options = Array.from(select.options);
+        const isActionSelect = select.matches('#changelist .actions select[name="action"]');
+        const insertAfter = label && label.contains(select) ? label : select;
         const dropdown = document.createElement('div');
         const button = document.createElement('button');
         const buttonText = document.createElement('span');
@@ -166,11 +202,16 @@
         select.tabIndex = -1;
         select.setAttribute('aria-hidden', 'true');
         select.required = false;
-        label.classList.add('admin-action-select__label');
+        if (label) {
+            label.classList.add('admin-action-select__label');
+        }
 
-        dropdown.className = 'admin-action-select';
+        dropdown.className = isActionSelect
+            ? 'admin-action-select'
+            : 'admin-action-select admin-action-select--field';
         button.type = 'button';
         button.className = 'admin-action-select__button';
+        button.disabled = select.disabled;
         button.setAttribute('aria-haspopup', 'listbox');
         button.setAttribute('aria-expanded', 'false');
         button.setAttribute('aria-controls', menuId);
@@ -291,19 +332,20 @@
         });
 
         dropdown.append(button, menu);
-        label.after(dropdown);
+        insertAfter.after(dropdown);
         syncButtonLabel();
 
         return dropdown;
     }
 
-    const actionDropdowns = actionSelects
+    const customDropdowns = customSelects
         .map(enhanceActionSelect)
         .filter(Boolean);
 
     const storedCollapsed = localStorage.getItem(sidebarStateKey);
     setCollapsed(storedCollapsed === 'true', false);
     setMobileOpen(false);
+    startAdminMessageTimers();
     applyStoredOpenSections();
 
     const storedTheme = localStorage.getItem('theme');
@@ -363,7 +405,7 @@
             if (accountDetails) {
                 accountDetails.open = false;
             }
-            actionDropdowns.forEach((dropdown) => {
+            customDropdowns.forEach((dropdown) => {
                 dropdown.classList.remove('is-open');
                 dropdown.querySelector('.admin-action-select__button')?.setAttribute('aria-expanded', 'false');
             });
@@ -371,7 +413,7 @@
     });
 
     document.addEventListener('click', (event) => {
-        actionDropdowns.forEach((dropdown) => {
+        customDropdowns.forEach((dropdown) => {
             if (!dropdown.contains(event.target)) {
                 dropdown.classList.remove('is-open');
                 dropdown.querySelector('.admin-action-select__button')?.setAttribute('aria-expanded', 'false');

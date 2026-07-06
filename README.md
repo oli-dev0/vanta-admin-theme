@@ -9,8 +9,15 @@ standard Django admin behavior.
 
 - A fixed sidebar with persistent collapsed state and remembered open sections.
 - Light and dark theme support through CSS tokens.
+- A flatter visual pass that removes heavy shadows and blur effects from the
+  admin shell, login screens, cards, filters, and two-factor auth views.
 - A denser dashboard, changelist, filter, message, and form presentation.
-- Default icons for common admin apps, models, and recent actions.
+- Auto-dismissing admin messages with success, warning, and error treatment.
+- Custom single-select controls for changelist actions and normal admin form
+  selects, while native multi-selects stay unchanged.
+- Default icons for common admin apps, models, and recent actions, including
+  incident and uptime-monitor style models.
+- A packaged admin favicon loaded through the theme.
 - A responsive mobile sidebar overlay.
 - Optional themed templates for `django-two-factor-auth` login, setup completion,
   account security, and backup-token flows.
@@ -96,6 +103,8 @@ Vanta only provides the theme layer.
 - The Django app label you add to `INSTALLED_APPS` is `vanta_admin`.
 - Two-factor auth support is visual/template support for projects that already
   install and configure `django-two-factor-auth`.
+- Vanta keeps Django admin server-rendered. It does not add a frontend runtime
+  or a custom dashboard framework.
 
 ## Links
 - Website: https://vanta-admin.org/
