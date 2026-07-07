@@ -13,7 +13,9 @@
     const navFilter = document.getElementById('admin-nav-filter');
     const mobileQuery = window.matchMedia('(max-width: 1024px)');
     const navSections = Array.from(document.querySelectorAll('[data-admin-nav-section]'));
-    let isFilteringNavigation = false;
+    const programmaticSectionToggles = new WeakSet();
+    let filterBaselineOpenSections = null;
+    let hadFilterQuery = false;
 
     function setCollapsed(isCollapsed, shouldPersist) {
         body.classList.toggle('admin-sidebar-collapsed', isCollapsed);
@@ -60,11 +62,22 @@
         return section.dataset.adminNavSection;
     }
 
+    function isCurrentSection(section) {
+        return section.classList.contains('is-current-app');
+    }
+
     function syncSectionAria(section) {
         const summary = section.querySelector('.admin-sidebar__group-title');
         if (summary) {
             summary.setAttribute('aria-expanded', String(isSectionOpen(section)));
         }
+    }
+
+    function getCurrentOpenSections() {
+        return new Set(navSections
+            .filter(isSectionOpen)
+            .map(getSectionKey)
+            .filter(Boolean));
     }
 
     function getStoredOpenSections() {
@@ -77,16 +90,40 @@
     }
 
     function persistOpenSections() {
-        if (isFilteringNavigation) {
+        const openSections = Array.from(getCurrentOpenSections());
+
+        localStorage.setItem(navSectionsStateKey, JSON.stringify(openSections));
+    }
+
+    function persistFilteredSectionToggle(section) {
+        const sectionKey = getSectionKey(section);
+        if (!sectionKey) {
             return;
         }
 
-        const openSections = navSections
-            .filter(isSectionOpen)
-            .map(getSectionKey)
-            .filter(Boolean);
+        const openSections = new Set(filterBaselineOpenSections || getStoredOpenSections() || []);
 
-        localStorage.setItem(navSectionsStateKey, JSON.stringify(openSections));
+        if (isSectionOpen(section)) {
+            openSections.add(sectionKey);
+        } else {
+            openSections.delete(sectionKey);
+        }
+
+        filterBaselineOpenSections = openSections;
+        localStorage.setItem(navSectionsStateKey, JSON.stringify(Array.from(openSections)));
+    }
+
+    function setSectionOpen(section, isOpen, shouldPersist) {
+        if (section.open === isOpen) {
+            return;
+        }
+
+        if (!shouldPersist) {
+            programmaticSectionToggles.add(section);
+        }
+
+        section.open = isOpen;
+        syncSectionAria(section);
     }
 
     function normalizeFilterValue(value) {
@@ -105,7 +142,9 @@
         const query = normalizeFilterValue(navFilter.value);
         const hasQuery = query.length > 0;
 
-        isFilteringNavigation = true;
+        if (hasQuery && !hadFilterQuery) {
+            filterBaselineOpenSections = getCurrentOpenSections();
+        }
 
         navSections.forEach((section) => {
             const sectionTitle = section.querySelector('.admin-sidebar__group-title span');
@@ -124,32 +163,38 @@
             section.hidden = hasQuery && !matchesSection && !hasVisibleModel;
 
             if (hasQuery && !section.hidden) {
-                section.open = true;
+                setSectionOpen(section, true, false);
             }
 
             syncSectionAria(section);
         });
 
         if (!hasQuery) {
-            applyStoredOpenSections();
+            applyOpenSections(filterBaselineOpenSections || getStoredOpenSections());
             navSections.forEach((section) => {
                 section.hidden = false;
                 section.querySelectorAll('.admin-sidebar__model').forEach((item) => {
                     item.hidden = false;
                 });
             });
+            filterBaselineOpenSections = null;
         }
 
-        isFilteringNavigation = false;
+        hadFilterQuery = hasQuery;
     }
 
-    function applyStoredOpenSections() {
-        const storedOpenSections = getStoredOpenSections();
-
-        if (!storedOpenSections) {
+    function applyOpenSections(openSections, shouldPersist) {
+        if (!openSections) {
             root.classList.remove('admin-nav-state-pending');
             return;
         }
+
+        const nextOpenSections = new Set(openSections);
+        navSections
+            .filter(isCurrentSection)
+            .map(getSectionKey)
+            .filter(Boolean)
+            .forEach((sectionKey) => nextOpenSections.add(sectionKey));
 
         navSections.forEach((section) => {
             const sectionKey = getSectionKey(section);
@@ -157,11 +202,18 @@
                 return;
             }
 
-            section.open = storedOpenSections.has(sectionKey);
-            syncSectionAria(section);
+            setSectionOpen(section, nextOpenSections.has(sectionKey), false);
         });
 
+        if (shouldPersist) {
+            localStorage.setItem(navSectionsStateKey, JSON.stringify(Array.from(nextOpenSections)));
+        }
+
         root.classList.remove('admin-nav-state-pending');
+    }
+
+    function applyStoredOpenSections() {
+        applyOpenSections(getStoredOpenSections(), true);
     }
 
     const storedCollapsed = localStorage.getItem(sidebarStateKey);
@@ -190,6 +242,16 @@
         syncSectionAria(section);
         section.addEventListener('toggle', () => {
             syncSectionAria(section);
+            if (programmaticSectionToggles.has(section)) {
+                programmaticSectionToggles.delete(section);
+                return;
+            }
+
+            if (hadFilterQuery) {
+                persistFilteredSectionToggle(section);
+                return;
+            }
+
             persistOpenSections();
         });
     });
