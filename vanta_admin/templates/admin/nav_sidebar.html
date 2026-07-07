@@ -103,18 +103,41 @@
       </summary>
 
       <div class="admin-sidebar__account-menu">
-        <div class="admin-sidebar__theme-controls" aria-label="Theme controls">
-          <button class="admin-sidebar__theme-button admin-sidebar__theme-button--light" type="button" data-admin-theme-value="light">
-            <svg aria-hidden="true"><use href="#admin-icon-sun"></use></svg>
-            <span>Light</span>
-          </button>
-          <button class="admin-sidebar__theme-button admin-sidebar__theme-button--dark" type="button" data-admin-theme-value="dark">
-            <svg aria-hidden="true"><use href="#admin-icon-moon"></use></svg>
-            <span>Dark</span>
-          </button>
+        <div class="admin-sidebar__account-section admin-sidebar__display-section">
+          <div class="admin-sidebar__section-title">Display</div>
+          <div class="admin-sidebar__display-row">
+            <span class="admin-sidebar__display-label">
+              <svg aria-hidden="true"><use href="#admin-icon-sun"></use></svg>
+              <span>Theme</span>
+            </span>
+            <span class="admin-sidebar__theme-controls" aria-label="Theme controls">
+              <button class="admin-sidebar__theme-button admin-sidebar__theme-button--light" type="button" data-admin-theme-value="light">
+                <svg aria-hidden="true"><use href="#admin-icon-sun"></use></svg>
+                <span class="visually-hidden">Light</span>
+              </button>
+              <button class="admin-sidebar__theme-button admin-sidebar__theme-button--dark" type="button" data-admin-theme-value="dark">
+                <svg aria-hidden="true"><use href="#admin-icon-moon"></use></svg>
+                <span class="visually-hidden">Dark</span>
+              </button>
+            </span>
+          </div>
+          <div class="admin-sidebar__display-row">
+            <span class="admin-sidebar__display-label">
+              <svg aria-hidden="true"><use href="#admin-icon-clock"></use></svg>
+              <span>Time format</span>
+            </span>
+            <span class="admin-sidebar__time-controls" aria-label="Time format controls">
+              <button class="admin-sidebar__time-button admin-sidebar__time-button--12" type="button" data-admin-time-format-value="12">
+                <span>12h</span>
+              </button>
+              <button class="admin-sidebar__time-button admin-sidebar__time-button--24" type="button" data-admin-time-format-value="24">
+                <span>24h</span>
+              </button>
+            </span>
+          </div>
         </div>
 
-        <div class="admin-sidebar__account-links">
+        <div class="admin-sidebar__account-section admin-sidebar__account-links">
           {% if site_url %}
             <a href="{{ site_url }}">
               <svg aria-hidden="true"><use href="#admin-icon-external"></use></svg>
@@ -134,7 +157,9 @@
             <span class="donation-button__label">Buy me a coffee</span>
             <svg class="admin-sidebar__external-icon" aria-hidden="true"><use href="#admin-icon-external"></use></svg>
           </a>
-          <span class="admin-sidebar__account-divider" aria-hidden="true"></span>
+        </div>
+
+        <div class="admin-sidebar__account-section admin-sidebar__logout-section">
           <form method="post" action="{% url 'admin:logout' %}">
             {% csrf_token %}
             <button type="submit">

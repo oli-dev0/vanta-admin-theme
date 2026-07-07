@@ -332,8 +332,8 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
   position: absolute;
   bottom: -0.2rem;
   left: 10.45rem;
-  width: 12.7rem;
-  padding: 0.72rem;
+  width: 16.6rem;
+  padding: 0.42rem 0.72rem;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-md);
   background: var(--surface-strong);
@@ -341,17 +341,65 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
   color: var(--text);
 }
 
-.admin-sidebar__theme-controls {
+.admin-sidebar__account-section {
+  padding: 0.64rem 0;
+}
+
+.admin-sidebar__account-section + .admin-sidebar__account-section {
+  border-top: 1px solid var(--border);
+}
+
+.admin-sidebar__section-title {
+  margin: 0 0 0.48rem;
+  color: var(--subtle);
+  font-size: 0.72rem;
+  font-weight: 760;
+}
+
+.admin-sidebar__display-section {
+  display: grid;
+  gap: 0.38rem;
+}
+
+.admin-sidebar__display-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.28rem;
+  min-height: 2.15rem;
+}
+
+.admin-sidebar__display-label {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  gap: 0.18rem;
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 680;
+}
+
+.admin-sidebar__display-label svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  flex: 0 0 auto;
+  color: var(--muted);
+  transform: translateX(-0.08rem);
+}
+
+.admin-sidebar__theme-controls,
+.admin-sidebar__time-controls {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.32rem;
   padding: 0.25rem;
-  margin-bottom: 0.64rem;
+  width: 5.4rem;
   border-radius: 0.34rem;
   background: var(--surface-muted);
 }
 
-.admin-sidebar__theme-button {
+.admin-sidebar__theme-button,
+.admin-sidebar__time-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -365,20 +413,30 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
   cursor: pointer;
   font-size: 0.82rem;
   font-weight: 720;
+  white-space: nowrap;
+}
+
+.admin-sidebar__time-button {
+  letter-spacing: 0;
 }
 
 .admin-sidebar__theme-button svg {
-  width: 0.95rem;
-  height: 0.95rem;
+  width: 0.92rem;
+  height: 0.92rem;
 }
 
 html[data-theme="dark"] .admin-sidebar__theme-button--dark,
-html[data-theme="light"] .admin-sidebar__theme-button--light {
+html[data-theme="light"] .admin-sidebar__theme-button--light,
+.admin-sidebar__time-button[aria-pressed="true"] {
   color: var(--accent-strong);
   background: var(--accent-soft);
 }
 
 html[data-theme="light"] .admin-sidebar__theme-button--light {
+  background: var(--accent-softer);
+}
+
+html[data-theme="light"] .admin-sidebar__time-button[aria-pressed="true"] {
   background: var(--accent-softer);
 }
 
@@ -388,7 +446,8 @@ html[data-theme="light"] .admin-sidebar__theme-button--light {
 }
 
 .admin-sidebar__account-links a,
-.admin-sidebar__account-links button {
+.admin-sidebar__account-links button,
+.admin-sidebar__logout-section button {
   display: flex;
   align-items: center;
   gap: 0.68rem;
@@ -409,7 +468,8 @@ html[data-theme="light"] .admin-sidebar__theme-button--light {
     transform 130ms var(--ease);
 }
 
-.admin-sidebar__account-links svg {
+.admin-sidebar__account-links svg,
+.admin-sidebar__logout-section svg {
   width: 1rem;
   height: 1rem;
   color: var(--muted);
@@ -486,13 +546,15 @@ html[data-theme="light"] .admin-sidebar__theme-button--light {
 .admin-sidebar__account-links .admin-sidebar__external-icon {
   width: 0.86rem;
   height: 0.86rem;
-  margin-left: auto;
+  margin-left: 0.58rem;
 }
 
 .admin-sidebar__account-links a:hover,
 .admin-sidebar__account-links a:focus,
 .admin-sidebar__account-links button:hover,
-.admin-sidebar__account-links button:focus {
+.admin-sidebar__account-links button:focus,
+.admin-sidebar__logout-section button:hover,
+.admin-sidebar__logout-section button:focus {
   color: var(--accent-strong);
   background: var(--accent-softer);
   transform: translateX(1px);
@@ -501,15 +563,10 @@ html[data-theme="light"] .admin-sidebar__theme-button--light {
 .admin-sidebar__account-links a:hover svg,
 .admin-sidebar__account-links a:focus svg,
 .admin-sidebar__account-links button:hover svg,
-.admin-sidebar__account-links button:focus svg {
+.admin-sidebar__account-links button:focus svg,
+.admin-sidebar__logout-section button:hover svg,
+.admin-sidebar__logout-section button:focus svg {
   color: var(--accent);
-}
-
-.admin-sidebar__account-divider {
-  display: block;
-  height: 1px;
-  margin: 0.42rem 0.24rem;
-  background: var(--border);
 }
 
 @keyframes donation-steam {

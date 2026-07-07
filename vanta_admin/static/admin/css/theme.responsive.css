@@ -182,7 +182,7 @@
     right: 0;
     left: auto;
     bottom: calc(100% + 0.55rem);
-    width: min(12.7rem, calc(100vw - 2.4rem));
+    width: min(16.6rem, calc(100vw - 2.4rem));
   }
 
   .admin-model-row {

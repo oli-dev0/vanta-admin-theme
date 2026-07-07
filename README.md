@@ -22,8 +22,12 @@ feels more deliberate in everyday use.
 - Styled select controls for common admin dropdowns, while Django's native
   multi-select fields stay unchanged.
 - Built-in icons for common admin areas, models, and recent actions.
-- A cleaner account menu with theme controls, project links, password access,
-  logout, and a Vanta support link.
+- A cleaner account menu with display preferences, project links, password
+  access, logout, and a Vanta support link.
+- A 12-hour and 24-hour time-format preference for changelist date/time values,
+  stored in the browser for each admin user.
+- Shorter changelist date formatting that makes date-heavy tables easier to
+  scan.
 - A packaged favicon for the admin.
 - A mobile sidebar overlay that makes the admin easier to use on smaller
   screens.
