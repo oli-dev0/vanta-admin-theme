@@ -10,7 +10,9 @@ feels more deliberate in everyday use.
 ## What It Adds
 
 - A cleaner admin layout with a fixed sidebar that remembers how you left it.
+- A sidebar navigation filter that lets users quickly narrow large admin menus by app or model name.
 - Light and dark mode, using the same calm Vanta look across the admin.
+- A more settled light-mode palette with clearer search focus states and stronger changelist table headers.
 - Less visual noise on the main admin screens, login pages, cards, filters, and
   two-factor auth pages.
 - Denser dashboards, tables, filters, messages, and forms so admin work feels

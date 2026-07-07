@@ -112,11 +112,66 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
   white-space: nowrap;
 }
 
+.admin-sidebar__filter {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0.85rem 1rem 0;
+}
+
+.admin-sidebar__filter::before {
+  content: "";
+  position: absolute;
+  left: 1.72rem;
+  width: 0.95rem;
+  height: 0.95rem;
+  background: var(--accent);
+  mask: url("../img/search.svg") center / contain no-repeat;
+  -webkit-mask: url("../img/search.svg") center / contain no-repeat;
+  pointer-events: none;
+}
+
+#nav-sidebar .admin-sidebar__filter input[type="search"] {
+  width: 100%;
+  min-height: 2rem;
+  border: 0;
+  border-radius: 0.27rem;
+  background: var(--surface-muted);
+  color: var(--text);
+  padding: 0.32rem 0.7rem 0.32rem 2.65rem;
+  font-size: 0.82rem;
+  font-weight: 650;
+  outline: none;
+  transition:
+    background-color var(--admin-transition),
+    color var(--admin-transition);
+}
+
+#nav-sidebar .admin-sidebar__filter input[type="search"]::placeholder {
+  color: var(--admin-muted);
+  opacity: 0.82;
+}
+
+#nav-sidebar .admin-sidebar__filter input[type="search"]:focus,
+#nav-sidebar .admin-sidebar__filter input[type="search"]:focus-visible {
+  background: var(--surface);
+  box-shadow: none;
+}
+
+#nav-sidebar .admin-sidebar__filter input[type="search"]::-webkit-search-decoration {
+  appearance: none;
+}
+
+html[data-theme="light"] #nav-sidebar .admin-sidebar__filter input[type="search"]:focus,
+html[data-theme="light"] #nav-sidebar .admin-sidebar__filter input[type="search"]:focus-visible {
+  background: #e8f1fa;
+}
+
 .admin-sidebar__groups {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
-  padding: 0.9rem 1rem 8.25rem;
+  padding: 0.65rem 1rem 8.25rem;
   scrollbar-color: var(--border-strong) transparent;
   scrollbar-width: thin;
 }
@@ -350,7 +405,7 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
 }
 
 .admin-sidebar__section-title {
-  margin: 0 0 0.48rem;
+  margin: 0 0 0.24rem;
   color: var(--subtle);
   font-size: 0.72rem;
   font-weight: 760;
@@ -358,7 +413,7 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
 
 .admin-sidebar__display-section {
   display: grid;
-  gap: 0.38rem;
+  gap: 0.16rem;
 }
 
 .admin-sidebar__display-row {
@@ -391,9 +446,9 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
 .admin-sidebar__time-controls {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.32rem;
-  padding: 0.25rem;
-  width: 5.4rem;
+  gap: 0.24rem;
+  padding: 0.18rem;
+  width: 4.75rem;
   border-radius: 0.34rem;
   background: var(--surface-muted);
 }
@@ -404,8 +459,8 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
   align-items: center;
   justify-content: center;
   gap: 0.42rem;
-  min-height: 2.05rem;
-  padding: 0 0.58rem;
+  min-height: 1.62rem;
+  padding: 0 0.38rem;
   border: 0;
   border-radius: 0.27rem;
   background: transparent;
@@ -591,6 +646,7 @@ body.admin-sidebar-collapsed .admin-sidebar {
 }
 
 body.admin-sidebar-collapsed .admin-sidebar__brand,
+body.admin-sidebar-collapsed .admin-sidebar__filter,
 body.admin-sidebar-collapsed .admin-sidebar__groups,
 body.admin-sidebar-collapsed .admin-sidebar__account {
   display: none;
@@ -1132,6 +1188,11 @@ select,
   max-width: 16.8rem;
 }
 
+html[data-theme="light"] #changelist-search input[type="text"]:focus,
+html[data-theme="light"] #changelist input[type="search"]:focus {
+  background: #e8f1fa;
+}
+
 #changelist .actions select {
   appearance: none;
   min-height: 1.5rem;
@@ -1576,6 +1637,10 @@ input[type="checkbox"]:focus-visible {
   vertical-align: middle;
 }
 
+html[data-theme="light"] #changelist table thead th {
+  background: #d5e3f1;
+}
+
 #changelist table thead th:first-child {
   border-radius: var(--admin-radius-sm) 0 0 var(--admin-radius-sm);
 }
@@ -1620,6 +1685,11 @@ input[type="checkbox"]:focus-visible {
   transform: translateY(-2px);
 }
 
+html[data-theme="light"] #changelist table thead th a:hover,
+html[data-theme="light"] #changelist table thead th a:focus {
+  background: #c7d9eb;
+}
+
 #changelist table thead th a:focus-visible {
   outline: 2px solid var(--admin-accent);
   outline-offset: 2px;
@@ -1636,6 +1706,11 @@ input[type="checkbox"]:focus-visible {
   background: var(--admin-nav-item-active-bg) !important;
   color: var(--admin-accent-strong);
   vertical-align: middle;
+}
+
+html[data-theme="light"] #changelist table thead th.sorted .text,
+html[data-theme="light"] #changelist table thead th.sorted .sortoptions {
+  background: #c7d9eb !important;
 }
 
 #changelist table thead th.sorted .text {

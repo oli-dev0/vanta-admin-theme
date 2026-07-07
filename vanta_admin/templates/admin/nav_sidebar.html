@@ -52,6 +52,19 @@
     </div>
   </div>
 
+  {% if available_apps %}
+    <div class="admin-sidebar__filter">
+      <label class="visually-hidden" for="admin-nav-filter">Filter navigation items</label>
+      <input
+        type="search"
+        id="admin-nav-filter"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="Start typing to filter..."
+      >
+    </div>
+  {% endif %}
+
   <div class="admin-sidebar__groups">
     {% if available_apps %}
       {% grouped_admin_nav_apps available_apps as nav_apps %}

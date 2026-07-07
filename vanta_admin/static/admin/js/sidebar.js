@@ -10,8 +10,10 @@
     const collapseButton = document.getElementById('admin-sidebar-collapse');
     const menuButton = document.getElementById('admin-sidebar-menu-button');
     const accountDetails = document.querySelector('.admin-sidebar__account');
+    const navFilter = document.getElementById('admin-nav-filter');
     const mobileQuery = window.matchMedia('(max-width: 1024px)');
     const navSections = Array.from(document.querySelectorAll('[data-admin-nav-section]'));
+    let isFilteringNavigation = false;
 
     function setCollapsed(isCollapsed, shouldPersist) {
         body.classList.toggle('admin-sidebar-collapsed', isCollapsed);
@@ -75,12 +77,70 @@
     }
 
     function persistOpenSections() {
+        if (isFilteringNavigation) {
+            return;
+        }
+
         const openSections = navSections
             .filter(isSectionOpen)
             .map(getSectionKey)
             .filter(Boolean);
 
         localStorage.setItem(navSectionsStateKey, JSON.stringify(openSections));
+    }
+
+    function normalizeFilterValue(value) {
+        return value.trim().toLowerCase();
+    }
+
+    function getNavItemText(element) {
+        return element.textContent.trim().toLowerCase();
+    }
+
+    function filterNavigation() {
+        if (!navFilter) {
+            return;
+        }
+
+        const query = normalizeFilterValue(navFilter.value);
+        const hasQuery = query.length > 0;
+
+        isFilteringNavigation = true;
+
+        navSections.forEach((section) => {
+            const sectionTitle = section.querySelector('.admin-sidebar__group-title span');
+            const modelItems = Array.from(section.querySelectorAll('.admin-sidebar__model'));
+            const matchesSection = sectionTitle && getNavItemText(sectionTitle).includes(query);
+            let hasVisibleModel = false;
+
+            modelItems.forEach((item) => {
+                const matchesModel = getNavItemText(item).includes(query);
+                const isVisible = !hasQuery || matchesSection || matchesModel;
+
+                item.hidden = !isVisible;
+                hasVisibleModel = hasVisibleModel || isVisible;
+            });
+
+            section.hidden = hasQuery && !matchesSection && !hasVisibleModel;
+
+            if (hasQuery && !section.hidden) {
+                section.open = true;
+            }
+
+            syncSectionAria(section);
+        });
+
+        if (!hasQuery) {
+            applyStoredOpenSections();
+            navSections.forEach((section) => {
+                section.hidden = false;
+                section.querySelectorAll('.admin-sidebar__model').forEach((item) => {
+                    item.hidden = false;
+                });
+            });
+        }
+
+        isFilteringNavigation = false;
     }
 
     function applyStoredOpenSections() {
@@ -133,6 +193,10 @@
             persistOpenSections();
         });
     });
+
+    if (navFilter) {
+        navFilter.addEventListener('input', filterNavigation);
+    }
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
