@@ -229,17 +229,19 @@ ul.messagelist li.is-removing {
 }
 
 .errornote,
-ul.errorlist,
-ul.errorlist li {
-  width: 100%;
+ul.errorlist {
+  --admin-message-accent: var(--admin-error);
+  --admin-inline-error-icon: color-mix(in srgb, var(--admin-message-accent) 72%, #fff);
+  --admin-inline-error-bg: color-mix(in srgb, var(--admin-message-accent) 38%, var(--admin-surface-raised));
+  width: fit-content;
   max-width: 100%;
   margin: 0 0 0.65rem;
   padding: 0.22rem 0.75rem;
-  border: 1px solid var(--admin-error-border-soft);
-  border-left: 4px solid var(--admin-error);
+  border: 1px solid var(--admin-border);
+  border-left: 4px solid var(--admin-message-accent);
   border-radius: var(--admin-radius-lg);
-  background: var(--admin-error-surface);
-  color: var(--admin-error-copy);
+  background: var(--admin-inline-error-bg);
+  color: var(--admin-text);
   box-shadow: none;
   font-size: 0.92rem;
   font-family: var(--site-font-body);
@@ -265,17 +267,17 @@ ul.errorlist::before {
   place-items: center;
   width: 0.9rem;
   height: 0.9rem;
-  border: 2px solid color-mix(in srgb, var(--admin-error) 90%, #fff);
+  border: 2px solid var(--admin-inline-error-icon);
   border-radius: 999px;
-  background: var(--admin-error-icon-bg);
-  color: color-mix(in srgb, var(--admin-error) 82%, #fff);
+  background: transparent;
+  color: var(--admin-inline-error-icon);
   font-size: 0.62rem;
   font-weight: 800;
   line-height: 1;
 }
 
 .errornote {
-  color: var(--admin-error-text-strong);
+  color: var(--admin-text);
   font-weight: 720;
 }
 
@@ -284,16 +286,27 @@ ul.errorlist {
   gap: 0.45rem;
 }
 
+form .aligned ul.errorlist {
+  padding-left: 2.25rem;
+}
+
 ul.errorlist li {
+  width: auto;
+  max-width: none;
   margin: 0;
   padding: 0;
   border: 0;
   border-radius: 0;
   background: transparent;
-  color: var(--admin-error-copy);
+  color: var(--admin-text);
   font-size: 0.86rem;
   font-weight: 600;
   line-height: 1.4;
+}
+
+html[data-theme="light"] .errornote,
+html[data-theme="light"] ul.errorlist {
+  --admin-inline-error-bg: color-mix(in srgb, var(--admin-message-accent) 28%, #fff);
 }
 
 .form-row.errors {
@@ -362,13 +375,18 @@ td ul.errorlist + textarea {
 }
 
 .admin-breadcrumbs a,
-.breadcrumbs a {
+.breadcrumbs a,
+.admin-breadcrumb-app {
   display: inline-flex;
   align-items: center;
   border-radius: var(--admin-radius-sm);
   color: var(--admin-muted);
   font-weight: 650;
   padding: 0.2rem 0.5rem;
+}
+
+.admin-breadcrumbs a,
+.breadcrumbs a {
   transition: background-color 160ms ease, color 160ms ease;
 }
 

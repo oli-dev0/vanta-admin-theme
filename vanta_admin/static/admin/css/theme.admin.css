@@ -329,13 +329,17 @@ html[data-theme="light"] #nav-sidebar .admin-sidebar__filter input[type="search"
   gap: 0.75rem;
   width: 100%;
   padding: 0.7rem 0.78rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-md);
-  background: var(--surface-muted);
+  background: rgba(39, 49, 51, 0.96);
   box-shadow: none;
   color: var(--heading);
   cursor: pointer;
   list-style: none;
+}
+
+html[data-theme="light"] .admin-sidebar__account-summary {
+  background: #f7fbff;
 }
 
 .admin-sidebar__account-icon {
@@ -965,7 +969,238 @@ fieldset.module,
 }
 
 .submit-row {
-  background: var(--accent-soft);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+  background: color-mix(in srgb, var(--admin-surface-raised) 74%, var(--admin-accent-softer));
+}
+
+.change-form .submit-row.is-sticky-submit-row {
+  position: fixed;
+  right: auto;
+  bottom: 0.75rem;
+  left: var(--admin-submit-row-fixed-left, 0.75rem);
+  z-index: 30;
+  width: var(--admin-submit-row-fixed-width, auto);
+}
+
+.admin-submit-row-placeholder {
+  height: 0;
+}
+
+.change-form .errornote,
+.change-form ul.errorlist {
+  --admin-inline-error-icon: var(--admin-error-text);
+  border: 1px solid var(--admin-error-border);
+  border-left: 4px solid var(--admin-error-border);
+  border-radius: var(--admin-radius-sm);
+  background: var(--admin-error-bg);
+  color: var(--admin-error-text);
+  box-shadow: none;
+}
+
+.change-form .errornote {
+  margin: 0 0 0.75rem;
+}
+
+.change-form ul.errorlist {
+  color: var(--admin-error-text);
+}
+
+.change-form ul.errorlist li {
+  color: var(--admin-error-text);
+}
+
+.change-form .submit-row input,
+.change-form .submit-row a.deletelink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.35rem;
+  margin: 0;
+  padding: 0.54rem 0.82rem;
+  border: 1px solid var(--admin-border-strong);
+  border-radius: var(--admin-radius-sm);
+  background: var(--admin-surface-muted);
+  color: var(--admin-text);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 760;
+  line-height: 1.2;
+  text-decoration: none;
+  box-shadow: none;
+  cursor: pointer;
+  transition:
+    background-color var(--admin-transition),
+    border-color var(--admin-transition),
+    color var(--admin-transition),
+    filter var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+.change-form .submit-row input:not(.default):not([name="_save"]):not(:first-child) {
+  border-color: var(--admin-border-strong);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+}
+
+.submit-row input.default,
+.change-form .submit-row input[name="_save"],
+.change-form .submit-row input[type="submit"]:first-child {
+  border-color: var(--admin-accent-border);
+  background: var(--admin-accent);
+  color: var(--admin-button-text);
+}
+
+.change-form .submit-row a.deletelink {
+  margin-left: auto;
+  border-color: var(--admin-error);
+  background: var(--admin-error-bg);
+  color: var(--admin-error-text);
+}
+
+.change-form .submit-row input:hover,
+.change-form .submit-row input:focus-visible,
+.change-form .submit-row a.deletelink:hover,
+.change-form .submit-row a.deletelink:focus-visible {
+  border-color: var(--admin-accent-border);
+  background: var(--admin-surface-hover);
+  color: var(--admin-text);
+  filter: brightness(1.04);
+  transform: translateY(-2px);
+}
+
+.submit-row input.default:hover,
+.submit-row input.default:focus-visible,
+.change-form .submit-row input[name="_save"]:hover,
+.change-form .submit-row input[name="_save"]:focus-visible,
+.change-form .submit-row input[type="submit"]:first-child:hover,
+.change-form .submit-row input[type="submit"]:first-child:focus-visible {
+  background: var(--admin-accent-strong);
+  color: var(--admin-button-text);
+}
+
+.change-form .submit-row a.deletelink:hover,
+.change-form .submit-row a.deletelink:focus-visible {
+  border-color: var(--admin-error);
+  background: var(--admin-error-bg);
+  color: var(--admin-error-text);
+  filter: brightness(1.04);
+}
+
+.change-form .submit-row input:active,
+.change-form .submit-row a.deletelink:active {
+  transform: translateY(0);
+}
+
+.change-form .submit-row input:disabled {
+  opacity: 0.62;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.delete-confirmation form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 1rem;
+}
+
+.delete-confirmation form input[type="submit"],
+.delete-confirmation form .cancel-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.35rem;
+  margin: 0;
+  padding: 0.54rem 0.82rem;
+  border: 1px solid var(--admin-border-strong);
+  border-radius: var(--admin-radius-sm);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 760;
+  line-height: 1.2;
+  text-decoration: none;
+  box-shadow: none;
+  cursor: pointer;
+  transition:
+    background-color var(--admin-transition),
+    border-color var(--admin-transition),
+    color var(--admin-transition),
+    filter var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+.delete-confirmation form input[type="submit"] {
+  border-color: var(--admin-error-border-soft);
+  background: var(--admin-error-surface);
+  color: var(--admin-error-copy);
+}
+
+.delete-confirmation form .cancel-link {
+  border-color: var(--admin-accent-border);
+  background: var(--admin-accent);
+  color: var(--admin-button-text);
+}
+
+.delete-confirmation form input[type="submit"]:hover,
+.delete-confirmation form input[type="submit"]:focus-visible {
+  border-color: var(--admin-error);
+  background: var(--admin-error-bg);
+  color: var(--admin-error-text);
+  filter: brightness(1.04);
+  transform: translateY(-2px);
+}
+
+.delete-confirmation form .cancel-link:hover,
+.delete-confirmation form .cancel-link:focus-visible {
+  filter: brightness(1.04);
+  transform: translateY(-2px);
+}
+
+.delete-confirmation form .cancel-link:hover,
+.delete-confirmation form .cancel-link:focus-visible {
+  background: var(--admin-accent-strong);
+  color: var(--admin-button-text);
+}
+
+.delete-confirmation form input[type="submit"]:active,
+.delete-confirmation form .cancel-link:active {
+  transform: translateY(0);
+}
+
+.field-password a.button[role="button"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.82rem;
+  padding: 0.26rem 0.5rem;
+  border: 1px solid var(--admin-accent-border);
+  border-radius: var(--admin-radius-sm);
+  background: var(--admin-accent);
+  color: var(--admin-button-text);
+  font-size: 0.88rem;
+  font-weight: 760;
+  line-height: 1.2;
+  text-decoration: none;
+  box-shadow: none;
+  transition:
+    background-color var(--admin-transition),
+    color var(--admin-transition),
+    filter var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+.field-password a.button[role="button"]:hover,
+.field-password a.button[role="button"]:focus-visible {
+  background: var(--admin-accent-strong);
+  color: var(--admin-button-text);
+  filter: brightness(1.04);
+  transform: translateY(-2px);
 }
 
 #changelist #toolbar,
@@ -1535,6 +1770,52 @@ input[type="checkbox"]:focus-visible {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.change-form .object-tools {
+  position: relative;
+  z-index: 5;
+  overflow: visible;
+}
+
+.change-form .object-tools li {
+  overflow: visible;
+}
+
+.change-form .object-tools a {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.82rem;
+  padding: 0.26rem 0.5rem;
+  border: 1px solid var(--admin-accent-border);
+  border-radius: var(--admin-radius-sm);
+  background: var(--admin-accent);
+  color: var(--admin-button-text);
+  font-size: 0.88rem;
+  font-weight: 760;
+  line-height: 1.2;
+  text-decoration: none;
+  box-shadow: none;
+  transition:
+    background-color var(--admin-transition),
+    color var(--admin-transition),
+    filter var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+.change-form .object-tools a:hover,
+.change-form .object-tools a:focus-visible {
+  background: var(--admin-accent-strong);
+  color: var(--admin-button-text);
+  filter: brightness(1.04);
+  transform: translateY(-2px);
+}
+
+#changelist .object-tools {
+  margin-left: auto;
 }
 
 #changelist .object-tools a,

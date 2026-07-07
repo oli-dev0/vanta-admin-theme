@@ -392,22 +392,31 @@ body.vanta-two-factor {
 .vanta-two-factor .alert,
 .vanta-two-factor .errornote,
 .vanta-two-factor ul.errorlist {
+  --admin-message-accent: var(--admin-error);
+  --admin-inline-error-icon: color-mix(in srgb, var(--admin-message-accent) 72%, #fff);
+  --admin-inline-error-bg: color-mix(in srgb, var(--admin-message-accent) 38%, var(--admin-surface-raised));
   position: relative;
-  width: 100%;
+  width: fit-content;
   max-width: 100%;
   margin: 0 0 0.75rem;
   padding: 0.22rem 0.75rem 0.22rem 2.25rem;
-  border: 1px solid var(--admin-error-border-soft);
-  border-left: 4px solid var(--admin-error);
+  border: 1px solid var(--admin-border);
+  border-left: 4px solid var(--admin-message-accent);
   border-radius: var(--admin-radius-lg);
-  background: var(--admin-error-surface);
-  color: var(--admin-error-copy);
+  background: var(--admin-inline-error-bg);
+  color: var(--admin-text);
   font-size: 0.9rem;
   font-family: var(--site-font-body);
   font-weight: 560;
   line-height: 1.45;
   list-style: none;
   overflow-wrap: anywhere;
+}
+
+html[data-theme="light"] .vanta-two-factor .alert,
+html[data-theme="light"] .vanta-two-factor .errornote,
+html[data-theme="light"] .vanta-two-factor ul.errorlist {
+  --admin-inline-error-bg: color-mix(in srgb, var(--admin-message-accent) 28%, #fff);
 }
 
 .vanta-two-factor .alert::before,
@@ -421,26 +430,32 @@ body.vanta-two-factor {
   place-items: center;
   width: 0.9rem;
   height: 0.9rem;
-  border: 2px solid color-mix(in srgb, var(--admin-error) 90%, #fff);
+  border: 2px solid var(--admin-inline-error-icon);
   border-radius: 999px;
-  background: var(--admin-error-icon-bg);
-  color: color-mix(in srgb, var(--admin-error) 82%, #fff);
+  background: transparent;
+  color: var(--admin-inline-error-icon);
   font-size: 0.62rem;
   font-weight: 800;
   line-height: 1;
 }
 
 .vanta-two-factor .errornote {
-  color: var(--admin-error-text-strong);
+  color: var(--admin-text);
   font-weight: 720;
 }
 
+.vanta-two-factor ul.errorlist {
+  padding-left: 3rem;
+}
+
 .vanta-two-factor ul.errorlist li {
+  width: auto;
+  max-width: none;
   margin: 0;
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--admin-error-copy);
+  color: var(--admin-text);
   font-size: 0.84rem;
   font-weight: 600;
   line-height: 1.4;

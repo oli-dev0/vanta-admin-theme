@@ -202,19 +202,19 @@ body.login .errornote {
 
 body.login .errornote,
 body.login ul.errorlist.nonfield {
-  border-color: var(--admin-error-border-soft);
-  border-left-color: var(--admin-error);
-  background: var(--admin-error-surface);
-  color: var(--admin-error-copy);
+  border-color: var(--admin-border);
+  border-left-color: var(--admin-message-accent);
+  background: var(--admin-inline-error-bg);
+  color: var(--admin-text);
 }
 
 body.login .errornote::before,
 body.login ul.errorlist.nonfield::before {
-  border-color: var(--admin-error-border-soft);
-  background: var(--admin-error-icon-bg);
-  color: var(--admin-error-text-strong);
+  border-color: var(--admin-inline-error-icon);
+  background: transparent;
+  color: var(--admin-inline-error-icon);
 }
 
 body.login ul.errorlist.nonfield li {
-  color: var(--admin-error-copy);
+  color: var(--admin-text);
 }

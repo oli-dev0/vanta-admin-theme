@@ -17,6 +17,10 @@ feels more deliberate in everyday use.
   two-factor auth pages.
 - Denser dashboards, tables, filters, messages, and forms so admin work feels
   easier to scan.
+- Better edit pages for longer admin forms, with save buttons that stay easier
+  to reach while scrolling.
+- Cleaner buttons for saving, deleting, viewing history, and changing passwords.
+- Clearer form errors on admin pages, login, and two-factor auth screens.
 - Admin messages that appear clearly, pause while hovered, and dismiss
   themselves after a short time.
 - Changelist actions that appear only when rows are selected, stay available
@@ -30,6 +34,7 @@ feels more deliberate in everyday use.
   stored in the browser for each admin user.
 - Shorter changelist date formatting that makes date-heavy tables easier to
   scan.
+- Simpler breadcrumbs on edit pages, so the page path feels less cluttered.
 - A packaged favicon for the admin.
 - A mobile sidebar overlay that makes the admin easier to use on smaller
   screens.

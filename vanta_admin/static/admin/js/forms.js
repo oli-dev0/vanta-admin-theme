@@ -169,6 +169,56 @@
         .map(enhanceActionSelect)
         .filter(Boolean);
 
+    function syncStickySubmitRow() {
+        const form = document.querySelector('body.change-form form[id$="_form"]');
+        const submitRow = form?.querySelector('.submit-row:last-of-type');
+
+        if (!form || !submitRow) {
+            return;
+        }
+
+        let placeholder = submitRow.nextElementSibling;
+        if (!placeholder || !placeholder.classList.contains('admin-submit-row-placeholder')) {
+            placeholder = document.createElement('div');
+            placeholder.className = 'admin-submit-row-placeholder';
+            submitRow.after(placeholder);
+        }
+
+        function syncSubmitRowPosition() {
+            const formRect = form.getBoundingClientRect();
+            const rowRect = submitRow.getBoundingClientRect();
+            const isFixed = submitRow.classList.contains('is-sticky-submit-row');
+            const naturalTop = isFixed
+                ? placeholder.getBoundingClientRect().top
+                : rowRect.top;
+            const shouldStick = naturalTop + rowRect.height > window.innerHeight && formRect.top < window.innerHeight;
+
+            submitRow.classList.toggle('is-sticky-submit-row', shouldStick);
+            form.classList.toggle('has-sticky-submit-row', shouldStick);
+
+            if (shouldStick) {
+                const contentRect = form.getBoundingClientRect();
+                const left = Math.max(contentRect.left, 12);
+                const rightEdge = Math.min(contentRect.right, window.innerWidth - 12);
+                const width = Math.max(rightEdge - left, 0);
+
+                submitRow.style.setProperty('--admin-submit-row-fixed-left', `${left}px`);
+                submitRow.style.setProperty('--admin-submit-row-fixed-width', `${width}px`);
+                placeholder.style.height = `${rowRect.height}px`;
+            } else {
+                submitRow.style.removeProperty('--admin-submit-row-fixed-left');
+                submitRow.style.removeProperty('--admin-submit-row-fixed-width');
+                placeholder.style.height = '0px';
+            }
+        }
+
+        window.addEventListener('scroll', syncSubmitRowPosition, { passive: true });
+        window.addEventListener('resize', syncSubmitRowPosition);
+        syncSubmitRowPosition();
+    }
+
+    syncStickySubmitRow();
+
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
             customDropdowns.forEach((dropdown) => {
