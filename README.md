@@ -3,7 +3,9 @@ Vanta Admin is a Django admin theme with a darker interface, tighter density,
 and a standalone structure that stays close to Django's admin template system.
 
 It is designed to be portable and to avoid frontend runtime dependencies outside
-standard Django admin behavior.
+standard Django admin behavior. You still use Django admin; Vanta changes the
+shell, navigation, common controls, messages, and visual treatment so the admin
+feels more deliberate in everyday use.
 
 ## What It Adds
 

@@ -25,7 +25,10 @@ Thin local override entrypoint for admin branding and theme CSS.
         }
       } catch (error) {}
     </script>
+    <script src="{% static 'admin/js/theme.js' %}" defer></script>
     <script src="{% static 'admin/js/sidebar.js' %}" defer></script>
+    <script src="{% static 'admin/js/messages.js' %}" defer></script>
+    <script src="{% static 'admin/js/forms.js' %}" defer></script>
 {% endblock %}
 
 {% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:'Django site admin' }}{% endblock %}
