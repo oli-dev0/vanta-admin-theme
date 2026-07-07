@@ -146,7 +146,7 @@ ul.messagelist li {
   line-height: 1.3;
   overflow-wrap: anywhere;
   transition:
-    background-size 5000ms linear,
+    background-size 4000ms linear,
     opacity 160ms ease,
     transform 160ms ease;
 }

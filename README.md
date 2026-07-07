@@ -7,20 +7,26 @@ standard Django admin behavior.
 
 ## What It Adds
 
-- A fixed sidebar with persistent collapsed state and remembered open sections.
-- Light and dark theme support through CSS tokens.
-- A flatter visual pass that removes heavy shadows and blur effects from the
-  admin shell, login screens, cards, filters, and two-factor auth views.
-- A denser dashboard, changelist, filter, message, and form presentation.
-- Auto-dismissing admin messages with success, warning, and error treatment.
-- Custom single-select controls for changelist actions and normal admin form
-  selects, while native multi-selects stay unchanged.
-- Default icons for common admin apps, models, and recent actions, including
-  incident and uptime-monitor style models.
-- A packaged admin favicon loaded through the theme.
-- A responsive mobile sidebar overlay.
-- Optional themed templates for `django-two-factor-auth` login, setup completion,
-  account security, and backup-token flows.
+- A cleaner admin layout with a fixed sidebar that remembers how you left it.
+- Light and dark mode, using the same calm Vanta look across the admin.
+- Less visual noise on the main admin screens, login pages, cards, filters, and
+  two-factor auth pages.
+- Denser dashboards, tables, filters, messages, and forms so admin work feels
+  easier to scan.
+- Admin messages that appear clearly, pause while hovered, and dismiss
+  themselves after a short time.
+- Changelist actions that appear only when rows are selected, stay available
+  while scrolling, and include a clear-selected control.
+- Styled select controls for common admin dropdowns, while Django's native
+  multi-select fields stay unchanged.
+- Built-in icons for common admin areas, models, and recent actions.
+- A cleaner account menu with theme controls, project links, password access,
+  logout, and a Vanta support link.
+- A packaged favicon for the admin.
+- A mobile sidebar overlay that makes the admin easier to use on smaller
+  screens.
+- Optional matching templates for `django-two-factor-auth` login, setup
+  completion, account security, and backup-token screens.
 
 Vanta Admin does not replace Django admin, change your permissions, or configure
 two-factor authentication for you. If your project uses `django-two-factor-auth`,

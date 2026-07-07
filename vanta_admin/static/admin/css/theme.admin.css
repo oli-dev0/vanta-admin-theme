@@ -283,23 +283,15 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
   list-style: none;
 }
 
-.admin-sidebar__avatar {
-  display: inline-grid;
-  place-items: center;
-  width: 2.6rem;
-  min-width: 2.6rem;
-  height: 2.6rem;
-  border: 1px solid color-mix(in srgb, var(--accent) 34%, transparent);
-  border-radius: 0.36rem;
-  background: var(--admin-accent-soft);
-  color: var(--admin-accent-strong);
-  font-weight: 900;
-  letter-spacing: 0;
-}
-
-html[data-theme="light"] .admin-sidebar__avatar {
-  background: var(--admin-accent-soft);
-  color: var(--admin-accent);
+.admin-sidebar__account-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  color: color-mix(in srgb, var(--muted) 82%, var(--accent));
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 32px;
 }
 
 .admin-sidebar__account-copy {
@@ -321,6 +313,13 @@ html[data-theme="light"] .admin-sidebar__avatar {
   color: var(--heading);
   font-size: 0.92rem;
   font-weight: 760;
+  transition: color var(--admin-transition), transform var(--admin-transition);
+}
+
+.admin-sidebar__account-summary:hover .admin-sidebar__username,
+.admin-sidebar__account-summary:focus-visible .admin-sidebar__username {
+  color: var(--accent-strong);
+  transform: translateY(-2px);
 }
 
 .admin-sidebar__group-name {
@@ -416,6 +415,80 @@ html[data-theme="light"] .admin-sidebar__theme-button--light {
   color: var(--muted);
 }
 
+.admin-sidebar__account-links .admin-sidebar__donation-link {
+  color: var(--accent-strong);
+}
+
+.admin-sidebar__donation-link .donation-button__label {
+  min-width: 0;
+}
+
+.admin-sidebar__donation-link .donation-button__cup {
+  position: relative;
+  width: 0.92rem;
+  height: 0.72rem;
+  border: 2px solid currentColor;
+  border-radius: 0 0 0.28rem 0.28rem;
+}
+
+.admin-sidebar__donation-link .donation-button__cup::before {
+  content: "";
+  position: absolute;
+  top: 0.1rem;
+  right: -0.38rem;
+  width: 0.3rem;
+  height: 0.3rem;
+  border: 2px solid currentColor;
+  border-left: 0;
+  border-radius: 0 0.35rem 0.35rem 0;
+}
+
+.admin-sidebar__donation-link .donation-button__cup::after {
+  content: "";
+  position: absolute;
+  right: -0.08rem;
+  bottom: -0.25rem;
+  left: -0.08rem;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.75;
+}
+
+.admin-sidebar__donation-link .donation-button__steam,
+.admin-sidebar__donation-link .donation-button__steam::before,
+.admin-sidebar__donation-link .donation-button__steam::after {
+  content: "";
+  position: absolute;
+  bottom: 0.78rem;
+  width: 2px;
+  height: 0.38rem;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.65;
+  animation: donation-steam 1.8s ease-in-out infinite;
+}
+
+.admin-sidebar__donation-link .donation-button__steam {
+  left: 0.4rem;
+}
+
+.admin-sidebar__donation-link .donation-button__steam::before {
+  left: -0.25rem;
+  animation-delay: 0.25s;
+}
+
+.admin-sidebar__donation-link .donation-button__steam::after {
+  left: 0.25rem;
+  animation-delay: 0.5s;
+}
+
+.admin-sidebar__account-links .admin-sidebar__external-icon {
+  width: 0.86rem;
+  height: 0.86rem;
+  margin-left: auto;
+}
+
 .admin-sidebar__account-links a:hover,
 .admin-sidebar__account-links a:focus,
 .admin-sidebar__account-links button:hover,
@@ -437,6 +510,19 @@ html[data-theme="light"] .admin-sidebar__theme-button--light {
   height: 1px;
   margin: 0.42rem 0.24rem;
   background: var(--border);
+}
+
+@keyframes donation-steam {
+  0%,
+  100% {
+    transform: translateY(0) scaleY(0.72);
+    opacity: 0.35;
+  }
+
+  50% {
+    transform: translateY(-0.16rem) scaleY(1);
+    opacity: 0.9;
+  }
 }
 
 body.admin-sidebar-collapsed .main {
@@ -729,6 +815,10 @@ body.change-list #content-main {
   max-width: 100%;
 }
 
+#changelist-form {
+  position: relative;
+}
+
 .admin-changelist-card-header {
   display: flex;
   gap: 0.85rem;
@@ -762,7 +852,7 @@ fieldset.module,
 }
 
 .submit-row {
-  background: var(--admin-surface-raised);
+  background: var(--accent-soft);
 }
 
 #changelist #toolbar,
@@ -776,6 +866,91 @@ fieldset.module,
   border-bottom: 1px solid var(--border);
   background: color-mix(in srgb, var(--admin-bg) 78%, var(--admin-surface-raised));
   box-shadow: none;
+}
+
+#changelist .actions {
+  position: absolute;
+  top: 0.18rem;
+  right: 0.72rem;
+  left: 0.72rem;
+  z-index: 8;
+  max-width: none;
+  padding-left: 0.87rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: #151719;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transform: translateY(-0.18rem);
+  transition:
+    opacity var(--admin-transition),
+    transform var(--admin-transition),
+    visibility var(--admin-transition);
+}
+
+html[data-theme="light"] #changelist .actions {
+  background: #e7f0ff;
+}
+
+#changelist-form.has-selected-actions .actions,
+#changelist-form:has(input.action-select[type="checkbox"]:checked) .actions {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+#changelist-form.has-sticky-actions .actions {
+  position: fixed;
+  top: 0.75rem;
+  right: auto;
+  left: var(--admin-actions-fixed-left, 0.72rem);
+  width: var(--admin-actions-fixed-width, auto);
+  z-index: 30;
+}
+
+#changelist .actions.admin-actions--duplicate {
+  display: none;
+}
+
+#changelist .actions .admin-actions__clear {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 1.5rem;
+  width: 1.5rem;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--admin-error) 72%, var(--border-strong));
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--admin-error) 76%, var(--surface-muted));
+  color: var(--admin-error-text);
+}
+
+#changelist .actions .admin-actions__clear::before,
+#changelist .actions .admin-actions__clear::after {
+  content: "";
+  position: absolute;
+  width: 0.62rem;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+#changelist .actions .admin-actions__clear::before {
+  transform: rotate(45deg);
+}
+
+#changelist .actions .admin-actions__clear::after {
+  transform: rotate(-45deg);
+}
+
+#changelist .actions .admin-actions__clear:hover,
+#changelist .actions .admin-actions__clear:focus-visible {
+  color: var(--admin-error-text);
+  background: var(--admin-error);
 }
 
 #changelist .admin-changelist-card-header #changelist-search > div {
@@ -1254,6 +1429,7 @@ input[type="checkbox"]:focus-visible {
   gap: 0.2rem;
   height: 1.8rem;
   min-height: 1.8rem;
+  margin-top: 2px;
   padding: 0 0.42rem;
   border: 0;
   border-radius: 0.27rem;
@@ -1270,6 +1446,11 @@ input[type="checkbox"]:focus-visible {
   text-transform: none;
   white-space: nowrap;
   overflow: hidden;
+  transition:
+    background-color var(--admin-transition),
+    border-color var(--admin-transition),
+    color var(--admin-transition),
+    transform var(--admin-transition);
 }
 
 #changelist .object-tools a.addlink::before {
@@ -1296,6 +1477,13 @@ input[type="checkbox"]:focus-visible {
   box-shadow: none;
 }
 
+#changelist .object-tools a:hover,
+#changelist .object-tools a:focus-visible,
+#changelist .object-tools a.addlink:hover,
+#changelist .object-tools a.addlink:focus-visible {
+  transform: translateY(-2px);
+}
+
 #changelist input[type="submit"]:active,
 #changelist button:active,
 .object-tools a:active,
@@ -1319,10 +1507,10 @@ input[type="checkbox"]:focus-visible {
 
 #changelist table thead th {
   border: 0;
-  background: transparent;
+  background: color-mix(in srgb, var(--admin-bg) 72%, var(--admin-surface-muted));
   color: var(--text);
   font-size: 0.74rem;
-  font-weight: 560;
+  font-weight: 760;
   letter-spacing: 0;
   height: auto;
   padding: 0.05rem 0.56rem;
@@ -1331,20 +1519,180 @@ input[type="checkbox"]:focus-visible {
   vertical-align: middle;
 }
 
+#changelist table thead th:first-child {
+  border-radius: var(--admin-radius-sm) 0 0 var(--admin-radius-sm);
+}
+
+#changelist table thead th:last-child {
+  border-radius: 0 var(--admin-radius-sm) var(--admin-radius-sm) 0;
+}
+
 #changelist table thead th.sorted {
-  border: 1px solid var(--admin-accent-border);
-  border-radius: var(--admin-radius-sm);
-  background: var(--admin-nav-item-active-bg);
-  color: var(--admin-accent-strong);
+  direction: rtl;
+  font-size: 0;
   font-weight: 720;
+  text-align: left;
+  white-space: nowrap;
+}
+
+#changelist table thead th .text {
+  display: inline-flex;
+  align-items: center;
 }
 
 #changelist table thead th a {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--admin-radius-sm);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
   color: inherit;
+  padding: 0.16rem 0.42rem;
+  transition:
+    background-color var(--admin-transition),
+    color var(--admin-transition),
+    transform var(--admin-transition);
 }
 
-#changelist table thead th.sorted a {
+#changelist table thead th a:hover,
+#changelist table thead th a:focus {
+  background: var(--admin-nav-item-active-bg);
+  box-shadow: none;
   color: var(--admin-accent-strong);
+  transform: translateY(-2px);
+}
+
+#changelist table thead th a:focus-visible {
+  outline: 2px solid var(--admin-accent);
+  outline-offset: 2px;
+}
+
+#changelist table thead th.sorted .text,
+#changelist table thead th.sorted .sortoptions {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.32rem;
+  direction: ltr;
+  font-size: 0.74rem;
+  margin: 0 !important;
+  background: var(--admin-nav-item-active-bg) !important;
+  color: var(--admin-accent-strong);
+  vertical-align: middle;
+}
+
+#changelist table thead th.sorted .text {
+  float: none !important;
+  padding: 0 !important;
+  border-radius: var(--admin-radius-sm) 0 0 var(--admin-radius-sm);
+}
+
+#changelist table thead th.sorted .text a {
+  background: transparent !important;
+  min-height: 1.32rem;
+  padding-right: 0.18rem;
+  color: var(--admin-accent-strong);
+}
+
+#changelist table thead th.sorted .text a:hover,
+#changelist table thead th.sorted .text a:focus {
+  background: transparent !important;
+  transform: none;
+}
+
+#changelist table thead th.sorted .sortoptions {
+  float: none !important;
+  gap: 0.03rem;
+  margin-left: 0 !important;
+  padding: 0.16rem 0.28rem 0.16rem 0.16rem;
+  border-radius: 0 var(--admin-radius-sm) var(--admin-radius-sm) 0;
+}
+
+#changelist table thead th.sorted .sortoptions a {
+  background: transparent !important;
+}
+
+#changelist table thead th.sorted .sortremove,
+#changelist table thead th.sorted .toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 0.72rem;
+  height: 0.92rem;
+  padding: 0;
+  background: transparent !important;
+  background-image: none !important;
+  color: var(--admin-accent-strong);
+  font-size: 0;
+  line-height: 1;
+  overflow: hidden;
+  text-indent: 0;
+  transform: none;
+  visibility: visible !important;
+}
+
+#changelist table thead th.sorted .toggle {
+  order: 1;
+}
+
+#changelist table thead th.sorted .sortpriority {
+  order: 2;
+}
+
+#changelist table thead th.sorted .sortremove {
+  order: 3;
+}
+
+#changelist table thead th.sorted .sortremove::before,
+#changelist table thead th.sorted .toggle::before {
+  font-size: 0.72rem;
+  font-weight: 860;
+  line-height: 1;
+}
+
+#changelist table thead th.sorted .sortremove::before {
+  content: "X";
+  color: var(--admin-accent-strong);
+  font-size: 0.76rem;
+  font-weight: 920;
+  opacity: 1;
+}
+
+#changelist table thead th.sorted .sortremove::after {
+  content: none !important;
+  display: none !important;
+}
+
+#changelist table thead th.sorted .toggle.ascending::before {
+  content: "🡱";
+  font-size: 0.76rem;
+}
+
+#changelist table thead th.sorted .toggle.descending::before {
+  content: "🡳";
+  font-size: 0.76rem;
+}
+
+#changelist table thead th.sorted .sortpriority {
+  display: inline-grid;
+  place-items: center;
+  min-width: 0.72rem;
+  height: 0.92rem;
+  margin: 0 !important;
+  padding: 0 0.08rem;
+  background: transparent !important;
+  color: var(--admin-accent-strong);
+  font-size: 0.64rem;
+  font-weight: 860;
+  line-height: 1;
+}
+
+#changelist table thead th.sorted .sortremove:hover,
+#changelist table thead th.sorted .sortremove:focus,
+#changelist table thead th.sorted .toggle:hover,
+#changelist table thead th.sorted .toggle:focus {
+  background: transparent !important;
+  color: var(--admin-accent-strong);
+  transform: none;
 }
 
 #changelist table tbody th,

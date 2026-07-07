@@ -262,6 +262,12 @@
   .admin-action-link {
     transition: none;
   }
+
+  .admin-sidebar__donation-link .donation-button__steam,
+  .admin-sidebar__donation-link .donation-button__steam::before,
+  .admin-sidebar__donation-link .donation-button__steam::after {
+    animation: none;
+  }
 }
 
 /* Links are clean by default; only text-content links opt into hover underlines. */
