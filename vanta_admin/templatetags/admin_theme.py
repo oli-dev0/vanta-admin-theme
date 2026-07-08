@@ -11,6 +11,16 @@ FACET_COUNT_PATTERN = re.compile(r"^(?P<label>.*) \((?P<count>\d+)\)$")
 COMPACT_SUFFIXES = ("", "k", "m", "b", "t")
 MAX_INLINE_FILTER_LABEL_LENGTH = 3
 DEFAULT_ADMIN_ICON = "admin-icon-file"
+NON_FILTER_CHANGE_LIST_PARAMS = {
+    "all",
+    "e",
+    "o",
+    "p",
+    "q",
+    "_facets",
+    "_popup",
+    "is_facets",
+}
 
 APP_ICON_MAP = {
     "auth": "admin-icon-shield",
@@ -221,6 +231,16 @@ def _facet_label_text(value):
     return match.group("label") if match else text
 
 
+@register.simple_tag
+def active_admin_filter_count(cl):
+    params = getattr(cl, "params", {}) or {}
+    return sum(
+        1
+        for key, value in params.items()
+        if key not in NON_FILTER_CHANGE_LIST_PARAMS and value not in (None, "")
+    )
+
+
 
 
 def _clone_admin_item(item):
@@ -304,7 +324,7 @@ def format_admin_facet_label(value, autoescape=True):
     label = escaper(match.group("label"))
     compact_count = _format_compact_count(match.group("count"))
     return format_html(
-        '{}&nbsp;<span class="admin-facet-count">{}</span>',
+        '{}&nbsp;-&nbsp;<span class="admin-facet-count">{}</span>',
         label,
         compact_count,
     )

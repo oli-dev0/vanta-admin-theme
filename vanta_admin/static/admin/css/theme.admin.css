@@ -896,6 +896,7 @@ body.change-list #content-main {
 }
 
 #changelist {
+  position: relative;
   margin: 0;
   border: 0;
   box-shadow: none;
@@ -903,14 +904,12 @@ body.change-list #content-main {
 }
 
 #changelist .changelist-form-container {
+  position: relative;
   display: block;
 }
 
 #changelist.filtered .changelist-form-container {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) fit-content(13rem);
-  gap: 0.72rem;
-  align-items: start;
+  display: block;
 }
 
 #changelist .changelist-form-container > div {
@@ -938,7 +937,7 @@ body.change-list #content-main {
 
 .admin-changelist-card-header {
   display: flex;
-  gap: 0.85rem;
+  gap: 0.65rem;
   justify-content: space-between;
   align-items: center;
   padding: 0.72rem;
@@ -1330,6 +1329,79 @@ html[data-theme="light"] #changelist .actions {
 #changelist .admin-changelist-card-header #changelist-search {
   flex: 1 1 22.4rem;
   width: auto;
+}
+
+#changelist .admin-filter-panel-toggle {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 2.05rem;
+  height: 1.8rem;
+  min-width: 2.05rem;
+  min-height: 1.8rem;
+  margin-top: 2px;
+  padding: 0;
+  border: 0;
+  border-radius: 0.27rem;
+  background: var(--surface-muted);
+  color: var(--admin-accent);
+}
+
+#changelist .admin-filter-panel-toggle svg {
+  display: block;
+  width: 1.18rem;
+  height: 1.18rem;
+}
+
+#changelist .admin-filter-panel-toggle.has-active-filters,
+#changelist .admin-filter-panel-toggle[aria-expanded="true"] {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+#changelist .admin-filter-panel-toggle.has-active-filters::after {
+  content: "";
+  position: absolute;
+  top: 0.28rem;
+  right: 0.28rem;
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 999px;
+  background: var(--admin-accent);
+  animation: admin-filter-active-pulse 1.8s ease-in-out infinite;
+}
+
+#changelist .admin-filter-panel-toggle__count {
+  position: absolute;
+  right: 0.18rem;
+  bottom: 0.12rem;
+  display: block;
+  min-width: 0;
+  height: auto;
+  padding: 0;
+  background: transparent;
+  color: var(--admin-accent-strong);
+  font-size: 0.5rem;
+  font-weight: 860;
+  line-height: 1;
+  pointer-events: none;
+}
+
+#changelist .admin-filter-panel-toggle:focus-visible {
+  outline: 2px solid var(--admin-accent-soft);
+  outline-offset: 2px;
+}
+
+@keyframes admin-filter-active-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--admin-accent) 34%, transparent);
+  }
+
+  50% {
+    box-shadow: 0 0 0 0.22rem color-mix(in srgb, var(--admin-accent) 0%, transparent);
+  }
 }
 
 #changelist-search label {
@@ -2222,31 +2294,49 @@ html[data-theme="light"] #changelist table thead th.sorted .sortoptions {
 /* Filters */
 
 #changelist-filter {
-  position: sticky;
-  top: 1.25rem;
-  grid-column: 2;
-  order: 2;
+  position: absolute;
+  top: 3.35rem;
+  right: 0.72rem;
+  z-index: 20;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: auto;
+  width: fit-content;
+  max-width: min(14.5rem, calc(100% - 1.44rem));
+  max-height: min(42rem, calc(100vh - 6rem));
   min-width: 0;
   margin: 0;
   flex: initial;
-  padding: 0.9rem 0.9rem 0.45rem;
+  padding: 0.82rem 0.62rem 0.45rem;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-md);
-  background: var(--surface-strong);
+  background: color-mix(in srgb, var(--admin-surface-raised) 92%, var(--admin-bg));
   box-shadow: none;
   color: var(--admin-text);
-  text-align: center;
+  opacity: 0;
+  overflow: auto;
+  text-align: left;
+  transform: translateY(-0.28rem);
+  transition:
+    opacity var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+#changelist-filter.is-open {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+html[data-theme="light"] #changelist-filter {
+  background: #eef6ff;
 }
 
 #changelist-filter .admin-filter-header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 0.42rem;
+  width: 100%;
   margin: 0 0 0.22rem;
 }
 
@@ -2336,13 +2426,15 @@ html[data-theme="light"] #changelist table thead th.sorted .sortoptions {
   margin: 0.45rem 0 0.18rem;
   padding: 0;
   font-size: 0.74rem;
+  font-weight: 800;
   line-height: 1.2;
   text-align: left;
+  width: 100%;
 }
 
 #changelist-filter details {
   display: grid;
-  justify-items: center;
+  justify-items: stretch;
   width: 100%;
 }
 
@@ -2375,50 +2467,44 @@ html[data-theme="light"] #changelist table thead th.sorted .sortoptions {
   color: var(--admin-link);
 }
 
-.admin-filter-footer {
-  display: flex;
-  justify-content: center;
-  margin-top: auto;
-  padding-top: 0.45rem;
-  padding-bottom: 0;
-}
-
 .vanta-filter-actions {
   display: inline-flex;
-  overflow: hidden;
-  border: 1px solid var(--admin-border);
-  border-radius: var(--admin-radius-md);
-  background: var(--admin-surface-muted);
+  align-items: center;
+  gap: 0.18rem;
+  margin-left: 0.12rem;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   box-shadow: none;
 }
 
 .vanta-filter-action {
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.32rem;
+  height: 1.32rem;
   border: 0;
-  color: var(--admin-muted);
+  border-radius: var(--admin-radius-sm);
+  color: var(--admin-link);
   background: transparent;
-  font-size: 18px;
-  line-height: 1;
+  font-size: 0.86rem;
+  font-weight: 800;
+  line-height: 1.32rem;
   cursor: pointer;
 }
 
 .vanta-filter-action svg {
   display: block;
-  width: 16px;
-  height: 16px;
-  transform: translateY(2.5px);
-}
-
-.vanta-filter-action + .vanta-filter-action {
-  border-left: 1px solid var(--admin-border);
+  width: 0.96rem;
+  height: 0.96rem;
+  transform: translate(0.06rem, 0.12rem);
 }
 
 .vanta-filter-action:hover,
 .vanta-filter-action:focus-visible {
-  color: var(--admin-link-strong);
+  color: var(--admin-accent-strong);
   background: var(--admin-accent-softer);
 }
 
@@ -2428,12 +2514,12 @@ html[data-theme="light"] #changelist table thead th.sorted .sortoptions {
 }
 
 .vanta-filter-actions.has-active-action {
-  border-color: var(--admin-accent-border);
+  color: var(--admin-accent-strong);
 }
 
 .vanta-filter-action.is-active {
-  color: var(--admin-link-strong);
-  background: var(--accent-soft);
+  color: var(--admin-accent-strong);
+  background: transparent;
 }
 
 .vanta-filter-action.is-disabled {
@@ -2442,25 +2528,18 @@ html[data-theme="light"] #changelist table thead th.sorted .sortoptions {
   pointer-events: none;
 }
 
-.vanta-filter-action.is-disabled:last-child {
-  padding-top: 1px;
-}
-
-.vanta-filter-action.is-active:last-child {
-  padding-top: 3px;
-}
-
 #changelist-filter details ul {
-  display: inline-flex;
-  flex-wrap: nowrap;
-  gap: 0;
-  width: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.02rem;
+  justify-self: stretch;
+  width: 100%;
   padding: 0;
   border: 0;
   border-radius: 0;
   background: transparent;
   box-shadow: none;
-  overflow: hidden;
+  overflow: visible;
 }
 
 #changelist-filter details .admin-filter-options--stacked {
@@ -2477,6 +2556,7 @@ html[data-theme="light"] #changelist table thead th.sorted .sortoptions {
 
 #changelist-filter details li {
   display: flex;
+  width: 100%;
   min-width: 0;
   margin: 0;
   padding: 0;
@@ -2494,22 +2574,23 @@ html[data-theme="light"] #changelist table thead th.sorted .sortoptions {
 
 #changelist-filter details li a,
 #changelist-filter details li.selected a {
-  min-height: 1.45rem;
+  min-height: 1rem;
   position: relative;
   z-index: 0;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  width: fit-content;
   border: 0;
-  border-radius: 0;
+  border-radius: var(--admin-radius-sm);
   background: transparent;
-  border: 1px solid var(--admin-border);
   color: var(--admin-muted);
   margin: 0;
-  padding: 0.12rem 0.42rem;
-  font-size: 0.72rem;
+  padding: 0.01rem 0.24rem;
+  font-size: 0.73rem;
   font-weight: 720;
   letter-spacing: 0.01em;
+  line-height: 1.08;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2522,7 +2603,7 @@ html[data-theme="light"] #changelist table thead th.sorted .sortoptions {
 
 #changelist-filter details .admin-filter-options--inline li a,
 #changelist-filter details .admin-filter-options--inline li.selected a {
-  min-width: 2.65rem;
+  min-width: 0;
 }
 
 #changelist-filter .admin-facet-count {
@@ -2530,84 +2611,46 @@ html[data-theme="light"] #changelist table thead th.sorted .sortoptions {
   font-variant-numeric: tabular-nums;
 }
 
-#changelist-filter details li:not(:first-child) a {
-  margin-left: -1px;
-}
-
-#changelist-filter details .admin-filter-options--stacked li:not(:first-child) a {
-  margin-top: -1px;
-  margin-left: 0;
-}
-
-#changelist-filter details li:first-child a,
-#changelist-filter details li.selected:first-child a {
-  border-radius: 0.28rem 0 0 0.28rem;
-}
-
-#changelist-filter details .admin-filter-options--stacked li:first-child a,
-#changelist-filter details .admin-filter-options--stacked li.selected:first-child a {
-  border-radius: 0.28rem 0.28rem 0 0;
-}
-
-#changelist-filter details li:last-child a,
-#changelist-filter details li.selected:last-child a {
-  border-radius: 0 0.28rem 0.28rem 0;
-}
-
-#changelist-filter details .admin-filter-options--stacked li:last-child a,
-#changelist-filter details .admin-filter-options--stacked li.selected:last-child a {
-  border-radius: 0 0 0.28rem 0.28rem;
-}
-
 #changelist-filter details .admin-filter-options--stacked li a,
 #changelist-filter details .admin-filter-options--stacked li.selected a {
-  display: block;
-  min-width: 7.5rem;
-  width: 100%;
-  padding-inline: 0.52rem;
+  display: flex;
+  min-width: 0;
+  width: fit-content;
+  padding-inline: 0.24rem;
   text-align: left;
 }
 
 #changelist-filter details li a:hover {
   z-index: 1;
-  color: var(--admin-text);
-  background: var(--admin-accent-softer);
+  color: var(--admin-accent-strong);
+  transform: translateY(-2px);
 }
 
 #changelist-filter details li a:active {
   z-index: 2;
   outline: none;
-  color: var(--admin-text);
-  background: var(--admin-accent-softer);
+  color: var(--admin-accent-strong);
 }
 
 #changelist-filter details li a:focus-visible {
   z-index: 1;
-  color: var(--admin-text);
-  background: var(--admin-accent-softer);
-  outline: 2px solid var(--admin-accent-soft);
+  color: var(--admin-accent-strong);
+  outline: 2px solid var(--admin-accent);
   outline-offset: 2px;
-  border-color: var(--admin-accent-border);
 }
 
 #changelist-filter details li.selected a {
   z-index: 1;
-  background: var(--admin-nav-item-active-bg);
-  color: var(--admin-link-strong);
-  border-color: var(--admin-accent-border);
+  color: var(--admin-accent-strong);
 }
 
 #changelist-filter details li.selected a:active {
   z-index: 2;
-  color: var(--admin-link-strong);
-  background: var(--admin-nav-item-active-bg);
-  border-color: var(--admin-accent-border);
+  color: var(--admin-accent-strong);
 }
 
 #changelist-filter details li.selected a:focus-visible {
-  color: var(--admin-link-strong);
-  background: var(--admin-nav-item-active-bg);
-  border-color: var(--admin-accent-border);
+  color: var(--admin-accent-strong);
 }
 
 #changelist-filter details summary:focus-visible {

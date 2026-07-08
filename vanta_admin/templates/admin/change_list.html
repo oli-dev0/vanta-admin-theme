@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_urls static admin_list %}
+{% load i18n admin_urls static admin_list admin_theme %}
 
 {% block title %}{% if cl.formset and cl.formset.errors %}{% translate "Error:" %} {% endif %}{{ block.super }}{% endblock %}
 {% block extrastyle %}
@@ -48,7 +48,7 @@
       <div class="changelist-form-container">
         {% block filters %}
           {% if cl.has_filters %}
-          <search id="changelist-filter" aria-labelledby="changelist-filter-header">
+          <search id="changelist-filter" aria-labelledby="changelist-filter-header" hidden>
             <div class="admin-filter-header">
               <button class="admin-filter-sections-toggle" id="admin-filter-sections-toggle" type="button" aria-label="{% translate 'Collapse all filter sections' %}" title="{% translate 'Collapse all filter sections' %}">
                 <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -58,31 +58,28 @@
               <h2 id="changelist-filter-header">
                 <span>{% translate 'Filter' %}</span>
               </h2>
-            </div>
-            {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
-            <div class="admin-filter-footer">
               <div class="vanta-filter-actions{% if cl.add_facets or cl.has_active_filters %} has-active-action{% endif %}">
                 {% if cl.is_facets_optional %}
                   {% if cl.add_facets %}
                     <a class="vanta-filter-action is-active" href="{{ cl.remove_facet_link }}" aria-label="{% translate 'Hide counts' %}" title="{% translate 'Hide counts' %}">
                       <svg aria-hidden="true" viewBox="0 0 24 24">
-                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                        <circle cx="12" cy="12" r="2.8" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <circle cx="12" cy="12" r="2.8" fill="none" stroke="currentColor" stroke-width="2.2"></circle>
                       </svg>
                     </a>
                   {% else %}
                     <a class="vanta-filter-action" href="{{ cl.add_facet_link }}" aria-label="{% translate 'Show counts' %}" title="{% translate 'Show counts' %}">
                       <svg aria-hidden="true" viewBox="0 0 24 24">
-                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                        <path d="M4 4l16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M4 4l16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
                       </svg>
                     </a>
                   {% endif %}
                 {% else %}
                   <span class="vanta-filter-action is-disabled" aria-hidden="true">
                     <svg aria-hidden="true" viewBox="0 0 24 24">
-                      <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                      <path d="M4 4l16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                      <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                      <path d="M4 4l16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
                     </svg>
                   </span>
                 {% endif %}
@@ -93,11 +90,12 @@
                 {% endif %}
               </div>
             </div>
+            {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
           </search>
           {% endif %}
         {% endblock %}
         <div>
-          {% if cl.search_fields or has_add_permission %}
+          {% if cl.search_fields or has_add_permission or cl.has_filters %}
             <div id="toolbar" class="admin-changelist-card-header">
               {% block search %}
                 {% if cl.search_fields %}
@@ -130,6 +128,31 @@
                   {% endblock %}
                 </ul>
               {% endblock %}
+              {% if cl.has_filters %}
+                {% active_admin_filter_count cl as active_filter_count %}
+                <button
+                  class="admin-filter-panel-toggle{% if cl.has_active_filters %} has-active-filters{% endif %}"
+                  id="admin-filter-panel-toggle"
+                  type="button"
+                  aria-controls="changelist-filter"
+                  aria-expanded="false"
+                  aria-label="{% if cl.has_active_filters %}{% translate 'Open filters, active filters applied' %}{% else %}{% translate 'Open filters' %}{% endif %}"
+                  title="{% if cl.has_active_filters %}{% translate 'Open filters, active filters applied' %}{% else %}{% translate 'Open filters' %}{% endif %}"
+                  data-open-label="{% translate 'Open filters' %}"
+                  data-open-active-label="{% translate 'Open filters, active filters applied' %}"
+                  data-close-label="{% translate 'Close filters' %}"
+                >
+                  <svg aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="M3 5h18l-7 8v5l-4 2v-7Z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                  {% if active_filter_count %}
+                    <span class="admin-filter-panel-toggle__count" aria-hidden="true">{{ active_filter_count }}</span>
+                  {% endif %}
+                  {% if cl.has_active_filters %}
+                    <span class="visually-hidden">{% translate 'Active filters applied' %}</span>
+                  {% endif %}
+                </button>
+              {% endif %}
             </div>
           {% endif %}
           {% block date_hierarchy %}{% if cl.date_hierarchy %}{% date_hierarchy cl %}{% endif %}{% endblock %}

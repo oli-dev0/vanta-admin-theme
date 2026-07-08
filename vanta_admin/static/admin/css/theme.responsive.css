@@ -194,21 +194,16 @@
     justify-content: flex-start;
   }
 
-  #changelist.filtered .changelist-form-container {
-    grid-template-columns: 1fr;
-  }
-
-  #changelist .changelist-form-container > div,
-  #changelist-filter {
-    grid-column: 1;
-  }
-
   #changelist .changelist-form-container > div {
     min-width: 0;
   }
 
   #changelist-filter {
-    position: static;
+    top: 3.15rem;
+    right: 0.6rem;
+    left: 0.6rem;
+    width: auto;
+    max-height: min(38rem, calc(100vh - 5.25rem));
   }
 }
 
@@ -259,13 +254,16 @@
   .admin-sidebar__model a,
   .admin-sidebar__account-links a,
   .admin-sidebar__account-links button,
-  .admin-action-link {
+  .admin-action-link,
+  .admin-filter-panel-toggle,
+  #changelist-filter {
     transition: none;
   }
 
   .admin-sidebar__donation-link .donation-button__steam,
   .admin-sidebar__donation-link .donation-button__steam::before,
-  .admin-sidebar__donation-link .donation-button__steam::after {
+  .admin-sidebar__donation-link .donation-button__steam::after,
+  #changelist .admin-filter-panel-toggle.has-active-filters::after {
     animation: none;
   }
 }

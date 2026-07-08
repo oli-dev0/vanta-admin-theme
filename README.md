@@ -25,6 +25,10 @@ feels more deliberate in everyday use.
   themselves after a short time.
 - Changelist actions that appear only when rows are selected, stay available
   while scrolling, and include a clear-selected control.
+- Changelist filters that open from a compact toolbar button instead of taking a
+  permanent right-side column.
+- Active-filter indicators in the toolbar, including a count when filters are
+  applied.
 - Styled select controls for common admin dropdowns, while Django's native
   multi-select fields stay unchanged.
 - Built-in icons for common admin areas, models, and recent actions.

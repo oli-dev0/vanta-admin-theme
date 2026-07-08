@@ -1,8 +1,13 @@
 'use strict';
 
 {
+    const changelist = document.getElementById('changelist');
+    const filterPanel = document.getElementById('changelist-filter');
+    const filterPanelToggle = document.getElementById('admin-filter-panel-toggle');
     const filterSectionsToggle = document.getElementById('admin-filter-sections-toggle');
     const filterSections = Array.from(document.querySelectorAll('#changelist-filter details'));
+    const filterPanelReopenKey = `django.admin.theme.changelistFilter.reopen:${window.location.pathname}`;
+    let filterPanelCloseTimer = null;
 
     function isDetailsOpen(section) {
         return section.open;
@@ -23,6 +28,61 @@
 
     function setFilterSectionOpen(section, isOpen) {
         section.open = isOpen;
+    }
+
+    function setFilterPanelOpen(isOpen) {
+        if (!changelist || !filterPanel || !filterPanelToggle) {
+            return;
+        }
+
+        window.clearTimeout(filterPanelCloseTimer);
+        const hasActiveFilters = filterPanelToggle.classList.contains('has-active-filters');
+        const openLabel = hasActiveFilters
+            ? filterPanelToggle.dataset.openActiveLabel || 'Open filters, active filters applied'
+            : filterPanelToggle.dataset.openLabel || 'Open filters';
+        const label = isOpen
+            ? filterPanelToggle.dataset.closeLabel || 'Close filters'
+            : openLabel;
+
+        changelist.classList.toggle('has-open-filters', isOpen);
+        filterPanelToggle.setAttribute('aria-expanded', String(isOpen));
+        filterPanelToggle.setAttribute('aria-label', label);
+        filterPanelToggle.setAttribute('title', label);
+
+        if (isOpen) {
+            filterPanel.hidden = false;
+            window.requestAnimationFrame(() => {
+                filterPanel.classList.add('is-open');
+            });
+            return;
+        }
+
+        filterPanel.classList.remove('is-open');
+        filterPanelCloseTimer = window.setTimeout(() => {
+            if (!filterPanel.classList.contains('is-open')) {
+                filterPanel.hidden = true;
+            }
+        }, 180);
+    }
+
+    function shouldReopenFilterPanel() {
+        try {
+            return window.sessionStorage.getItem(filterPanelReopenKey) === 'true';
+        } catch (error) {
+            return false;
+        }
+    }
+
+    function clearFilterPanelReopen() {
+        try {
+            window.sessionStorage.removeItem(filterPanelReopenKey);
+        } catch (error) {}
+    }
+
+    function rememberFilterPanelReopen() {
+        try {
+            window.sessionStorage.setItem(filterPanelReopenKey, 'true');
+        } catch (error) {}
     }
 
     function syncChangelistActions() {
@@ -103,6 +163,53 @@
     }
 
     syncChangelistActions();
+
+    if (filterPanelToggle && filterPanel) {
+        setFilterPanelOpen(shouldReopenFilterPanel());
+        clearFilterPanelReopen();
+
+        filterPanelToggle.addEventListener('click', () => {
+            setFilterPanelOpen(filterPanelToggle.getAttribute('aria-expanded') !== 'true');
+        });
+
+        document.addEventListener('click', (event) => {
+            if (
+                filterPanelToggle.getAttribute('aria-expanded') !== 'true'
+                || filterPanel.contains(event.target)
+                || filterPanelToggle.contains(event.target)
+            ) {
+                return;
+            }
+
+            setFilterPanelOpen(false);
+        });
+
+        filterPanel.addEventListener('click', (event) => {
+            const link = event.target.closest('a[href]');
+            if (!link) {
+                return;
+            }
+
+            const url = new URL(link.href, window.location.href);
+            if (url.pathname === window.location.pathname) {
+                rememberFilterPanelReopen();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (
+                event.key === 'Escape'
+                && filterPanelToggle.getAttribute('aria-expanded') === 'true'
+                && (
+                    filterPanel.contains(document.activeElement)
+                    || filterPanelToggle === document.activeElement
+                )
+            ) {
+                setFilterPanelOpen(false);
+                filterPanelToggle.focus();
+            }
+        });
+    }
 
     if (filterSectionsToggle) {
         filterSectionsToggle.addEventListener('click', () => {
