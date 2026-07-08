@@ -44,11 +44,15 @@ body.vanta-two-factor {
   line-height: 1.2;
   text-decoration: none;
   white-space: nowrap;
+  transition:
+    color var(--admin-transition),
+    transform var(--admin-transition);
 }
 
 .vanta-two-factor-admin-link:hover,
 .vanta-two-factor-admin-link:focus-visible {
   color: var(--admin-link-strong);
+  transform: translateY(-2px);
 }
 
 .vanta-two-factor-admin-link__arrow {
@@ -56,6 +60,33 @@ body.vanta-two-factor {
   font-size: 1.08rem;
   line-height: 1;
   transform: translateY(-0.20rem);
+}
+
+.vanta-two-factor-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.18rem;
+  color: var(--admin-link);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    color var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+.vanta-two-factor-back-link:hover,
+.vanta-two-factor-back-link:focus-visible {
+  color: var(--admin-link-strong);
+  transform: translateY(-2px);
+}
+
+.vanta-two-factor-back-link__arrow {
+  display: inline-block;
+  font-size: 1.08rem;
+  line-height: 1;
+  transform: translateY(-0.22rem);
 }
 
 
@@ -232,7 +263,7 @@ body.vanta-two-factor {
 .vanta-two-factor .btn-warning,
 .vanta-two-factor .btn-info {
   border-color: var(--admin-border-strong);
-  background: var(--admin-surface-muted);
+  background: var(--input-bg);
   color: var(--admin-text);
   box-shadow: none;
 }
@@ -307,6 +338,8 @@ body.vanta-two-factor {
 .vanta-two-factor .btn-warning:focus-visible,
 .vanta-two-factor .btn-info:hover,
 .vanta-two-factor .btn-info:focus-visible {
+  background: var(--admin-surface-muted);
+  border-color: var(--admin-accent-border);
   box-shadow: none;
 }
 
@@ -340,6 +373,21 @@ body.vanta-two-factor {
   filter: none;
   color: var(--admin-link-strong);
   box-shadow: none;
+}
+
+.vanta-two-factor a.float-right.btn-link {
+  border-color: var(--admin-border-strong);
+  background: var(--input-bg);
+  color: var(--admin-text);
+  padding-right: 0.82rem;
+  padding-left: 0.82rem;
+}
+
+.vanta-two-factor a.float-right.btn-link:hover,
+.vanta-two-factor a.float-right.btn-link:focus-visible {
+  background: var(--admin-surface-muted);
+  color: var(--admin-text);
+  transform: translateY(-2px);
 }
 
 .vanta-two-factor .btn-block {

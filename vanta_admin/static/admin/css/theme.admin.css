@@ -5,13 +5,91 @@
   top: 0;
   z-index: 20;
   display: flex;
+  flex: 0 0 var(--admin-sidebar-width);
   width: var(--admin-sidebar-width);
+  min-width: var(--admin-sidebar-width);
   min-height: 100vh;
   max-height: 100vh;
   flex-direction: column;
   background: var(--admin-sidebar-bg);
   border-right: 1px solid var(--admin-border);
   transition: width 160ms var(--ease), transform 160ms var(--ease);
+}
+
+.admin-sidebar__resize-handle {
+  position: absolute;
+  top: 0;
+  right: -0.34rem;
+  z-index: 4;
+  width: 0.68rem;
+  height: 100%;
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.admin-sidebar__resize-handle::before,
+.admin-sidebar__resize-handle::after {
+  content: "";
+  position: absolute;
+  opacity: 0;
+  transition:
+    opacity var(--admin-transition),
+    background-color var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+.admin-sidebar__resize-handle::before {
+  top: 50%;
+  right: 0.5rem;
+  z-index: 2;
+  width: 0.3rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--admin-muted) 70%, var(--admin-border-strong));
+  transform: translateY(-50%);
+}
+
+.admin-sidebar__resize-handle::after {
+  top: 0.85rem;
+  right: 0.26rem;
+  bottom: 0.85rem;
+  z-index: 1;
+  width: 1px;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.admin-sidebar__resize-handle:hover::before,
+.admin-sidebar__resize-handle:focus-visible::before,
+body.admin-sidebar-resizing .admin-sidebar__resize-handle::before,
+.admin-sidebar__resize-handle:hover::after,
+.admin-sidebar__resize-handle:focus-visible::after,
+body.admin-sidebar-resizing .admin-sidebar__resize-handle::after {
+  opacity: 1;
+}
+
+.admin-sidebar__resize-handle:hover::after,
+.admin-sidebar__resize-handle:focus-visible::after,
+body.admin-sidebar-resizing .admin-sidebar__resize-handle::after {
+  background: color-mix(in srgb, var(--admin-border-strong) 80%, var(--admin-muted));
+}
+
+.admin-sidebar__resize-handle:focus-visible {
+  outline: none;
+}
+
+body.admin-sidebar-collapsed .admin-sidebar__resize-handle {
+  display: none;
+}
+
+body.admin-sidebar-resizing,
+body.admin-sidebar-resizing * {
+  cursor: ew-resize !important;
+  user-select: none;
+}
+
+body.admin-sidebar-resizing .admin-sidebar {
+  transition: none;
 }
 
 .admin-sidebar__brand-row,
@@ -114,14 +192,17 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
 
 .admin-sidebar__filter {
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 2rem;
   align-items: center;
+  gap: 0.55rem;
   padding: 0.85rem 1rem 0;
 }
 
 .admin-sidebar__filter::before {
   content: "";
   position: absolute;
+  top: calc(0.85rem + 1rem);
   left: 1.72rem;
   width: 0.95rem;
   height: 0.95rem;
@@ -129,6 +210,7 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
   mask: url("../img/search.svg") center / contain no-repeat;
   -webkit-mask: url("../img/search.svg") center / contain no-repeat;
   pointer-events: none;
+  transform: translateY(-50%);
 }
 
 #nav-sidebar .admin-sidebar__filter input[type="search"] {
@@ -145,6 +227,46 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
   transition:
     background-color var(--admin-transition),
     color var(--admin-transition);
+}
+
+.admin-sidebar__sections-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  min-width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 0.27rem;
+  background: var(--surface-muted);
+  color: var(--accent);
+  cursor: pointer;
+  transition:
+    background-color var(--admin-transition),
+    color var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+.admin-sidebar__sections-toggle svg {
+  width: 1.12rem;
+  height: 1.12rem;
+  stroke-width: 2.45;
+  transition: transform var(--admin-transition);
+}
+
+.admin-sidebar__sections-toggle.is-collapse-mode svg {
+  transform: rotate(180deg);
+}
+
+.admin-sidebar__sections-toggle:hover,
+.admin-sidebar__sections-toggle:focus-visible {
+  background: var(--surface);
+  color: var(--accent-strong);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.admin-sidebar__sections-toggle:active {
+  transform: translateY(0);
 }
 
 #nav-sidebar .admin-sidebar__filter input[type="search"]::placeholder {
@@ -511,8 +633,8 @@ html[data-theme="light"] .admin-sidebar__time-button[aria-pressed="true"] {
   align-items: center;
   gap: 0.68rem;
   width: 100%;
-  min-height: 2.22rem;
-  padding: 0.46rem;
+  min-height: 2rem;
+  padding: 0.34rem 0.46rem;
   border: 0;
   border-radius: 0.28rem;
   background: transparent;
@@ -1097,6 +1219,48 @@ fieldset.module,
   opacity: 0.62;
   cursor: not-allowed;
   transform: none;
+}
+
+.helptext,
+.help {
+  color: var(--admin-muted);
+  font-size: 0.82rem;
+  line-height: 1.12;
+}
+
+ul.helptext,
+.help ul {
+  display: grid;
+  gap: 0.06rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+ul.helptext li,
+.help li {
+  position: relative;
+  margin: 0;
+  padding-left: 0.95rem;
+}
+
+fieldset.module .form-row .help li,
+fieldset.module .form-row ul.helptext li {
+  line-height: 1.12;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+ul.helptext li::before,
+.help li::before {
+  content: "";
+  position: absolute;
+  top: 0.36em;
+  left: 0.12rem;
+  width: 0.32rem;
+  height: 0.32rem;
+  border-radius: 999px;
+  background: var(--admin-accent);
 }
 
 .delete-confirmation form {
@@ -1785,6 +1949,94 @@ input[type="checkbox"]:focus-visible {
   padding: 0 0.8rem;
 }
 
+body:not(.change-form) .submit-row input[type="submit"],
+body:not(.change-form) .submit-row button,
+body:not(.change-form) .submit-row .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.05rem;
+  margin: 0;
+  padding: 0 0.8rem;
+  border: 0;
+  border-radius: 0.27rem;
+  background: var(--admin-accent);
+  color: var(--admin-button-text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 720;
+  line-height: 1.2;
+  text-decoration: none;
+  box-shadow: none;
+  transition:
+    background-color var(--admin-transition),
+    border-color var(--admin-transition),
+    color var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+body:not(.change-form) .submit-row input[type="submit"]:hover,
+body:not(.change-form) .submit-row input[type="submit"]:focus-visible,
+body:not(.change-form) .submit-row button:hover,
+body:not(.change-form) .submit-row button:focus-visible,
+body:not(.change-form) .submit-row .button:hover,
+body:not(.change-form) .submit-row .button:focus-visible {
+  border-color: var(--admin-accent-border);
+  background: var(--admin-accent-strong);
+  color: var(--admin-button-text);
+  filter: none;
+  box-shadow: none;
+  transform: translateY(-2px);
+}
+
+body:not(.change-form) .submit-row input[type="submit"]:active,
+body:not(.change-form) .submit-row button:active,
+body:not(.change-form) .submit-row .button:active {
+  transform: scale(0.97);
+}
+
+html[data-theme="dark"] body:not(.change-form) .submit-row,
+body[data-theme="dark"]:not(.change-form) .submit-row,
+body.theme-dark:not(.change-form) .submit-row {
+  background: #2c3435;
+}
+
+html[data-theme="dark"] body:not(.change-form) .submit-row input[type="submit"],
+html[data-theme="dark"] body:not(.change-form) .submit-row button,
+html[data-theme="dark"] body:not(.change-form) .submit-row .button,
+body[data-theme="dark"]:not(.change-form) .submit-row input[type="submit"],
+body[data-theme="dark"]:not(.change-form) .submit-row button,
+body[data-theme="dark"]:not(.change-form) .submit-row .button,
+body.theme-dark:not(.change-form) .submit-row input[type="submit"],
+body.theme-dark:not(.change-form) .submit-row button,
+body.theme-dark:not(.change-form) .submit-row .button {
+  background: var(--admin-accent);
+  color: var(--admin-button-text);
+}
+
+html[data-theme="dark"] body:not(.change-form) .submit-row input[type="submit"]:hover,
+html[data-theme="dark"] body:not(.change-form) .submit-row input[type="submit"]:focus-visible,
+html[data-theme="dark"] body:not(.change-form) .submit-row button:hover,
+html[data-theme="dark"] body:not(.change-form) .submit-row button:focus-visible,
+html[data-theme="dark"] body:not(.change-form) .submit-row .button:hover,
+html[data-theme="dark"] body:not(.change-form) .submit-row .button:focus-visible,
+body[data-theme="dark"]:not(.change-form) .submit-row input[type="submit"]:hover,
+body[data-theme="dark"]:not(.change-form) .submit-row input[type="submit"]:focus-visible,
+body[data-theme="dark"]:not(.change-form) .submit-row button:hover,
+body[data-theme="dark"]:not(.change-form) .submit-row button:focus-visible,
+body[data-theme="dark"]:not(.change-form) .submit-row .button:hover,
+body[data-theme="dark"]:not(.change-form) .submit-row .button:focus-visible,
+body.theme-dark:not(.change-form) .submit-row input[type="submit"]:hover,
+body.theme-dark:not(.change-form) .submit-row input[type="submit"]:focus-visible,
+body.theme-dark:not(.change-form) .submit-row button:hover,
+body.theme-dark:not(.change-form) .submit-row button:focus-visible,
+body.theme-dark:not(.change-form) .submit-row .button:hover,
+body.theme-dark:not(.change-form) .submit-row .button:focus-visible {
+  background: var(--admin-accent-strong);
+  color: var(--admin-button-text);
+}
+
 #changelist .actions .admin-action-select__button,
 #changelist .actions .admin-action-select__option {
   font-size: 0.72rem;
@@ -1860,13 +2112,13 @@ input[type="checkbox"]:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 1.82rem;
-  padding: 0.26rem 0.5rem;
+  min-height: 1.55rem;
+  padding: 0.22rem 0.43rem;
   border: 1px solid var(--admin-accent-border);
   border-radius: var(--admin-radius-sm);
   background: var(--admin-accent);
   color: var(--admin-button-text);
-  font-size: 0.88rem;
+  font-size: 0.75rem;
   font-weight: 760;
   line-height: 1.2;
   text-decoration: none;
@@ -2679,8 +2931,8 @@ html[data-theme="light"] #changelist-filter {
 input:not([type="checkbox"]):not([type="radio"]):focus,
 textarea:focus,
 select:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: 1px solid var(--admin-accent-border);
+  outline-offset: 1px;
 }
 
 :where(a, button, summary, input[type="submit"], input[type="button"], input[type="reset"]):focus:not(:focus-visible) {
@@ -2689,8 +2941,8 @@ select:focus {
 }
 
 :where(a, button, input:not([type="checkbox"]):not([type="radio"]), select, textarea, summary):focus-visible {
-  outline: 3px solid var(--admin-accent-soft);
-  outline-offset: 2px;
+  outline: 1px solid var(--admin-accent-border);
+  outline-offset: 1px;
   box-shadow: none;
 }
 

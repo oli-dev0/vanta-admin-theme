@@ -144,6 +144,10 @@
     transform: translateX(-100%);
   }
 
+  .admin-sidebar__resize-handle {
+    display: none;
+  }
+
   body.admin-sidebar-mobile-open .admin-sidebar {
     transform: translateX(0);
   }

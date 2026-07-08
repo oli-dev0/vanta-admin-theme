@@ -2,13 +2,19 @@
 
 {
     const sidebarStateKey = 'django.admin.theme.sidebar.isCollapsed';
+    const sidebarWidthStateKey = 'django.admin.theme.sidebar.width';
     const navSectionsStateKey = 'django.admin.theme.sidebar.openSections';
+    const minSidebarWidth = 220;
+    const maxSidebarWidth = 420;
+    const sidebarResizeStep = 16;
 
     const body = document.body;
     const root = document.documentElement;
     const sidebar = document.getElementById('nav-sidebar');
     const collapseButton = document.getElementById('admin-sidebar-collapse');
+    const resizeHandle = document.getElementById('admin-sidebar-resize-handle');
     const menuButton = document.getElementById('admin-sidebar-menu-button');
+    const sectionsToggle = document.getElementById('admin-sidebar-sections-toggle');
     const accountDetails = document.querySelector('.admin-sidebar__account');
     const navFilter = document.getElementById('admin-nav-filter');
     const mobileQuery = window.matchMedia('(max-width: 1024px)');
@@ -16,6 +22,50 @@
     const programmaticSectionToggles = new WeakSet();
     let filterBaselineOpenSections = null;
     let hadFilterQuery = false;
+    let resizeStartX = 0;
+    let resizeStartWidth = 0;
+
+    function clampSidebarWidth(width) {
+        return Math.min(maxSidebarWidth, Math.max(minSidebarWidth, width));
+    }
+
+    function getStoredSidebarWidth() {
+        const width = Number.parseInt(localStorage.getItem(sidebarWidthStateKey), 10);
+        return Number.isFinite(width) ? clampSidebarWidth(width) : null;
+    }
+
+    function setSidebarWidth(width, shouldPersist) {
+        const nextWidth = clampSidebarWidth(width);
+
+        root.style.setProperty('--admin-sidebar-width', `${nextWidth}px`);
+
+        if (resizeHandle) {
+            resizeHandle.setAttribute('aria-valuemin', String(minSidebarWidth));
+            resizeHandle.setAttribute('aria-valuemax', String(maxSidebarWidth));
+            resizeHandle.setAttribute('aria-valuenow', String(nextWidth));
+        }
+
+        if (shouldPersist) {
+            localStorage.setItem(sidebarWidthStateKey, String(nextWidth));
+        }
+    }
+
+    function getCurrentSidebarWidth() {
+        if (!sidebar) {
+            return getStoredSidebarWidth() || minSidebarWidth;
+        }
+
+        return clampSidebarWidth(Math.round(sidebar.getBoundingClientRect().width));
+    }
+
+    function canResizeSidebar() {
+        return (
+            sidebar
+            && resizeHandle
+            && !mobileQuery.matches
+            && !body.classList.contains('admin-sidebar-collapsed')
+        );
+    }
 
     function setCollapsed(isCollapsed, shouldPersist) {
         body.classList.toggle('admin-sidebar-collapsed', isCollapsed);
@@ -52,6 +102,10 @@
             sidebar.setAttribute('aria-hidden', String(isHiddenOnMobile));
             sidebar.toggleAttribute('inert', isHiddenOnMobile);
         }
+
+        if (resizeHandle) {
+            resizeHandle.hidden = mobileQuery.matches;
+        }
     }
 
     function isSectionOpen(section) {
@@ -71,6 +125,23 @@
         if (summary) {
             summary.setAttribute('aria-expanded', String(isSectionOpen(section)));
         }
+    }
+
+    function hasOpenSections() {
+        return navSections.some((section) => !section.hidden && isSectionOpen(section));
+    }
+
+    function syncSectionsToggle() {
+        if (!sectionsToggle) {
+            return;
+        }
+
+        const shouldCollapse = hasOpenSections();
+        const label = shouldCollapse ? 'Collapse all' : 'Expand all';
+
+        sectionsToggle.classList.toggle('is-collapse-mode', shouldCollapse);
+        sectionsToggle.setAttribute('aria-label', label);
+        sectionsToggle.setAttribute('title', label);
     }
 
     function getCurrentOpenSections() {
@@ -181,10 +252,12 @@
         }
 
         hadFilterQuery = hasQuery;
+        syncSectionsToggle();
     }
 
     function applyOpenSections(openSections, shouldPersist) {
         if (!openSections) {
+            syncSectionsToggle();
             root.classList.remove('admin-nav-state-pending');
             return;
         }
@@ -209,6 +282,7 @@
             localStorage.setItem(navSectionsStateKey, JSON.stringify(Array.from(nextOpenSections)));
         }
 
+        syncSectionsToggle();
         root.classList.remove('admin-nav-state-pending');
     }
 
@@ -217,9 +291,73 @@
     }
 
     const storedCollapsed = localStorage.getItem(sidebarStateKey);
+    const storedSidebarWidth = getStoredSidebarWidth();
+    if (storedSidebarWidth) {
+        setSidebarWidth(storedSidebarWidth, false);
+    } else if (resizeHandle) {
+        setSidebarWidth(getCurrentSidebarWidth(), false);
+    }
     setCollapsed(storedCollapsed === 'true', false);
     setMobileOpen(false);
     applyStoredOpenSections();
+    syncSectionsToggle();
+
+    if (resizeHandle) {
+        resizeHandle.addEventListener('pointerdown', (event) => {
+            if (!canResizeSidebar()) {
+                return;
+            }
+
+            resizeStartX = event.clientX;
+            resizeStartWidth = getCurrentSidebarWidth();
+            body.classList.add('admin-sidebar-resizing');
+            resizeHandle.setPointerCapture(event.pointerId);
+            event.preventDefault();
+        });
+
+        resizeHandle.addEventListener('pointermove', (event) => {
+            if (!body.classList.contains('admin-sidebar-resizing')) {
+                return;
+            }
+
+            setSidebarWidth(resizeStartWidth + event.clientX - resizeStartX, false);
+        });
+
+        resizeHandle.addEventListener('pointerup', (event) => {
+            if (!body.classList.contains('admin-sidebar-resizing')) {
+                return;
+            }
+
+            body.classList.remove('admin-sidebar-resizing');
+            setSidebarWidth(getCurrentSidebarWidth(), true);
+            resizeHandle.releasePointerCapture(event.pointerId);
+        });
+
+        resizeHandle.addEventListener('pointercancel', () => {
+            body.classList.remove('admin-sidebar-resizing');
+            setSidebarWidth(getCurrentSidebarWidth(), true);
+        });
+
+        resizeHandle.addEventListener('keydown', (event) => {
+            if (!canResizeSidebar()) {
+                return;
+            }
+
+            if (event.key === 'ArrowLeft') {
+                setSidebarWidth(getCurrentSidebarWidth() - sidebarResizeStep, true);
+                event.preventDefault();
+            } else if (event.key === 'ArrowRight') {
+                setSidebarWidth(getCurrentSidebarWidth() + sidebarResizeStep, true);
+                event.preventDefault();
+            } else if (event.key === 'Home') {
+                setSidebarWidth(minSidebarWidth, true);
+                event.preventDefault();
+            } else if (event.key === 'End') {
+                setSidebarWidth(maxSidebarWidth, true);
+                event.preventDefault();
+            }
+        });
+    }
 
     if (collapseButton) {
         collapseButton.addEventListener('click', () => {
@@ -238,10 +376,28 @@
         });
     }
 
+    if (sectionsToggle) {
+        sectionsToggle.addEventListener('click', () => {
+            const shouldOpen = !hasOpenSections();
+
+            navSections.forEach((section) => {
+                if (section.hidden) {
+                    return;
+                }
+
+                setSectionOpen(section, shouldOpen, true);
+            });
+
+            persistOpenSections();
+            syncSectionsToggle();
+        });
+    }
+
     navSections.forEach((section) => {
         syncSectionAria(section);
         section.addEventListener('toggle', () => {
             syncSectionAria(section);
+            syncSectionsToggle();
             if (programmaticSectionToggles.has(section)) {
                 programmaticSectionToggles.delete(section);
                 return;

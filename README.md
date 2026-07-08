@@ -11,6 +11,8 @@ feels more deliberate in everyday use.
 
 - A cleaner admin layout with a fixed sidebar that remembers how you left it.
 - A sidebar navigation filter that lets users quickly narrow large admin menus by app or model name.
+- A resizable desktop sidebar that remembers each user's preferred width in the browser.
+- A sidebar expand/collapse-all control for quickly opening or closing visible navigation sections.
 - Light and dark mode, using the same calm Vanta look across the admin.
 - A more settled light-mode palette with clearer search focus states and stronger changelist table headers.
 - Less visual noise on the main admin screens, login pages, cards, filters, and
@@ -33,7 +35,7 @@ feels more deliberate in everyday use.
   multi-select fields stay unchanged.
 - Built-in icons for common admin areas, models, and recent actions.
 - A cleaner account menu with display preferences, project links, password
-  access, logout, and a Vanta support link.
+  access, 2FA settings, logout, and a Vanta support link.
 - A 12-hour and 24-hour time-format preference for changelist date/time values,
   stored in the browser for each admin user.
 - Shorter changelist date formatting that makes date-heavy tables easier to
@@ -43,7 +45,7 @@ feels more deliberate in everyday use.
 - A mobile sidebar overlay that makes the admin easier to use on smaller
   screens.
 - Optional matching templates for `django-two-factor-auth` login, setup
-  completion, account security, and backup-token screens.
+  completion, account security, disable confirmation, and backup-token screens.
 
 Vanta Admin does not replace Django admin, change your permissions, or configure
 two-factor authentication for you. If your project uses `django-two-factor-auth`,
