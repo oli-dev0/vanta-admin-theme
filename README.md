@@ -32,8 +32,10 @@ feels more deliberate in everyday use.
   permanent right-side column.
 - Active-filter indicators in the toolbar, including a count when filters are
   applied.
-- Styled select controls for common admin dropdowns, while Django's native
-  multi-select fields stay unchanged.
+- An enhanced horizontal selector for many-to-many admin fields, with category
+  grouping, item filtering, selected counts, and add/remove visible controls.
+- Styled select controls for common admin dropdowns, plus a clearer enhanced
+  horizontal selector for many-to-many fields.
 - Built-in icons for common admin areas, models, and recent actions.
 - A cleaner account menu with display preferences, project links, password
   access, 2FA settings, logout, and a Vanta support link.

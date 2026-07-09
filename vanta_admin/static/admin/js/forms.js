@@ -169,6 +169,328 @@
         .map(enhanceActionSelect)
         .filter(Boolean);
 
+    function parseStructuredLabel(text) {
+        const parts = text.split('|').map((part) => part.trim()).filter(Boolean);
+
+        if (parts.length < 3) {
+            return null;
+        }
+
+        return {
+            category: parts[0],
+            section: parts[1],
+            label: parts.slice(2).join(' | ')
+        };
+    }
+
+    function createOption(optionData, selected = false) {
+        return new Option(optionData.text, optionData.value, false, selected);
+    }
+
+    function enhanceHorizontalSelector(selector, selectorIndex) {
+        if (selector.dataset.vantaEnhanced === 'true' || selector.classList.contains('stacked')) {
+            return;
+        }
+
+        const fromSelect = selector.querySelector('select[id$="_from"]');
+        const toSelect = selector.querySelector('select[id$="_to"]');
+
+        if (!fromSelect || !toSelect || !fromSelect.multiple || !toSelect.multiple) {
+            return;
+        }
+
+        const fieldId = fromSelect.id.replace(/_from$/, '');
+        const fieldLabel = selector.closest('.form-row')?.querySelector('label')?.textContent.trim()
+            || toSelect.name
+            || 'items';
+        const selectedValues = new Set(Array.from(toSelect.options).map((option) => option.value));
+        const optionMap = new Map();
+
+        [...Array.from(fromSelect.options), ...Array.from(toSelect.options)].forEach((option) => {
+            if (!optionMap.has(option.value)) {
+                const text = option.textContent.trim();
+                const structured = parseStructuredLabel(text);
+                optionMap.set(option.value, {
+                    value: option.value,
+                    text,
+                    category: structured?.category || '',
+                    section: structured?.section || '',
+                    label: structured?.label || text
+                });
+            }
+        });
+
+        const options = Array.from(optionMap.values());
+
+        if (!options.length) {
+            return;
+        }
+
+        const usesCategories = options.some((option) => option.category && option.section);
+        const categories = usesCategories
+            ? Array.from(new Set(options.map((option) => option.category)))
+            : [];
+        let activeCategory = categories[0] || '';
+        let searchQuery = '';
+
+        const widget = document.createElement('div');
+        const header = document.createElement('div');
+        const title = document.createElement('div');
+        const countWrap = document.createElement('div');
+        const clearAllSelected = document.createElement('button');
+        const clearAllIcon = document.createElement('span');
+        const count = document.createElement('div');
+        const tools = document.createElement('div');
+        const searchWrap = document.createElement('div');
+        const search = document.createElement('input');
+        const addVisible = document.createElement('button');
+        const removeVisible = document.createElement('button');
+        const categoryNav = document.createElement('div');
+        const list = document.createElement('div');
+        const empty = document.createElement('p');
+        const categoryButtons = new Map();
+        const widgetId = `admin-checkbox-selector-${selectorIndex}`;
+
+        widget.className = 'admin-checkbox-selector';
+        widget.id = widgetId;
+        header.className = 'admin-checkbox-selector__header';
+        title.className = 'admin-checkbox-selector__title';
+        countWrap.className = 'admin-checkbox-selector__count-wrap';
+        clearAllSelected.className = 'admin-checkbox-selector__clear-selected';
+        clearAllIcon.className = 'admin-checkbox-selector__clear-selected-icon';
+        count.className = 'admin-checkbox-selector__count';
+        tools.className = 'admin-checkbox-selector__tools';
+        searchWrap.className = 'admin-checkbox-selector__search-wrap';
+        search.className = 'admin-checkbox-selector__search';
+        addVisible.className = 'admin-checkbox-selector__bulk-button';
+        removeVisible.className = 'admin-checkbox-selector__bulk-button admin-checkbox-selector__bulk-button--muted';
+        categoryNav.className = 'admin-checkbox-selector__categories';
+        list.className = 'admin-checkbox-selector__list';
+        empty.className = 'admin-checkbox-selector__empty';
+
+        title.textContent = fieldLabel.replace(/^Available\s+/i, '');
+        clearAllSelected.type = 'button';
+        clearAllSelected.setAttribute('aria-label', `Clear selected ${title.textContent}`);
+        clearAllSelected.title = `Clear selected ${title.textContent}`;
+        clearAllSelected.append(clearAllIcon);
+        search.type = 'search';
+        search.id = `${fieldId}_vanta_filter`;
+        search.autocomplete = 'off';
+        search.placeholder = 'Filter items';
+        search.setAttribute('aria-label', `Filter ${title.textContent}`);
+        addVisible.type = 'button';
+        addVisible.textContent = 'Add all';
+        removeVisible.type = 'button';
+        removeVisible.textContent = 'Remove all';
+        empty.textContent = 'No matching items.';
+
+        function optionMatches(option) {
+            if (usesCategories && option.category !== activeCategory) {
+                return false;
+            }
+
+            if (!searchQuery) {
+                return true;
+            }
+
+            return option.text.toLowerCase().includes(searchQuery);
+        }
+
+        function visibleOptions() {
+            return options.filter(optionMatches);
+        }
+
+        function syncNativeSelects() {
+            const fromOptions = [];
+            const toOptions = [];
+
+            options.forEach((option) => {
+                if (selectedValues.has(option.value)) {
+                    toOptions.push(createOption(option, true));
+                } else {
+                    fromOptions.push(createOption(option));
+                }
+            });
+
+            fromSelect.replaceChildren(...fromOptions);
+            toSelect.replaceChildren(...toOptions);
+
+            if (window.SelectBox?.cache) {
+                window.SelectBox.cache[fromSelect.id] = fromOptions.map((option) => ({
+                    value: option.value,
+                    text: option.text,
+                    displayed: 1
+                }));
+                window.SelectBox.cache[toSelect.id] = toOptions.map((option) => ({
+                    value: option.value,
+                    text: option.text,
+                    displayed: 1
+                }));
+            }
+
+            toSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        function syncCounts() {
+            count.textContent = `${selectedValues.size} selected`;
+
+            categoryButtons.forEach((button, category) => {
+                const badge = button.querySelector('.admin-checkbox-selector__category-count');
+                const selectedInCategory = options.filter((option) => (
+                    option.category === category && selectedValues.has(option.value)
+                )).length;
+
+                button.classList.toggle('is-active', category === activeCategory);
+                button.setAttribute('aria-pressed', String(category === activeCategory));
+                badge.textContent = String(selectedInCategory);
+                badge.hidden = selectedInCategory === 0;
+            });
+        }
+
+        function renderList() {
+            const visible = visibleOptions();
+            const fragment = document.createDocumentFragment();
+            const sections = new Map();
+
+            list.replaceChildren();
+
+            visible.forEach((option) => {
+                const sectionName = usesCategories ? option.section : '';
+                if (!sections.has(sectionName)) {
+                    sections.set(sectionName, []);
+                }
+                sections.get(sectionName).push(option);
+            });
+
+            sections.forEach((sectionOptions, sectionName) => {
+                const sectionBlock = document.createElement('section');
+                sectionBlock.className = sectionName
+                    ? 'admin-checkbox-selector__section-block'
+                    : 'admin-checkbox-selector__section-block admin-checkbox-selector__section-block--flat';
+
+                if (sectionName) {
+                    const sectionTitle = document.createElement('h3');
+                    sectionTitle.className = 'admin-checkbox-selector__section-title';
+                    sectionTitle.textContent = sectionName;
+                    sectionBlock.append(sectionTitle);
+                }
+
+                const group = document.createElement('div');
+                group.className = 'admin-checkbox-selector__section';
+
+                sectionOptions.forEach((option) => {
+                    const row = document.createElement('label');
+                    const checkbox = document.createElement('input');
+                    const text = document.createElement('span');
+
+                    row.className = 'admin-checkbox-selector__item';
+                    checkbox.type = 'checkbox';
+                    checkbox.value = option.value;
+                    checkbox.checked = selectedValues.has(option.value);
+                    checkbox.id = `${fieldId}_vanta_${option.value}`;
+                    text.textContent = option.label;
+
+                    checkbox.addEventListener('change', () => {
+                        if (checkbox.checked) {
+                            selectedValues.add(option.value);
+                        } else {
+                            selectedValues.delete(option.value);
+                        }
+                        syncNativeSelects();
+                        syncCounts();
+                    });
+
+                    row.append(checkbox, text);
+                    group.append(row);
+                });
+
+                sectionBlock.append(group);
+                fragment.append(sectionBlock);
+            });
+
+            if (!visible.length) {
+                fragment.append(empty);
+            }
+
+            list.append(fragment);
+            syncCounts();
+        }
+
+        categories.forEach((category) => {
+            const button = document.createElement('button');
+            const buttonText = document.createElement('span');
+            const badge = document.createElement('span');
+
+            button.type = 'button';
+            button.className = 'admin-checkbox-selector__category';
+            button.setAttribute('aria-controls', widgetId);
+            buttonText.textContent = category;
+            badge.className = 'admin-checkbox-selector__category-count';
+            badge.hidden = true;
+            button.append(buttonText, badge);
+            button.addEventListener('click', () => {
+                activeCategory = category;
+                renderList();
+            });
+            categoryButtons.set(category, button);
+            categoryNav.append(button);
+        });
+
+        search.addEventListener('input', () => {
+            searchQuery = search.value.trim().toLowerCase();
+            renderList();
+        });
+
+        addVisible.addEventListener('click', () => {
+            visibleOptions().forEach((option) => selectedValues.add(option.value));
+            syncNativeSelects();
+            renderList();
+        });
+
+        removeVisible.addEventListener('click', () => {
+            visibleOptions().forEach((option) => selectedValues.delete(option.value));
+            syncNativeSelects();
+            renderList();
+        });
+
+        clearAllSelected.addEventListener('click', () => {
+            selectedValues.clear();
+            syncNativeSelects();
+            renderList();
+        });
+
+        toSelect.form?.addEventListener('submit', () => {
+            syncNativeSelects();
+            Array.from(toSelect.options).forEach((option) => {
+                option.selected = true;
+            });
+        }, { capture: true });
+
+        countWrap.append(clearAllSelected, count);
+        header.append(title, countWrap);
+        searchWrap.append(search);
+        tools.append(searchWrap, addVisible, removeVisible);
+        widget.append(header);
+        if (usesCategories) {
+            widget.append(categoryNav);
+        }
+        widget.append(tools, list);
+
+        selector.dataset.vantaEnhanced = 'true';
+        selector.classList.add('admin-checkbox-selector-source');
+        selector.prepend(widget);
+        syncNativeSelects();
+        renderList();
+    }
+
+    function enhanceHorizontalSelectors() {
+        document.querySelectorAll('.selector').forEach(enhanceHorizontalSelector);
+    }
+
+    window.addEventListener('load', () => {
+        window.setTimeout(enhanceHorizontalSelectors, 0);
+    });
+
     function syncStickySubmitRow() {
         const form = document.querySelector('body.change-form form[id$="_form"]');
         const submitRow = form?.querySelector('.submit-row:last-of-type');
