@@ -1,8 +1,18 @@
+from datetime import timedelta
 from decimal import Decimal, ROUND_DOWN
 import re
+import sys
+from urllib.parse import urlencode
 
-from django import template
+from django import get_version, template
+from django.conf import settings
+from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
+from django.db import connection
+from django.urls import NoReverseMatch, reverse
+from django.utils import timezone
 from django.utils.html import conditional_escape, format_html
+from django.utils.text import capfirst, Truncator
+from django.utils.translation import gettext as _
 
 
 register = template.Library()
@@ -21,6 +31,17 @@ NON_FILTER_CHANGE_LIST_PARAMS = {
     "_popup",
     "is_facets",
 }
+RECENT_ACTIVITY_LIMIT = 10
+RECENT_ACTIVITY_QUERY_LIMIT = 60
+RECENT_ACTIVITY_GROUPS = ("today", "yesterday")
+UNAVAILABLE_VALUE = _("Unavailable")
+SAFE_ENVIRONMENT_SETTING_NAMES = (
+    "ENVIRONMENT_LABEL",
+    "ENVIRONMENT_NAME",
+    "ENVIRONMENT",
+    "APP_ENV",
+    "DJANGO_ENV",
+)
 
 APP_ICON_MAP = {
     "auth": "admin-icon-shield",
@@ -132,6 +153,232 @@ def first_group_name(user):
 
     group = user.groups.order_by('name').first()
     return group.name if group else ''
+
+
+@register.simple_tag
+def admin_display_name(user):
+    get_short_name = getattr(user, "get_short_name", None)
+    short_name = get_short_name() if callable(get_short_name) else ""
+    if short_name:
+        return short_name
+
+    get_username = getattr(user, "get_username", None)
+    username = get_username() if callable(get_username) else ""
+    if username:
+        return username
+
+    return str(user) if user else _("admin")
+
+
+def _visible_admin_model_keys(app_list):
+    visible_keys = set()
+
+    for app in app_list or []:
+        app_label = _admin_context_value(app, "app_label")
+        for model in _admin_context_value(app, "models") or []:
+            object_name = _admin_context_value(model, "object_name")
+            if app_label and object_name:
+                visible_keys.add((str(app_label).lower(), str(object_name).lower()))
+
+    return visible_keys
+
+
+def _can_show_log_entry(entry, visible_model_keys):
+    content_type = entry.content_type
+    if not content_type:
+        return True
+
+    if not visible_model_keys:
+        return False
+
+    return (content_type.app_label.lower(), content_type.model.lower()) in visible_model_keys
+
+
+def _admin_log_action_label(entry):
+    action_labels = {
+        ADDITION: _("Added"),
+        CHANGE: _("Changed"),
+        DELETION: _("Deleted"),
+    }
+    action_label = action_labels.get(entry.action_flag, _("Updated"))
+
+    content_type = entry.content_type
+    model_label = capfirst(content_type.name) if content_type else _("item")
+    object_label = Truncator(entry.object_repr or "").chars(80)
+    if object_label.isdigit():
+        object_label = ""
+
+    if object_label:
+        return _('%(action)s %(model)s "%(object)s"') % {
+            "action": action_label,
+            "model": model_label,
+            "object": object_label,
+        }
+
+    return _("%(action)s %(model)s") % {
+        "action": action_label,
+        "model": model_label,
+    }
+
+
+def _safe_admin_log_url(entry):
+    if entry.is_deletion() or not entry.content_type:
+        return ""
+
+    try:
+        return entry.get_admin_url()
+    except (AttributeError, NoReverseMatch):
+        return ""
+
+
+def _group_recent_activity(entries, limit):
+    today = timezone.localdate()
+    yesterday = today - timedelta(days=1)
+    grouped = {group_key: [] for group_key in RECENT_ACTIVITY_GROUPS}
+
+    for entry in entries:
+        local_action_time = timezone.localtime(entry.action_time)
+        entry_date = local_action_time.date()
+        if entry_date == today:
+            group_key = "today"
+        elif entry_date == yesterday:
+            group_key = "yesterday"
+        else:
+            continue
+
+        grouped[group_key].append(
+            {
+                "time": local_action_time.strftime("%I:%M %p").lstrip("0"),
+                "iso_time": local_action_time.isoformat(),
+                "label": _admin_log_action_label(entry),
+                "url": _safe_admin_log_url(entry),
+            }
+        )
+
+        total_entries = sum(len(grouped[key]) for key in RECENT_ACTIVITY_GROUPS)
+        if total_entries >= limit:
+            break
+
+    groups = [
+        {"key": "today", "label": _("Today"), "items": grouped["today"]},
+        {"key": "yesterday", "label": _("Yesterday"), "items": grouped["yesterday"]},
+    ]
+    return groups
+
+
+def _safe_admin_history_url(user=None):
+    try:
+        url = reverse("admin:admin_logentry_changelist")
+    except NoReverseMatch:
+        return ""
+
+    if user is not None and getattr(user, "pk", None):
+        return f"{url}?{urlencode({'user__id__exact': user.pk})}"
+
+    return url
+
+
+@register.simple_tag(takes_context=True)
+def get_vanta_recent_activity(context, limit=RECENT_ACTIVITY_LIMIT):
+    user = context.get("user")
+    if not getattr(user, "is_authenticated", False):
+        return {"groups": _group_recent_activity([], int(limit)), "has_activity": False, "history_url": ""}
+
+    visible_model_keys = _visible_admin_model_keys(context.get("app_list"))
+    log_entries = (
+        LogEntry.objects.select_related("content_type", "user")
+        .filter(user=user)
+        .order_by("-action_time")[:RECENT_ACTIVITY_QUERY_LIMIT]
+    )
+    visible_entries = [
+        entry for entry in log_entries if _can_show_log_entry(entry, visible_model_keys)
+    ]
+
+    # The dashboard only includes this admin's own log entries and only for
+    # models visible in this index context.
+    groups = _group_recent_activity(visible_entries, int(limit))
+    return {
+        "groups": groups,
+        "has_activity": any(group["items"] for group in groups),
+        "history_url": _safe_admin_history_url(user),
+    }
+
+
+def _row(label, value):
+    return {"label": label, "value": value or UNAVAILABLE_VALUE}
+
+
+@register.simple_tag
+def get_vanta_system_rows():
+    current_time = timezone.localtime(timezone.now()).strftime("%Y-%m-%d %H:%M")
+    return [
+        _row(_("Django version"), get_version()),
+        _row(_("Python version"), ".".join(str(part) for part in sys.version_info[:3])),
+        _row(_("Database"), capfirst(connection.vendor)),
+        _row(_("Timezone"), getattr(settings, "TIME_ZONE", "")),
+        _row(_("Server time"), current_time),
+    ]
+
+
+def _safe_environment_label():
+    for setting_name in SAFE_ENVIRONMENT_SETTING_NAMES:
+        value = getattr(settings, setting_name, "")
+        if not value:
+            continue
+
+        text = str(value).strip()
+        if len(text) <= 40 and re.fullmatch(r"[\w .:-]+", text):
+            return capfirst(text)
+
+    return ""
+
+
+def _email_status():
+    backend = getattr(settings, "EMAIL_BACKEND", "")
+    if not backend:
+        return UNAVAILABLE_VALUE
+
+    if any(marker in backend for marker in ("console", "locmem", "dummy")):
+        return _("Local/test backend")
+
+    return _("Configured")
+
+
+def _media_storage_status():
+    storages = getattr(settings, "STORAGES", {}) or {}
+    if "default" in storages or getattr(settings, "DEFAULT_FILE_STORAGE", ""):
+        return _("Configured")
+
+    return UNAVAILABLE_VALUE
+
+
+@register.simple_tag(takes_context=True)
+def get_vanta_environment_rows(context):
+    request = context.get("request")
+    site_name = getattr(getattr(request, "site", None), "name", "")
+
+    # Keep values deliberately generic; raw environment variables, database URLs,
+    # storage paths, hostnames, and provider names do not belong on this page.
+    rows = []
+    environment_label = _safe_environment_label()
+    if environment_label:
+        rows.append(_row(_("Environment"), environment_label))
+
+    rows.extend(
+        [
+            _row(_("Debug mode"), _("Enabled") if settings.DEBUG else _("Disabled")),
+            _row(_("Site name"), site_name),
+            _row(_("Email"), _email_status()),
+            _row(
+                _("Static files"),
+                _("Configured")
+                if getattr(settings, "STATIC_URL", "")
+                else UNAVAILABLE_VALUE,
+            ),
+            _row(_("Media storage"), _media_storage_status()),
+        ]
+    )
+    return rows
 
 
 def _normalize_icon_name(value):

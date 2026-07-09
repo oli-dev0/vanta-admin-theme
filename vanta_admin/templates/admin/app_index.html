@@ -1,5 +1,5 @@
 {% extends "admin/index.html" %}
-{% load i18n %}
+{% load i18n admin_theme %}
 
 {% block bodyclass %}{{ block.super }} app-{{ app_label }}{% endblock %}
 
@@ -16,5 +16,69 @@
   </nav>
 {% endblock %}
 {% endif %}
+
+{% block content %}
+<section class="admin-app-index">
+  {% if app_list %}
+    {% for app in app_list %}
+      <section class="admin-app-card app-{{ app.app_label }}" aria-labelledby="admin-app-{{ app.app_label }}-title">
+        <header class="admin-app-card__header">
+          <svg aria-hidden="true"><use href="#{{ app|admin_app_icon }}"></use></svg>
+          {% if forloop.first %}
+            <h1 id="admin-app-{{ app.app_label }}-title">{{ app.name }}</h1>
+          {% else %}
+            <h2 id="admin-app-{{ app.app_label }}-title">{{ app.name }}</h2>
+          {% endif %}
+        </header>
+
+        <div class="admin-app-model-list">
+          {% for model in app.models %}
+            {% with model_name=model.object_name|lower %}
+              <article class="admin-app-model-row model-{{ model_name }}">
+                {% if model.admin_url %}
+                  <a class="admin-app-model-name" href="{{ model.admin_url }}">
+                    <svg aria-hidden="true"><use href="#{{ model|admin_model_icon:app.app_label }}"></use></svg>
+                    <span>{{ model.name }}</span>
+                  </a>
+                {% else %}
+                  <span class="admin-app-model-name">
+                    <svg aria-hidden="true"><use href="#{{ model|admin_model_icon:app.app_label }}"></use></svg>
+                    <span>{{ model.name }}</span>
+                  </span>
+                {% endif %}
+
+                <div class="admin-app-model-actions">
+                  {% if model.add_url %}
+                    <a class="admin-app-action-link addlink" href="{{ model.add_url }}" aria-label="{% blocktranslate with model_name=model.name %}Add {{ model_name }}{% endblocktranslate %}">
+                      <svg aria-hidden="true"><use href="#admin-icon-plus"></use></svg>
+                      <span>{% translate "Add" %}</span>
+                    </a>
+                  {% endif %}
+
+                  {% if model.admin_url %}
+                    {% if model.view_only %}
+                      <a class="admin-app-action-link viewlink" href="{{ model.admin_url }}" aria-label="{% blocktranslate with model_name=model.name %}View {{ model_name }}{% endblocktranslate %}">
+                        <svg aria-hidden="true"><use href="#admin-icon-file"></use></svg>
+                        <span>{% translate "View" %}</span>
+                      </a>
+                    {% else %}
+                      <a class="admin-app-action-link changelink" href="{{ model.admin_url }}" aria-label="{% blocktranslate with model_name=model.name %}Change {{ model_name }}{% endblocktranslate %}">
+                        <svg aria-hidden="true"><use href="#admin-icon-edit"></use></svg>
+                        <span>{% translate "Change" %}</span>
+                      </a>
+                    {% endif %}
+                  {% endif %}
+                </div>
+              </article>
+            {% endwith %}
+          {% endfor %}
+        </div>
+      </section>
+    {% endfor %}
+  {% else %}
+    <p class="admin-empty-state">{% translate "You do not have permission to view or edit anything." %}</p>
+  {% endif %}
+</section>
+{% endblock %}
 
 {% block sidebar %}{% endblock %}

@@ -9,11 +9,6 @@
     grid-template-columns: 1fr;
     gap: 1.6rem;
   }
-
-  .admin-recent-card {
-    margin-top: 0;
-    max-width: 28rem;
-  }
 }
 
 @media (max-width: 1024px) {
@@ -79,13 +74,30 @@
   .admin-sidebar-menu-button {
     display: inline-grid;
     place-items: center;
-    width: 2.65rem;
-    min-width: 2.65rem;
-    height: 2.65rem;
-    border: 1px solid var(--border-strong);
-    border-radius: 0.39rem;
+    width: 2rem;
+    min-width: 2rem;
+    height: 2rem;
+    border: 0;
+    border-radius: 0.27rem;
     background: var(--surface-muted);
-    color: var(--heading);
+    color: var(--accent);
+    cursor: pointer;
+    transition:
+      background-color var(--admin-transition),
+      color var(--admin-transition),
+      transform var(--admin-transition);
+  }
+
+  .admin-sidebar-menu-button:hover,
+  .admin-sidebar-menu-button:focus-visible {
+    background: var(--surface);
+    color: var(--accent-strong);
+    outline: none;
+    transform: translateY(-2px);
+  }
+
+  .admin-sidebar-menu-button:active {
+    transform: translateY(0);
   }
 
   body.admin-sidebar-mobile-open #admin-sidebar-menu-button {
@@ -186,16 +198,11 @@
     right: 0;
     left: auto;
     bottom: calc(100% + 0.55rem);
-    width: min(16.6rem, calc(100vw - 2.4rem));
+    width: min(12.8rem, calc(100vw - 2.4rem));
   }
 
-  .admin-model-row {
+  .admin-landing__grid {
     grid-template-columns: 1fr;
-    gap: 0.6rem;
-  }
-
-  .admin-model-actions {
-    justify-content: flex-start;
   }
 
   #changelist .changelist-form-container > div {
@@ -237,6 +244,29 @@
     font-size: clamp(1.55rem, 8vw, 2rem);
   }
 
+  .admin-landing__grid {
+    gap: 0.75rem;
+  }
+
+  .admin-landing-card {
+    padding: 0.85rem;
+  }
+
+  .admin-app-model-row,
+  .admin-activity-item,
+  .admin-landing-facts__row {
+    grid-template-columns: 1fr;
+    gap: 0.16rem;
+  }
+
+  .admin-app-model-actions {
+    justify-content: flex-start;
+  }
+
+  .admin-info-tooltip__content {
+    right: -0.35rem;
+  }
+
   #changelist #toolbar,
   #changelist .actions,
   #changelist #toolbar form,
@@ -258,7 +288,10 @@
   .admin-sidebar__model a,
   .admin-sidebar__account-links a,
   .admin-sidebar__account-links button,
-  .admin-action-link,
+  .admin-landing-card__action,
+  .admin-app-action-link,
+  .admin-info-tooltip__button,
+  .admin-info-tooltip__content,
   .admin-filter-panel-toggle,
   #changelist-filter {
     transition: none;
@@ -287,8 +320,8 @@ a:active * {
   text-decoration-line: none !important;
 }
 
-.admin-recent-action:hover strong,
-.admin-recent-action:focus strong {
+.admin-landing-card__action:hover,
+.admin-landing-card__action:focus-visible {
   text-decoration: underline !important;
   text-decoration-line: underline !important;
   text-underline-offset: 0.18em;

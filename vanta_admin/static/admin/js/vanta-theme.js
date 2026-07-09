@@ -91,6 +91,29 @@
         });
     }
 
+    function formatRecentActivityTime(timeElement, timeFormat) {
+        if (!timeElement.dataset.adminOriginalTimeText) {
+            timeElement.dataset.adminOriginalTimeText = timeElement.textContent;
+        }
+
+        const actionTime = new Date(timeElement.dateTime);
+        if (Number.isNaN(actionTime.getTime())) {
+            return timeElement.dataset.adminOriginalTimeText;
+        }
+
+        return actionTime.toLocaleTimeString([], {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: timeFormat !== '24',
+        });
+    }
+
+    function updateRecentActivityTimeFormat(timeFormat) {
+        document.querySelectorAll('[data-admin-recent-time]').forEach((timeElement) => {
+            timeElement.textContent = formatRecentActivityTime(timeElement, timeFormat);
+        });
+    }
+
     function applyTimeFormat(timeFormat) {
         if (!validTimeFormatValues.has(timeFormat)) {
             return;
@@ -99,6 +122,7 @@
         localStorage.setItem(timeFormatStorageKey, timeFormat);
         updateTimeFormatButtons(timeFormat);
         updateTableTimeFormat(timeFormat);
+        updateRecentActivityTimeFormat(timeFormat);
     }
 
     const storedTheme = localStorage.getItem('theme');
@@ -119,6 +143,7 @@
     const initialTimeFormat = validTimeFormatValues.has(storedTimeFormat) ? storedTimeFormat : '12';
     updateTimeFormatButtons(initialTimeFormat);
     updateTableTimeFormat(initialTimeFormat);
+    updateRecentActivityTimeFormat(initialTimeFormat);
 
     timeFormatButtons.forEach((button) => {
         button.addEventListener('click', () => {

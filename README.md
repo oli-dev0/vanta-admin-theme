@@ -10,6 +10,7 @@ feels more deliberate in everyday use.
 ## What It Adds
 
 - A cleaner admin layout with a fixed sidebar that remembers how you left it.
+- A redesigned admin landing page with a welcome message, recent activity, project placeholders, and compact system context.
 - A sidebar navigation filter that lets users quickly narrow large admin menus by app or model name.
 - A resizable desktop sidebar that remembers each user's preferred width in the browser.
 - A sidebar expand/collapse-all control for quickly opening or closing visible navigation sections.

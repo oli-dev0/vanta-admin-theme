@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load admin_theme %}
+{% load i18n admin_theme %}
 
 {% block coltype %}colMS{% endblock %}
 
@@ -10,104 +10,130 @@
 {% block content_title %}{% endblock %}
 
 {% block content %}
-<section class="admin-dashboard-main">
-  <h1>{{ title|default:'Site administration' }}</h1>
+{% admin_display_name user as display_name %}
+{% get_vanta_recent_activity as recent_activity %}
+{% get_vanta_system_rows as system_rows %}
+{% get_vanta_environment_rows as environment_rows %}
 
-  {% if app_list %}
-    {% for app in app_list %}
-      <section class="admin-module-card app-{{ app.app_label }}">
-        <header class="admin-module-card__header">
-          <svg aria-hidden="true"><use href="#{{ app|admin_app_icon }}"></use></svg>
-          <h2>{{ app.name }}</h2>
-        </header>
+<section class="admin-landing" aria-labelledby="admin-landing-title">
+  <header class="admin-landing-welcome">
+    <h1 id="admin-landing-title">
+      {% blocktranslate with username=display_name %}Welcome back {{ username }}{% endblocktranslate %}
+    </h1>
+    <p>{% translate "Here's what's happening today" %}</p>
+  </header>
 
-        <div class="admin-model-list">
-          {% for model in app.models %}
-            {% with model_name=model.object_name|lower %}
-              <article class="admin-model-row model-{{ model_name }}">
-                {% if model.admin_url %}
-                  <a class="admin-model-name" href="{{ model.admin_url }}">
-                    <svg aria-hidden="true"><use href="#{{ model|admin_model_icon:app.app_label }}"></use></svg>
-                    <span>{{ model.name }}</span>
-                  </a>
-                {% else %}
-                  <span class="admin-model-name">
-                    <svg aria-hidden="true"><use href="#{{ model|admin_model_icon:app.app_label }}"></use></svg>
-                    <span>{{ model.name }}</span>
-                  </span>
-                {% endif %}
+  <section class="admin-landing-card admin-landing-card--activity" aria-labelledby="admin-landing-activity-title">
+    <header class="admin-landing-card__header">
+      <h2 id="admin-landing-activity-title">{% translate "My recent activity" %}</h2>
+      {% if recent_activity.history_url %}
+        <a class="admin-landing-card__action" href="{{ recent_activity.history_url }}">
+          {% translate "View all" %}
+        </a>
+      {% endif %}
+    </header>
 
-                <div class="admin-model-actions">
-                  {% if model.add_url %}
-                    <a class="admin-action-link addlink" href="{{ model.add_url }}" aria-label="Add {{ model.name }}">
-                      <svg aria-hidden="true"><use href="#admin-icon-plus"></use></svg>
-                      <span>Add</span>
-                    </a>
+    {% if recent_activity.has_activity %}
+      {% for group in recent_activity.groups %}
+        {% if group.items %}
+          <section class="admin-activity-group" aria-labelledby="admin-activity-{{ group.key }}">
+            <h3 id="admin-activity-{{ group.key }}">{{ group.label }}</h3>
+            <ol class="admin-activity-list">
+              {% for item in group.items %}
+                <li class="admin-activity-item">
+                  <time
+                    class="admin-activity-item__time"
+                    datetime="{{ item.iso_time }}"
+                    data-admin-recent-time
+                  >{{ item.time }}</time>
+                  {% if item.url %}
+                    <a class="admin-activity-item__label" href="{{ item.url }}">{{ item.label }}</a>
+                  {% else %}
+                    <span class="admin-activity-item__label">{{ item.label }}</span>
                   {% endif %}
+                </li>
+              {% endfor %}
+            </ol>
+          </section>
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      <p class="admin-landing-empty">{% translate "You have no recent admin activity today or yesterday." %}</p>
+    {% endif %}
+  </section>
 
-                  {% if model.admin_url %}
-                    {% if model.view_only %}
-                      <a class="admin-action-link viewlink" href="{{ model.admin_url }}" aria-label="View {{ model.name }}">
-                        <svg aria-hidden="true"><use href="#admin-icon-file"></use></svg>
-                        <span>View</span>
-                      </a>
-                    {% else %}
-                      <a class="admin-action-link changelink" href="{{ model.admin_url }}" aria-label="Change {{ model.name }}">
-                        <svg aria-hidden="true"><use href="#admin-icon-edit"></use></svg>
-                        <span>Change</span>
-                      </a>
-                    {% endif %}
-                  {% endif %}
-                </div>
-              </article>
-            {% endwith %}
-          {% endfor %}
-        </div>
-      </section>
-    {% endfor %}
-  {% else %}
-    <p class="admin-empty-state">You do not have permission to view or edit anything.</p>
-  {% endif %}
+  <div class="admin-landing__grid admin-landing__grid--top">
+    <section class="admin-landing-card" aria-labelledby="admin-quick-actions-title">
+      <header class="admin-landing-card__header">
+        <h2 id="admin-quick-actions-title">{% translate "Quick actions" %}</h2>
+        <span class="admin-info-tooltip">
+          <button
+            class="admin-info-tooltip__button"
+            type="button"
+            aria-label="{% translate 'Quick actions information' %}"
+            aria-describedby="admin-quick-actions-tooltip"
+          >
+            <svg aria-hidden="true"><use href="#admin-icon-info"></use></svg>
+          </button>
+          <span class="admin-info-tooltip__content" id="admin-quick-actions-tooltip" role="tooltip">
+            {% translate "Configure these in your project's admin site settings or template context." %}
+          </span>
+        </span>
+      </header>
+      <p class="admin-landing-placeholder">{% translate "Configure project shortcuts for this dashboard." %}</p>
+    </section>
+
+    <section class="admin-landing-card" aria-labelledby="admin-attention-title">
+      <header class="admin-landing-card__header">
+        <h2 id="admin-attention-title">{% translate "Attention required" %}</h2>
+        <span class="admin-info-tooltip">
+          <button
+            class="admin-info-tooltip__button"
+            type="button"
+            aria-label="{% translate 'Attention required information' %}"
+            aria-describedby="admin-attention-tooltip"
+          >
+            <svg aria-hidden="true"><use href="#admin-icon-info"></use></svg>
+          </button>
+          <span class="admin-info-tooltip__content" id="admin-attention-tooltip" role="tooltip">
+            {% translate "Items shown here are supplied by your Django project, so each admin can surface the checks that matter to its workflow." %}
+          </span>
+        </span>
+      </header>
+      <p class="admin-landing-placeholder">{% translate "Configure project-specific checks to show items that need attention." %}</p>
+    </section>
+  </div>
+
+  <div class="admin-landing__grid admin-landing__grid--bottom">
+    <section class="admin-landing-card admin-landing-card--system" aria-labelledby="admin-system-title">
+      <header class="admin-landing-card__header">
+        <h2 id="admin-system-title">{% translate "System" %}</h2>
+      </header>
+      <dl class="admin-landing-facts">
+        {% for row in system_rows %}
+          <div class="admin-landing-facts__row">
+            <dt>{{ row.label }}</dt>
+            <dd>{{ row.value }}</dd>
+          </div>
+        {% endfor %}
+      </dl>
+    </section>
+
+    <section class="admin-landing-card admin-landing-card--environment" aria-labelledby="admin-environment-title">
+      <header class="admin-landing-card__header">
+        <h2 id="admin-environment-title">{% translate "Environment" %}</h2>
+      </header>
+      <dl class="admin-landing-facts">
+        {% for row in environment_rows %}
+          <div class="admin-landing-facts__row">
+            <dt>{{ row.label }}</dt>
+            <dd>{{ row.value }}</dd>
+          </div>
+        {% endfor %}
+      </dl>
+    </section>
+  </div>
 </section>
 {% endblock %}
 
-{% block sidebar %}
-<aside class="admin-recent-card" aria-label="Recent actions">
-  <header>
-    <svg aria-hidden="true"><use href="#admin-icon-clock"></use></svg>
-    <h2>Recent actions</h2>
-  </header>
-  <div class="admin-recent-card__divider"></div>
-  <p class="admin-recent-card__label">My actions</p>
-
-  {% load log %}
-  {% get_admin_log 10 as admin_log for_user user %}
-  {% if not admin_log %}
-    <p class="admin-recent-card__empty">None available</p>
-  {% else %}
-    <ul class="admin-recent-list">
-      {% for entry in admin_log %}
-        <li>
-          {% if entry.is_deletion or not entry.get_admin_url %}
-            <span class="admin-recent-action">
-              <svg aria-hidden="true"><use href="#{{ entry.content_type|admin_content_type_icon }}"></use></svg>
-              <span>
-                <strong>{{ entry.object_repr }}</strong>
-                <small>{% if entry.content_type %}{% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}{% else %}Unknown content{% endif %}</small>
-              </span>
-            </span>
-          {% else %}
-            <a class="admin-recent-action" href="{{ entry.get_admin_url }}">
-              <svg aria-hidden="true"><use href="#admin-icon-edit"></use></svg>
-              <span>
-                <strong>{{ entry.object_repr }}</strong>
-                <small>{% if entry.content_type %}{% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}{% else %}Unknown content{% endif %}</small>
-              </span>
-            </a>
-          {% endif %}
-        </li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-</aside>
-{% endblock %}
+{% block sidebar %}{% endblock %}
