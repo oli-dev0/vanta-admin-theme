@@ -238,7 +238,9 @@
         const title = document.createElement('div');
         const countWrap = document.createElement('div');
         const clearAllSelected = document.createElement('button');
+        const clearAllSeparator = document.createElement('span');
         const clearAllIcon = document.createElement('span');
+        const clearAllText = document.createElement('span');
         const count = document.createElement('div');
         const tools = document.createElement('div');
         const searchWrap = document.createElement('div');
@@ -246,6 +248,10 @@
         const addVisible = document.createElement('button');
         const removeVisible = document.createElement('button');
         const categoryNav = document.createElement('div');
+        const addAllCategories = document.createElement('button');
+        const addAllCategoriesIcon = document.createElement('span');
+        const addAllCategoriesText = document.createElement('span');
+        const listActions = document.createElement('div');
         const list = document.createElement('div');
         const empty = document.createElement('p');
         const categoryButtons = new Map();
@@ -257,7 +263,9 @@
         title.className = 'admin-checkbox-selector__title';
         countWrap.className = 'admin-checkbox-selector__count-wrap';
         clearAllSelected.className = 'admin-checkbox-selector__clear-selected';
+        clearAllSeparator.className = 'admin-checkbox-selector__clear-selected-separator';
         clearAllIcon.className = 'admin-checkbox-selector__clear-selected-icon';
+        clearAllText.className = 'admin-checkbox-selector__clear-selected-text';
         count.className = 'admin-checkbox-selector__count';
         tools.className = 'admin-checkbox-selector__tools';
         searchWrap.className = 'admin-checkbox-selector__search-wrap';
@@ -265,6 +273,10 @@
         addVisible.className = 'admin-checkbox-selector__bulk-button';
         removeVisible.className = 'admin-checkbox-selector__bulk-button admin-checkbox-selector__bulk-button--muted';
         categoryNav.className = 'admin-checkbox-selector__categories';
+        addAllCategories.className = 'admin-checkbox-selector__give-all';
+        addAllCategoriesIcon.className = 'admin-checkbox-selector__give-all-icon';
+        addAllCategoriesText.className = 'admin-checkbox-selector__give-all-text';
+        listActions.className = 'admin-checkbox-selector__list-actions';
         list.className = 'admin-checkbox-selector__list';
         empty.className = 'admin-checkbox-selector__empty';
 
@@ -272,7 +284,10 @@
         clearAllSelected.type = 'button';
         clearAllSelected.setAttribute('aria-label', `Clear selected ${title.textContent}`);
         clearAllSelected.title = `Clear selected ${title.textContent}`;
-        clearAllSelected.append(clearAllIcon);
+        clearAllSeparator.textContent = '|';
+        clearAllIcon.textContent = 'x';
+        clearAllText.textContent = 'remove all';
+        clearAllSelected.append(clearAllIcon, clearAllText);
         search.type = 'search';
         search.id = `${fieldId}_vanta_filter`;
         search.autocomplete = 'off';
@@ -282,6 +297,11 @@
         addVisible.textContent = 'Add all';
         removeVisible.type = 'button';
         removeVisible.textContent = 'Remove all';
+        addAllCategories.type = 'button';
+        addAllCategories.setAttribute('aria-label', `Give all ${title.textContent}`);
+        addAllCategoriesIcon.textContent = '+';
+        addAllCategoriesText.textContent = 'give all';
+        addAllCategories.append(addAllCategoriesIcon, addAllCategoriesText);
         empty.textContent = 'No matching items.';
 
         function optionMatches(option) {
@@ -412,7 +432,7 @@
                 fragment.append(empty);
             }
 
-            list.append(fragment);
+            list.append(fragment, listActions);
             syncCounts();
         }
 
@@ -434,6 +454,12 @@
             });
             categoryButtons.set(category, button);
             categoryNav.append(button);
+        });
+
+        addAllCategories.addEventListener('click', () => {
+            options.forEach((option) => selectedValues.add(option.value));
+            syncNativeSelects();
+            renderList();
         });
 
         search.addEventListener('input', () => {
@@ -466,12 +492,14 @@
             });
         }, { capture: true });
 
-        countWrap.append(clearAllSelected, count);
+        countWrap.append(count, clearAllSeparator, clearAllSelected);
         header.append(title, countWrap);
         searchWrap.append(search);
-        tools.append(searchWrap, addVisible, removeVisible);
+        tools.append(searchWrap);
+        listActions.append(addVisible, removeVisible);
         widget.append(header);
         if (usesCategories) {
+            categoryNav.prepend(addAllCategories);
             widget.append(categoryNav);
         }
         widget.append(tools, list);
@@ -487,9 +515,57 @@
         document.querySelectorAll('.selector').forEach(enhanceHorizontalSelector);
     }
 
+    function enhanceInlineDeleteControls(root = document) {
+        root.querySelectorAll('.inline-group .delete input[type="checkbox"][name$="-DELETE"]').forEach((checkbox) => {
+            if (checkbox.dataset.vantaDeleteEnhanced === 'true') {
+                return;
+            }
+
+            const row = checkbox.closest('tr.form-row, .inline-related');
+            const originalText = row?.querySelector('.original p')?.textContent.trim().replace(/\s+/g, ' ');
+            const button = document.createElement('button');
+            const label = originalText ? `Delete ${originalText}` : 'Delete inline row';
+
+            checkbox.dataset.vantaDeleteEnhanced = 'true';
+            checkbox.classList.add('admin-inline-delete-native');
+
+            button.type = 'button';
+            button.className = 'admin-inline-delete-button';
+            button.setAttribute('aria-label', label);
+            button.title = label;
+
+            checkbox.after(button);
+
+            if (checkbox.checked) {
+                row?.classList.add('is-inline-deleted');
+            }
+
+            button.addEventListener('click', () => {
+                checkbox.checked = true;
+                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                row?.classList.add('is-inline-deleted');
+            });
+        });
+    }
+
+    enhanceInlineDeleteControls();
+
     window.addEventListener('load', () => {
         window.setTimeout(enhanceHorizontalSelectors, 0);
+        window.setTimeout(enhanceInlineDeleteControls, 0);
     });
+
+    const inlineObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    enhanceInlineDeleteControls(node);
+                }
+            });
+        });
+    });
+
+    inlineObserver.observe(document.body, { childList: true, subtree: true });
 
     function syncStickySubmitRow() {
         const form = document.querySelector('body.change-form form[id$="_form"]');

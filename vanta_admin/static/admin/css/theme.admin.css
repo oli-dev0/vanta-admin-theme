@@ -141,7 +141,7 @@ body.admin-sidebar-resizing .admin-sidebar {
 
 .admin-sidebar__collapse:hover,
 .admin-sidebar-icon-btn:hover {
-  background: var(--surface);
+  background: var(--surface-hover);
   color: var(--accent-strong);
   transform: translateY(-2px);
 }
@@ -149,7 +149,7 @@ body.admin-sidebar-resizing .admin-sidebar {
 .admin-sidebar__collapse:focus-visible,
 .admin-sidebar-icon-btn:focus-visible {
   outline: none;
-  background: var(--surface);
+  background: var(--surface-hover);
   color: var(--accent-strong);
   transform: translateY(-2px);
 }
@@ -252,7 +252,7 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
 
 .admin-sidebar__sections-toggle:hover,
 .admin-sidebar__sections-toggle:focus-visible {
-  background: var(--surface);
+  background: var(--surface-hover);
   color: var(--accent-strong);
   outline: none;
   transform: translateY(-2px);
@@ -267,9 +267,14 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
   opacity: 0.82;
 }
 
+#nav-sidebar .admin-sidebar__filter input[type="search"]:hover {
+  background: var(--surface-hover);
+}
+
 #nav-sidebar .admin-sidebar__filter input[type="search"]:focus,
 #nav-sidebar .admin-sidebar__filter input[type="search"]:focus-visible {
-  background: var(--surface);
+  background: var(--surface-hover);
+  outline: none;
   box-shadow: none;
 }
 
@@ -279,7 +284,11 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
 
 html[data-theme="light"] #nav-sidebar .admin-sidebar__filter input[type="search"]:focus,
 html[data-theme="light"] #nav-sidebar .admin-sidebar__filter input[type="search"]:focus-visible {
-  background: #e8f1fa;
+  background: var(--surface-hover);
+}
+
+html[data-theme="light"] #nav-sidebar .admin-sidebar__filter input[type="search"]:hover {
+  background: var(--surface-hover);
 }
 
 .admin-sidebar__groups {
@@ -1355,6 +1364,355 @@ fieldset.module,
   box-shadow: none;
 }
 
+.change-form .inline-group {
+  display: grid;
+  gap: 0.62rem;
+  padding: 0;
+  overflow: hidden;
+}
+
+.change-form .inline-group fieldset.module {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.change-form .inline-group h2,
+.change-form .inline-group .inline-heading {
+  margin: 0;
+  padding: 0.68rem 0.82rem;
+  border-bottom: 1px solid var(--admin-border-strong);
+  background: color-mix(in srgb, var(--admin-surface-raised) 86%, var(--admin-bg));
+  color: var(--admin-text);
+  font-size: 0.82rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+html[data-theme="light"] .change-form .inline-group h2,
+html[data-theme="light"] .change-form .inline-group .inline-heading {
+  background: #eef6ff;
+}
+
+.change-form .inline-related {
+  margin: 0 0.72rem 0.72rem;
+  padding: 0.72rem;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-md);
+  background: color-mix(in srgb, var(--admin-surface-raised) 82%, var(--admin-bg));
+  color: var(--admin-text);
+  box-shadow: none;
+}
+
+.change-form .inline-related h3 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.38rem;
+  margin: 0 0 0.56rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--admin-text);
+  font-size: 0.78rem;
+  font-weight: 780;
+  line-height: 1.25;
+}
+
+.change-form .inline-related h3 .inline_label {
+  color: var(--admin-text);
+}
+
+.change-form .inline-related h3 .delete {
+  margin-left: auto;
+  color: var(--admin-muted);
+  font-size: 0.74rem;
+  font-weight: 720;
+}
+
+.change-form .inline-related h3 .delete label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  min-height: 1.5rem;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.change-form .inline-related h3 .delete label.vCheckboxLabel {
+  display: none;
+}
+
+.change-form .inline-group .tabular {
+  margin: 0.72rem;
+  overflow-x: auto;
+}
+
+.change-form .inline-group .tabular table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.18rem;
+  color: var(--admin-text);
+  background: transparent;
+}
+
+.change-form .inline-group .tabular thead th {
+  padding: 0.24rem 0.56rem;
+  border: 0;
+  background: color-mix(in srgb, var(--admin-bg) 72%, var(--admin-surface-muted));
+  color: var(--admin-text);
+  font-size: 0.74rem;
+  font-weight: 760;
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.change-form .inline-group .tabular thead th.original,
+.change-form .inline-group .tabular tbody td.original {
+  width: 0;
+  max-width: 0;
+  padding-inline: 0;
+}
+
+.change-form .inline-group .tabular thead th:last-child {
+  width: 4.25rem;
+  text-align: center;
+}
+
+html[data-theme="light"] .change-form .inline-group .tabular thead th {
+  background: #d5e3f1;
+}
+
+.change-form .inline-group .tabular thead th:first-child {
+  border-radius: var(--admin-radius-sm) 0 0 var(--admin-radius-sm);
+}
+
+.change-form .inline-group .tabular thead th:last-child {
+  border-radius: 0 var(--admin-radius-sm) var(--admin-radius-sm) 0;
+}
+
+.change-form .inline-group .tabular tbody tr {
+  background: transparent;
+}
+
+.change-form .inline-group .tabular tbody td,
+.change-form .inline-group .tabular tbody th {
+  padding: 0.42rem 0.56rem;
+  border: 0;
+  border-top: 1px solid var(--admin-border);
+  border-bottom: 1px solid var(--admin-border);
+  background: var(--admin-surface-raised);
+  color: var(--admin-text);
+  vertical-align: middle;
+}
+
+.change-form .inline-group .tabular tbody td:first-child,
+.change-form .inline-group .tabular tbody th:first-child {
+  border-left: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-sm) 0 0 var(--admin-radius-sm);
+}
+
+.change-form .inline-group .tabular tbody td:last-child,
+.change-form .inline-group .tabular tbody th:last-child {
+  border-right: 1px solid var(--admin-border);
+  border-radius: 0 var(--admin-radius-sm) var(--admin-radius-sm) 0;
+}
+
+.change-form .inline-group .tabular tbody tr.has_original td,
+.change-form .inline-group .tabular tbody tr.has_original th {
+  background: color-mix(in srgb, var(--admin-surface-raised) 86%, var(--admin-bg));
+}
+
+.change-form .inline-group .tabular .original p {
+  display: none;
+}
+
+.change-form .inline-group .tabular .original a,
+.change-form .inline-group .add-row a,
+.change-form .inline-group .inline-related a {
+  color: var(--admin-link);
+  text-decoration: none;
+  transition:
+    color var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+.change-form .inline-group .tabular .original a:hover,
+.change-form .inline-group .tabular .original a:focus-visible,
+.change-form .inline-group .add-row a:hover,
+.change-form .inline-group .add-row a:focus-visible,
+.change-form .inline-group .inline-related a:hover,
+.change-form .inline-group .inline-related a:focus-visible {
+  color: var(--admin-link-strong);
+  text-decoration: none;
+}
+
+.change-form .inline-group .add-row {
+  margin: 0 0.72rem 0.72rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.change-form .inline-group .add-row a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.05rem;
+  padding: 0.38rem 0.68rem;
+  border: 1px solid var(--admin-accent-border);
+  border-radius: var(--admin-radius-sm);
+  background: var(--admin-accent);
+  color: var(--admin-button-text);
+  font-size: 0.8rem;
+  font-weight: 760;
+  line-height: 1.2;
+}
+
+.change-form .inline-group .add-row a:hover,
+.change-form .inline-group .add-row a:focus-visible {
+  background: var(--admin-accent-strong);
+  color: var(--admin-button-text);
+  transform: translateY(-2px);
+}
+
+.change-form .inline-group input,
+.change-form .inline-group select,
+.change-form .inline-group textarea {
+  border: 0;
+  border-radius: var(--admin-radius-sm);
+  background: var(--input-bg);
+  color: var(--admin-text);
+}
+
+.change-form .inline-group input:hover,
+.change-form .inline-group select:hover,
+.change-form .inline-group textarea:hover,
+.change-form .inline-group input:focus,
+.change-form .inline-group input:focus-visible,
+.change-form .inline-group select:focus,
+.change-form .inline-group select:focus-visible,
+.change-form .inline-group textarea:focus,
+.change-form .inline-group textarea:focus-visible {
+  border: 0 !important;
+  background-color: var(--surface-hover) !important;
+  outline: none;
+  box-shadow: none;
+}
+
+.change-form .inline-group .delete {
+  padding-inline: 0.56rem;
+  text-align: center;
+}
+
+.change-form .inline-group .delete input[type="checkbox"].admin-inline-delete-native {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.admin-inline-delete-button {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  min-height: 2.5rem;
+  margin: 0;
+  padding: 0.5rem;
+  border: 0;
+  border-radius: var(--admin-radius-sm);
+  background: transparent;
+  color: #ef4444;
+  box-shadow: none;
+  cursor: pointer;
+  transition:
+    color var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+.change-form .inline-group .inline-deletelink {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  min-height: 2.5rem;
+  margin: 0;
+  padding: 0.5rem;
+  border: 0;
+  border-radius: var(--admin-radius-sm);
+  background: transparent;
+  color: transparent !important;
+  font-size: 0;
+  line-height: 0;
+  box-shadow: none;
+  overflow: hidden;
+  text-decoration: none;
+  transition:
+    transform var(--admin-transition);
+}
+
+.change-form .inline-group .delete > div {
+  display: grid;
+  place-items: center;
+}
+
+.admin-inline-delete-button::before,
+.change-form .inline-group .inline-deletelink::before {
+  content: "";
+  width: 1.5rem;
+  height: 1.5rem;
+  background: #ef4444;
+  mask: url("data:image/svg+xml,%3Csvg fill='%23000000' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg id='SVGRepo_bgCarrier' stroke-width='0'%3E%3C/g%3E%3Cg id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round'%3E%3C/g%3E%3Cg id='SVGRepo_iconCarrier'%3E%3Cpath d='M20 6h-3.155a.949.949 0 0 0-.064-.125l-1.7-2.124A1.989 1.989 0 0 0 13.519 3h-3.038a1.987 1.987 0 0 0-1.562.75l-1.7 2.125A.949.949 0 0 0 7.155 6H4a1 1 0 0 0 0 2h1v11a2 2 0 0 0 1.994 2h10.011A2 2 0 0 0 19 19V8h1a1 1 0 0 0 0-2zm-9.519-1h3.038l.8 1H9.681zm6.524 14H7V8h10z'%3E%3C/path%3E%3Cpath d='M14 18a1 1 0 0 1-1-1v-7a1 1 0 0 1 2 0v7a1 1 0 0 1-1 1zM10 18a1 1 0 0 1-1-1v-7a1 1 0 0 1 2 0v7a1 1 0 0 1-1 1z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg fill='%23000000' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg id='SVGRepo_bgCarrier' stroke-width='0'%3E%3C/g%3E%3Cg id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round'%3E%3C/g%3E%3Cg id='SVGRepo_iconCarrier'%3E%3Cpath d='M20 6h-3.155a.949.949 0 0 0-.064-.125l-1.7-2.124A1.989 1.989 0 0 0 13.519 3h-3.038a1.987 1.987 0 0 0-1.562.75l-1.7 2.125A.949.949 0 0 0 7.155 6H4a1 1 0 0 0 0 2h1v11a2 2 0 0 0 1.994 2h10.011A2 2 0 0 0 19 19V8h1a1 1 0 0 0 0-2zm-9.519-1h3.038l.8 1H9.681zm6.524 14H7V8h10z'%3E%3C/path%3E%3Cpath d='M14 18a1 1 0 0 1-1-1v-7a1 1 0 0 1 2 0v7a1 1 0 0 1-1 1zM10 18a1 1 0 0 1-1-1v-7a1 1 0 0 1 2 0v7a1 1 0 0 1-1 1z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.admin-inline-delete-button:hover,
+.admin-inline-delete-button:focus-visible,
+.change-form .inline-group .inline-deletelink:hover,
+.change-form .inline-group .inline-deletelink:focus-visible {
+  background: transparent;
+  color: transparent !important;
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.admin-inline-delete-button:hover,
+.admin-inline-delete-button:focus-visible {
+  color: #dc2626;
+}
+
+.admin-inline-delete-button:hover::before,
+.admin-inline-delete-button:focus-visible::before,
+.change-form .inline-group .inline-deletelink:hover::before,
+.change-form .inline-group .inline-deletelink:focus-visible::before {
+  background: #dc2626;
+}
+
+.admin-inline-delete-button:active,
+.change-form .inline-group .inline-deletelink:active {
+  transform: translateY(0);
+}
+
+.change-form .inline-group tr.is-inline-deleted {
+  display: none;
+}
+
 .submit-row {
   display: flex;
   flex-wrap: wrap;
@@ -1389,15 +1747,17 @@ fieldset.module,
 .change-form ul.errorlist {
   --admin-inline-error-icon: var(--admin-error-text);
   border: 1px solid var(--admin-error-border);
-  border-left: 4px solid var(--admin-error-border);
+  border-left: 3px solid var(--admin-error-border);
   border-radius: var(--admin-radius-sm);
   background: var(--admin-error-bg);
   color: var(--admin-error-text);
   box-shadow: none;
+  font-size: 0.76rem;
+  line-height: 1.28;
 }
 
 .change-form .errornote {
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.55rem;
 }
 
 .change-form ul.errorlist {
@@ -1406,6 +1766,8 @@ fieldset.module,
 
 .change-form ul.errorlist li {
   color: var(--admin-error-text);
+  font-size: 0.74rem;
+  line-height: 1.25;
 }
 
 .change-form .submit-row input,
@@ -1652,6 +2014,128 @@ ul.helptext li::before,
   transform: translateY(-2px);
 }
 
+.change-form p.datetime {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.34rem;
+  margin: 0;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.42rem 0.5rem;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-md);
+  background: color-mix(in srgb, var(--admin-surface-raised) 84%, var(--admin-bg));
+  color: var(--admin-muted);
+}
+
+.change-form .form-row > fieldset:has(p.datetime) {
+  background: transparent;
+}
+
+.change-form p.datetime br {
+  display: none;
+}
+
+.change-form .form-row p.datetime label {
+  width: auto !important;
+  min-width: 0 !important;
+  flex: 0 0 auto;
+  margin: 0;
+  color: var(--admin-muted);
+  font-size: 0.78rem;
+  font-weight: 720;
+  line-height: 1.2;
+}
+
+.change-form p.datetime input.vDateField,
+.change-form p.datetime input.vTimeField {
+  flex: 0 0 auto;
+  width: auto;
+  margin: 0;
+  border: 0;
+  min-height: 1.82rem;
+  padding-block: 0.24rem;
+  background: var(--input-bg);
+}
+
+.change-form p.datetime input.vDateField:hover,
+.change-form p.datetime input.vDateField:focus,
+.change-form p.datetime input.vDateField:focus-visible,
+.change-form p.datetime input.vTimeField:hover,
+.change-form p.datetime input.vTimeField:focus,
+.change-form p.datetime input.vTimeField:focus-visible {
+  border: 0 !important;
+  background-color: var(--surface-hover) !important;
+  outline: none;
+  box-shadow: none;
+}
+
+.change-form p.datetime .datetimeshortcuts {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.24rem;
+  color: var(--admin-muted);
+  font-size: 0.74rem;
+  font-weight: 680;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.change-form p.datetime .datetimeshortcuts a {
+  display: inline-grid;
+  place-items: center;
+  min-height: 1.5rem;
+  min-width: 1.5rem;
+  padding: 0.12rem 0.34rem;
+  border-radius: var(--admin-radius-sm);
+  background: transparent;
+  color: var(--admin-link);
+  font-weight: 760;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    background-color var(--admin-transition),
+    color var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+.change-form p.datetime .datetimeshortcuts a:hover,
+.change-form p.datetime .datetimeshortcuts a:focus-visible {
+  background: var(--surface-hover);
+  color: var(--admin-link-strong);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.change-form p.datetime .date-icon,
+.change-form p.datetime .clock-icon {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  background: currentColor;
+}
+
+.change-form p.datetime .date-icon {
+  mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 2v3M17 2v3M4 9h16M6 5h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm2 8h2m4 0h2m-8 4h2m4 0h2' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 2v3M17 2v3M4 9h16M6 5h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm2 8h2m4 0h2m-8 4h2m4 0h2' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.change-form p.datetime .clock-icon {
+  mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.change-form p.datetime .timezonewarning {
+  box-sizing: border-box;
+  flex: 1 0 100%;
+  margin: 0.05rem 0 0 !important;
+  padding: 0 !important;
+  color: var(--admin-muted-soft);
+  font-size: 0.68rem;
+  line-height: 1.2;
+}
+
 #changelist #toolbar,
 #changelist .actions {
   display: flex;
@@ -1894,6 +2378,10 @@ html[data-theme="light"] #changelist .actions {
   padding-bottom: 0.25rem;
 }
 
+.admin-changelist-card-header #changelist-search .admin-search-field:has(.admin-search-clear) #searchbar {
+  padding-right: 6.5rem;
+}
+
 #changelist #toolbar #searchbar {
   border: 0;
   box-shadow: none;
@@ -1901,7 +2389,41 @@ html[data-theme="light"] #changelist .actions {
 
 #changelist #toolbar #searchbar:focus,
 #changelist #toolbar #searchbar:focus-visible {
-  border: 1px solid var(--admin-accent-border);
+  border: 0;
+  outline: none;
+  box-shadow: none;
+}
+
+#changelist .admin-changelist-card-header #changelist-search .admin-search-clear {
+  position: absolute;
+  top: 50%;
+  right: 3.6rem;
+  transform: translateY(-50%);
+  display: inline-grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  min-width: 1.35rem;
+  min-height: 1.35rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 760;
+  line-height: 1;
+  box-shadow: none;
+  cursor: pointer;
+  transition:
+    background-color var(--admin-transition),
+    color var(--admin-transition);
+}
+
+#changelist .admin-changelist-card-header #changelist-search .admin-search-clear:hover,
+#changelist .admin-changelist-card-header #changelist-search .admin-search-clear:focus-visible {
+  background: transparent;
+  color: var(--heading);
   outline: none;
   box-shadow: none;
 }
@@ -1947,7 +2469,120 @@ select,
 
 html[data-theme="light"] #changelist-search input[type="text"]:focus,
 html[data-theme="light"] #changelist input[type="search"]:focus {
-  background: #e8f1fa;
+  background: var(--surface-hover);
+}
+
+html[data-theme="light"] #changelist-search input[type="text"]:hover,
+html[data-theme="light"] #changelist input[type="search"]:hover {
+  background: var(--surface-hover);
+}
+
+#changelist-search input[type="text"]:hover,
+#changelist input[type="search"]:hover {
+  background: var(--surface-hover);
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="file"]):hover,
+input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="file"]):focus,
+input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="file"]):focus-visible,
+textarea:hover,
+textarea:focus,
+textarea:focus-visible {
+  border: 0;
+  background: var(--surface-hover);
+  outline: none;
+  box-shadow: none;
+}
+
+.change-form .form-row ul.radiolist,
+.change-form .form-row ol.radiolist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.change-form .form-row ul.radiolist li,
+.change-form .form-row ol.radiolist li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.change-form .form-row label:has(input[type="radio"]) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  min-height: 1.86rem;
+  margin: 0;
+  padding: 0.28rem 0.18rem;
+  border: 0;
+  border-radius: var(--admin-radius-sm);
+  background: transparent;
+  color: var(--admin-muted);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 720;
+  line-height: 1.15;
+  transition:
+    background-color var(--admin-transition),
+    color var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+.change-form .form-row label:has(input[type="radio"]:hover),
+.change-form .form-row label:has(input[type="radio"]:focus-visible) {
+  background: transparent;
+  color: var(--admin-text);
+  transform: translateY(-2px);
+}
+
+.change-form .form-row label:has(input[type="radio"]:checked) {
+  background: transparent;
+  color: var(--admin-text);
+}
+
+input[type="radio"] {
+  appearance: none;
+  display: inline-grid;
+  place-items: center;
+  width: 0.74rem;
+  height: 0.74rem;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--admin-muted) 24%, transparent);
+  box-shadow: none;
+  cursor: pointer;
+}
+
+input[type="radio"]::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: transparent;
+  transform: none;
+  transition: background-color var(--admin-transition);
+}
+
+input[type="radio"]:checked {
+  background: var(--admin-accent-soft);
+}
+
+input[type="radio"]:checked::before {
+  background: var(--admin-accent-strong);
+  transform: none;
+}
+
+input[type="radio"]:focus,
+input[type="radio"]:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 #changelist .actions select {
@@ -1991,7 +2626,7 @@ input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):focus,
 textarea:focus,
 select:focus {
   box-shadow: none;
-  background: var(--surface);
+  background: var(--surface-hover);
 }
 
 #changelist .actions select,
@@ -2219,6 +2854,29 @@ select:focus {
   display: contents;
 }
 
+.change-form .form-row > fieldset:has(.related-widget-wrapper) .help,
+.change-form .form-row > fieldset:has(.related-widget-wrapper) .helptext {
+  grid-column: 2;
+  width: 100%;
+  max-width: 42rem;
+  margin: 0.3rem 0 0;
+  padding-left: 0;
+}
+
+.change-form .form-row > fieldset:has(.related-widget-wrapper) .help > div {
+  width: auto;
+}
+
+.change-form .status-affected-services {
+  row-gap: 0.2rem;
+}
+
+.change-form .status-affected-services label {
+  min-height: 1.45rem;
+  padding-top: 0.08rem;
+  padding-bottom: 0.08rem;
+}
+
 .change-form .related-widget-wrapper {
   display: contents;
   float: none;
@@ -2248,7 +2906,7 @@ select:focus {
   min-width: 2.05rem;
   height: 2.05rem;
   min-height: 2.05rem;
-  margin: 0.16rem 0 0;
+  margin: 0.16rem 0 0 0.28rem;
   padding: 0;
   border: 0;
   border-radius: var(--admin-radius-sm);
@@ -2262,9 +2920,13 @@ select:focus {
     transform var(--admin-transition);
 }
 
+.change-form .related-widget-wrapper-link + .related-widget-wrapper-link {
+  margin-left: 0.28rem;
+}
+
 .change-form .related-widget-wrapper-link:hover,
 .change-form .related-widget-wrapper-link:focus-visible {
-  background: var(--surface);
+  background: var(--surface-hover);
   color: var(--admin-accent-strong);
   transform: translateY(-2px);
 }
@@ -2275,9 +2937,41 @@ select:focus {
 }
 
 .change-form .related-widget-wrapper-link img {
-  display: block;
+  display: none;
   width: 1rem;
   height: 1rem;
+}
+
+.change-form .related-widget-wrapper-link::before {
+  content: "";
+  display: block;
+  width: 1.08rem;
+  height: 1.08rem;
+  background: currentColor;
+  mask: var(--admin-related-icon) center / contain no-repeat;
+  -webkit-mask: var(--admin-related-icon) center / contain no-repeat;
+}
+
+.change-form .related-widget-wrapper-link.change-related {
+  --admin-related-icon: url("../img/icon-changelink.svg");
+}
+
+.change-form .related-widget-wrapper-link.add-related {
+  --admin-related-icon: url("../img/icon-addlink.svg");
+}
+
+.change-form .related-widget-wrapper-link.view-related {
+  --admin-related-icon: url("../img/icon-viewlink.svg");
+}
+
+.change-form .related-widget-wrapper-link.delete-related {
+  --admin-related-icon: url("../img/icon-deletelink.svg");
+  color: var(--admin-error-text);
+}
+
+.change-form .related-widget-wrapper-link.delete-related:hover,
+.change-form .related-widget-wrapper-link.delete-related:focus-visible {
+  color: var(--admin-error-text);
 }
 
 @media (max-width: 767px) {
@@ -2366,10 +3060,12 @@ select:focus {
 }
 
 .admin-checkbox-selector__clear-selected {
-  display: inline-grid;
-  place-items: center;
-  width: 1.25rem;
-  height: 1.25rem;
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.22rem;
+  width: auto;
+  height: auto;
   min-height: 0;
   margin: 0;
   padding: 0;
@@ -2379,6 +3075,10 @@ select:focus {
   color: var(--admin-muted);
   cursor: pointer;
   box-shadow: none;
+  font: inherit;
+  font-size: 0.74rem;
+  font-weight: 720;
+  line-height: 1.2;
   transition:
     color var(--admin-transition),
     transform var(--admin-transition);
@@ -2393,12 +3093,22 @@ select:focus {
   transform: translateY(-2px);
 }
 
+.admin-checkbox-selector__clear-selected-separator {
+  color: var(--admin-muted);
+  font-size: 0.74rem;
+  font-weight: 860;
+  line-height: 1.2;
+}
+
 .admin-checkbox-selector__clear-selected-icon {
-  width: 0.72rem;
-  height: 0.72rem;
-  background: currentColor;
-  mask: url("../img/icon-no.svg") center / contain no-repeat;
-  -webkit-mask: url("../img/icon-no.svg") center / contain no-repeat;
+  color: var(--admin-error);
+  font-size: 0.82rem;
+  font-weight: 860;
+  line-height: 1.05;
+}
+
+.admin-checkbox-selector__clear-selected-text {
+  color: currentColor;
 }
 
 .admin-checkbox-selector__categories {
@@ -2406,6 +3116,62 @@ select:focus {
   flex-wrap: wrap;
   gap: 0.34rem;
   padding-bottom: 0.1rem;
+}
+
+.admin-checkbox-selector__give-all {
+  position: relative;
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.22rem;
+  min-height: 0 !important;
+  margin: 0 0.22rem 0 0;
+  padding: 0.12rem 0.72rem 0.12rem 0.5rem;
+  border: 0 !important;
+  border-radius: var(--admin-radius-md);
+  background: transparent;
+  color: var(--admin-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 760;
+  line-height: 1.14;
+  text-align: center;
+  box-shadow: none;
+  transition:
+    color var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+.admin-checkbox-selector__give-all::after {
+  content: "|";
+  position: absolute;
+  right: 0;
+  top: 0.15rem;
+  color: var(--admin-muted);
+  font-weight: 860;
+  line-height: 1.1;
+  pointer-events: none;
+}
+
+.admin-checkbox-selector__give-all:hover,
+.admin-checkbox-selector__give-all:focus-visible {
+  background: transparent;
+  color: var(--admin-text);
+  outline: none;
+  box-shadow: none;
+  transform: translateY(-2px);
+}
+
+.admin-checkbox-selector__give-all-icon {
+  color: var(--admin-accent-strong);
+  font-size: 0.86rem;
+  font-weight: 860;
+  line-height: 0.92;
+}
+
+.admin-checkbox-selector__give-all-text {
+  color: currentColor;
 }
 
 .admin-checkbox-selector button.admin-checkbox-selector__category {
@@ -2522,7 +3288,7 @@ select:focus {
 .admin-checkbox-selector input.admin-checkbox-selector__search:hover,
 .admin-checkbox-selector input.admin-checkbox-selector__search:focus,
 .admin-checkbox-selector input.admin-checkbox-selector__search:focus-visible {
-  background: var(--surface);
+  background: var(--surface-hover);
   border: 0 !important;
   outline: none !important;
   box-shadow: none !important;
@@ -2541,7 +3307,7 @@ select:focus {
 html[data-theme="light"] .admin-checkbox-selector input.admin-checkbox-selector__search:hover,
 html[data-theme="light"] .admin-checkbox-selector input.admin-checkbox-selector__search:focus,
 html[data-theme="light"] .admin-checkbox-selector input.admin-checkbox-selector__search:focus-visible {
-  background: #e8f1fa;
+  background: var(--surface-hover);
 }
 
 .admin-checkbox-selector__bulk-button {
@@ -2571,6 +3337,23 @@ html[data-theme="light"] .admin-checkbox-selector input.admin-checkbox-selector_
     transform var(--admin-transition);
 }
 
+.admin-checkbox-selector__list-actions {
+  grid-column: 1 / -1;
+  display: inline-flex;
+  justify-content: flex-end;
+  justify-self: end;
+  align-items: center;
+  gap: 0.34rem;
+  padding-top: 0.06rem;
+}
+
+.admin-checkbox-selector__list-actions .admin-checkbox-selector__bulk-button {
+  min-height: 1.42rem;
+  padding: 0.16rem 0.5rem;
+  font-size: 0.68rem;
+  line-height: 1.12;
+}
+
 .admin-checkbox-selector__bulk-button--muted {
   background: var(--surface-muted);
   color: var(--admin-text);
@@ -2586,7 +3369,7 @@ html[data-theme="light"] .admin-checkbox-selector input.admin-checkbox-selector_
 
 .admin-checkbox-selector__bulk-button--muted:hover,
 .admin-checkbox-selector__bulk-button--muted:focus-visible {
-  background: var(--surface);
+  background: var(--surface-hover);
   color: var(--admin-text);
 }
 
@@ -2604,12 +3387,12 @@ html[data-theme="light"] .admin-checkbox-selector input.admin-checkbox-selector_
 
 .admin-checkbox-selector__list {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
   align-items: start;
-  gap: 0.55rem 0.65rem;
+  gap: 0.28rem 0.5rem;
   max-height: 24rem;
   overflow: auto;
-  padding: 0.5rem;
+  padding: 0.42rem;
   border: 1px solid var(--admin-border);
   border-radius: var(--admin-radius-md);
   background: var(--admin-surface);
@@ -2636,13 +3419,13 @@ html[data-theme="light"] .admin-checkbox-selector input.admin-checkbox-selector_
 
 .admin-checkbox-selector__section {
   display: grid;
-  gap: 0.18rem;
+  gap: 0.08rem;
   min-width: 0;
 }
 
 .admin-checkbox-selector__section-block--flat .admin-checkbox-selector__section {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.18rem 0.65rem;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.08rem 0.5rem;
 }
 
 label.admin-checkbox-selector__item {
@@ -2651,9 +3434,9 @@ label.admin-checkbox-selector__item {
   gap: 0.62rem;
   width: 100%;
   max-width: 100%;
-  min-height: 1.86rem;
+  min-height: 1.52rem;
   margin: 0;
-  padding: 0.34rem 0.42rem;
+  padding: 0.18rem 0.34rem;
   border: 0;
   border-radius: var(--admin-radius-sm);
   background: transparent;
@@ -3392,6 +4175,10 @@ html[data-theme="light"] #changelist table thead th.sorted .sortoptions {
     transform var(--admin-transition);
 }
 
+#changelist-filter[hidden] {
+  display: none;
+}
+
 #changelist-filter.is-open {
   opacity: 1;
   transform: translateY(0);
@@ -3765,6 +4552,38 @@ select:focus {
 :where(a, button, input:not([type="checkbox"]):not([type="radio"]), select, textarea, summary):focus-visible {
   outline: 1px solid var(--admin-accent-border);
   outline-offset: 1px;
+  box-shadow: none;
+}
+
+#nav-sidebar .admin-sidebar__filter input[type="search"]:focus,
+#nav-sidebar .admin-sidebar__filter input[type="search"]:focus-visible,
+#changelist-search input[type="text"]:focus,
+#changelist-search input[type="text"]:focus-visible,
+#changelist input[type="search"]:focus,
+#changelist input[type="search"]:focus-visible,
+input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="file"]):focus,
+input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="file"]):focus-visible,
+textarea:focus,
+textarea:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.change-form p.datetime input.vDateField:hover,
+.change-form p.datetime input.vDateField:focus,
+.change-form p.datetime input.vDateField:focus-visible,
+.change-form p.datetime input.vTimeField:hover,
+.change-form p.datetime input.vTimeField:focus,
+.change-form p.datetime input.vTimeField:focus-visible,
+.change-form .inline-group input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):hover,
+.change-form .inline-group input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):focus,
+.change-form .inline-group input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):focus-visible,
+.change-form .inline-group textarea:hover,
+.change-form .inline-group textarea:focus,
+.change-form .inline-group textarea:focus-visible {
+  border: 0;
+  background-color: var(--surface-hover);
+  outline: none;
   box-shadow: none;
 }
 

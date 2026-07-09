@@ -110,16 +110,22 @@ svg {
 /* Messages And Errors */
 
 ul.messagelist {
-  position: absolute;
+  position: fixed;
   top: 0.9rem;
-  left: clamp(1.25rem, 4vw, 4.25rem);
-  z-index: 35;
+  left: calc(var(--admin-sidebar-width) + clamp(1.25rem, 4vw, 4.25rem));
+  z-index: 60;
   display: grid;
   justify-items: start;
   gap: 0.45rem;
   margin: 0;
   padding: 0;
-  max-width: calc(100% - (2 * clamp(1.25rem, 4vw, 4.25rem)));
+  max-width: calc(100vw - var(--admin-sidebar-width) - (2 * clamp(1.25rem, 4vw, 4.25rem)));
+  pointer-events: none;
+}
+
+body.admin-sidebar-collapsed ul.messagelist {
+  left: calc(var(--admin-sidebar-collapsed-width) + clamp(1.25rem, 4vw, 4.25rem));
+  max-width: calc(100vw - var(--admin-sidebar-collapsed-width) - (2 * clamp(1.25rem, 4vw, 4.25rem)));
 }
 
 ul.messagelist li {
@@ -134,7 +140,7 @@ ul.messagelist li {
   max-width: 100%;
   margin: 0;
   padding: 0.62rem 1rem 0.62rem 3.85rem;
-  border: 1px solid var(--admin-border);
+  border: 0;
   border-radius: var(--admin-radius-xl);
   background-color: var(--admin-error-surface-strong);
   background-image: linear-gradient(90deg, var(--admin-message-fill), var(--admin-message-fill));
@@ -149,6 +155,7 @@ ul.messagelist li {
   font-weight: 700;
   line-height: 1.3;
   overflow-wrap: anywhere;
+  pointer-events: auto;
   transition:
     background-size 4000ms linear,
     opacity 160ms ease,
@@ -158,7 +165,7 @@ ul.messagelist li {
 ul.messagelist li::before {
   content: "";
   position: absolute;
-  inset: -1px auto -1px -1px;
+  inset: 0 auto 0 0;
   width: 0.45rem;
   border-radius: var(--admin-radius-xl) 0 0 var(--admin-radius-xl);
   background: var(--admin-message-accent);
@@ -239,18 +246,18 @@ ul.errorlist {
   --admin-inline-error-bg: color-mix(in srgb, var(--admin-message-accent) 38%, var(--admin-surface-raised));
   width: fit-content;
   max-width: 100%;
-  margin: 0 0 0.65rem;
-  padding: 0.22rem 0.75rem;
+  margin: 0 0 0.5rem;
+  padding: 0.18rem 0.58rem;
   border: 1px solid var(--admin-border);
-  border-left: 4px solid var(--admin-message-accent);
-  border-radius: var(--admin-radius-lg);
+  border-left: 3px solid var(--admin-message-accent);
+  border-radius: var(--admin-radius-sm);
   background: var(--admin-inline-error-bg);
   color: var(--admin-text);
   box-shadow: none;
-  font-size: 0.92rem;
+  font-size: 0.78rem;
   font-family: var(--site-font-body);
   font-weight: 520;
-  line-height: 1.45;
+  line-height: 1.3;
   list-style: none;
   overflow-wrap: anywhere;
 }
@@ -258,40 +265,40 @@ ul.errorlist {
 .errornote,
 ul.errorlist {
   position: relative;
-  padding-left: 2.25rem;
+  padding-left: 1.9rem;
 }
 
 .errornote::before,
 ul.errorlist::before {
   content: "!";
   position: absolute;
-  top: 0.28rem;
-  left: 0.72rem;
+  top: 0.24rem;
+  left: 0.58rem;
   display: grid;
   place-items: center;
-  width: 0.9rem;
-  height: 0.9rem;
-  border: 2px solid var(--admin-inline-error-icon);
+  width: 0.72rem;
+  height: 0.72rem;
+  border: 1.5px solid var(--admin-inline-error-icon);
   border-radius: 999px;
   background: transparent;
   color: var(--admin-inline-error-icon);
-  font-size: 0.62rem;
+  font-size: 0.5rem;
   font-weight: 800;
   line-height: 1;
 }
 
 .errornote {
   color: var(--admin-text);
-  font-weight: 720;
+  font-weight: 680;
 }
 
 ul.errorlist {
   display: inline-grid;
-  gap: 0.45rem;
+  gap: 0.28rem;
 }
 
 form .aligned ul.errorlist {
-  padding-left: 2.25rem;
+  padding-left: 1.9rem;
 }
 
 ul.errorlist li {
@@ -303,9 +310,9 @@ ul.errorlist li {
   border-radius: 0;
   background: transparent;
   color: var(--admin-text);
-  font-size: 0.86rem;
+  font-size: 0.76rem;
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.28;
 }
 
 html[data-theme="light"] .errornote,

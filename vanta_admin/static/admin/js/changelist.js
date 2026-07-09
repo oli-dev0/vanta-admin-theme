@@ -85,6 +85,25 @@
         } catch (error) {}
     }
 
+    function syncSearchClear() {
+        const searchForm = document.getElementById('changelist-search');
+        const searchInput = document.getElementById('searchbar');
+        const clearButton = searchForm?.querySelector('.admin-search-clear');
+
+        if (!searchForm || !searchInput || !clearButton) {
+            return;
+        }
+
+        clearButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            searchInput.value = '';
+            const searchParams = new URLSearchParams(window.location.search);
+            searchParams.delete('q');
+            const queryString = searchParams.toString();
+            window.location.assign(`${window.location.pathname}${queryString ? `?${queryString}` : ''}`);
+        });
+    }
+
     function syncChangelistActions() {
         const form = document.getElementById('changelist-form');
         const actions = Array.from(document.querySelectorAll('#changelist .actions'));
@@ -162,6 +181,7 @@
         updateActionsVisibility();
     }
 
+    syncSearchClear();
     syncChangelistActions();
 
     if (filterPanelToggle && filterPanel) {

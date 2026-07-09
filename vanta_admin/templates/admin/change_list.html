@@ -105,6 +105,11 @@
                       <span class="admin-search-field">
                         <label for="searchbar"><img src="{% static "admin/img/search.svg" %}" alt="{% translate 'Search' %}"></label>
                         <input type="text" size="40" name="q" value="{{ cl.query }}" id="searchbar"{% if cl.search_help_text %} aria-describedby="searchbar_helptext"{% endif %}>
+                        {% if cl.query %}
+                          <button class="admin-search-clear" type="submit" aria-label="{% translate 'Clear search' %}" title="{% translate 'Clear search' %}">
+                            <span aria-hidden="true">×</span>
+                          </button>
+                        {% endif %}
                         <input type="submit" value="{% translate 'Search' %}">
                       </span>
                       {% if cl.result_count != cl.full_result_count %}

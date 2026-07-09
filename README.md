@@ -34,6 +34,12 @@ feels more deliberate in everyday use.
   applied.
 - An enhanced horizontal selector for many-to-many admin fields, with category
   grouping, item filtering, selected counts, and add/remove visible controls.
+- Cleaner inline admin formsets, including compact tabular rows, stacked inline
+  panels, and Vanta-styled delete controls.
+- A clear-search control for changelist search forms that removes the current
+  search while preserving the rest of the list state.
+- More complete enhanced relationship controls, including a give-all action for
+  grouped many-to-many selectors.
 - Styled select controls for common admin dropdowns, plus a clearer enhanced
   horizontal selector for many-to-many fields.
 - Built-in icons for common admin areas, models, and recent actions.

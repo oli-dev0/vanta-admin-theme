@@ -90,7 +90,7 @@
 
   .admin-sidebar-menu-button:hover,
   .admin-sidebar-menu-button:focus-visible {
-    background: var(--surface);
+    background: var(--surface-hover);
     color: var(--accent-strong);
     outline: none;
     transform: translateY(-2px);
@@ -136,6 +136,14 @@
   .main,
   body.admin-sidebar-collapsed .main {
     display: block;
+  }
+
+  ul.messagelist,
+  body.admin-sidebar-collapsed ul.messagelist {
+    top: 4.65rem;
+    left: 1rem;
+    right: 1rem;
+    max-width: none;
   }
 
   #content {
@@ -277,6 +285,14 @@
 
   #changelist-search input[type="text"] {
     flex: 1 1 12rem;
+  }
+
+  .change-form p.datetime {
+    align-items: flex-start;
+  }
+
+  .change-form p.datetime label[for$="_1"] {
+    flex-basis: 100%;
   }
 }
 
