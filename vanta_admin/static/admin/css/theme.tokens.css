@@ -17,10 +17,19 @@
   --admin-radius-xl: var(--radius-xl);
   --admin-transition: 160ms ease;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --admin-font-size: 100%;
   --site-font-body: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --site-font-mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
   --admin-font-family: var(--site-font-body);
   --admin-error-font: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+html[data-admin-font-size="small"] {
+  --admin-font-size: 94%;
+}
+
+html[data-admin-font-size="large"] {
+  --admin-font-size: 108%;
 }
 
 :root,

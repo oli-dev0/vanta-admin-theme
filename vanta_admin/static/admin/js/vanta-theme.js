@@ -3,10 +3,13 @@
 {
     const validThemeValues = new Set(['light', 'dark']);
     const validTimeFormatValues = new Set(['12', '24']);
+    const validFontSizeValues = new Set(['small', 'normal', 'large']);
     const timeFormatStorageKey = 'django.admin.theme.timeFormat';
+    const fontSizeStorageKey = 'django.admin.theme.fontSize';
     const root = document.documentElement;
     const themeButtons = document.querySelectorAll('[data-admin-theme-value]');
     const timeFormatButtons = document.querySelectorAll('[data-admin-time-format-value]');
+    const fontSizeButtons = document.querySelectorAll('[data-admin-font-size-value]');
 
     function updateThemeButtons(theme) {
         themeButtons.forEach((button) => {
@@ -28,6 +31,27 @@
         timeFormatButtons.forEach((button) => {
             button.setAttribute('aria-pressed', String(button.dataset.adminTimeFormatValue === timeFormat));
         });
+    }
+
+    function updateFontSizeButtons(fontSize) {
+        fontSizeButtons.forEach((button) => {
+            button.setAttribute('aria-pressed', String(button.dataset.adminFontSizeValue === fontSize));
+        });
+    }
+
+    function applyFontSize(fontSize) {
+        if (!validFontSizeValues.has(fontSize)) {
+            return;
+        }
+
+        if (fontSize === 'normal') {
+            delete root.dataset.adminFontSize;
+        } else {
+            root.dataset.adminFontSize = fontSize;
+        }
+
+        localStorage.setItem(fontSizeStorageKey, fontSize);
+        updateFontSizeButtons(fontSize);
     }
 
     function formatHour(hour, meridiem) {
@@ -148,6 +172,16 @@
     timeFormatButtons.forEach((button) => {
         button.addEventListener('click', () => {
             applyTimeFormat(button.dataset.adminTimeFormatValue);
+        });
+    });
+
+    const storedFontSize = localStorage.getItem(fontSizeStorageKey);
+    const initialFontSize = validFontSizeValues.has(storedFontSize) ? storedFontSize : 'normal';
+    applyFontSize(initialFontSize);
+
+    fontSizeButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            applyFontSize(button.dataset.adminFontSizeValue);
         });
     });
 }

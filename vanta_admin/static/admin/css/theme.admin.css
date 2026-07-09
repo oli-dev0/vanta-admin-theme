@@ -563,18 +563,29 @@ html[data-theme="light"] .admin-sidebar__account-summary {
 }
 
 .admin-sidebar__theme-controls,
-.admin-sidebar__time-controls {
+.admin-sidebar__time-controls,
+.admin-sidebar__font-size-controls {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 0.18rem;
   padding: 0.14rem;
-  width: 4.18rem;
   border-radius: 0.3rem;
   background: var(--surface-muted);
 }
 
+.admin-sidebar__theme-controls,
+.admin-sidebar__time-controls {
+  grid-template-columns: 1fr 1fr;
+  width: 4.18rem;
+}
+
+.admin-sidebar__font-size-controls {
+  grid-template-columns: repeat(3, 1fr);
+  width: 4.18rem;
+}
+
 .admin-sidebar__theme-button,
-.admin-sidebar__time-button {
+.admin-sidebar__time-button,
+.admin-sidebar__font-size-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -595,6 +606,10 @@ html[data-theme="light"] .admin-sidebar__account-summary {
   letter-spacing: 0;
 }
 
+.admin-sidebar__font-size-button {
+  letter-spacing: 0;
+}
+
 .admin-sidebar__theme-button svg {
   width: 0.78rem;
   height: 0.78rem;
@@ -602,7 +617,8 @@ html[data-theme="light"] .admin-sidebar__account-summary {
 
 html[data-theme="dark"] .admin-sidebar__theme-button--dark,
 html[data-theme="light"] .admin-sidebar__theme-button--light,
-.admin-sidebar__time-button[aria-pressed="true"] {
+.admin-sidebar__time-button[aria-pressed="true"],
+.admin-sidebar__font-size-button[aria-pressed="true"] {
   color: var(--accent-strong);
   background: var(--accent-soft);
 }
@@ -611,7 +627,8 @@ html[data-theme="light"] .admin-sidebar__theme-button--light {
   background: var(--accent-softer);
 }
 
-html[data-theme="light"] .admin-sidebar__time-button[aria-pressed="true"] {
+html[data-theme="light"] .admin-sidebar__time-button[aria-pressed="true"],
+html[data-theme="light"] .admin-sidebar__font-size-button[aria-pressed="true"] {
   background: var(--accent-softer);
 }
 

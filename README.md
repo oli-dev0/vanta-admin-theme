@@ -39,6 +39,8 @@ feels more deliberate in everyday use.
   access, 2FA settings, logout, and a Vanta support link.
 - A 12-hour and 24-hour time-format preference for changelist date/time values,
   stored in the browser for each admin user.
+- A small, normal, and large font-size preference for the admin interface, stored
+  in the browser for each admin user.
 - Shorter changelist date formatting that makes date-heavy tables easier to
   scan.
 - Simpler breadcrumbs on edit pages, so the page path feels less cluttered.

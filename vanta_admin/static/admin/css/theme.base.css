@@ -5,6 +5,10 @@ body {
   min-height: 100%;
 }
 
+html {
+  font-size: var(--admin-font-size);
+}
+
 body {
   margin: 0;
   color: var(--admin-text);
