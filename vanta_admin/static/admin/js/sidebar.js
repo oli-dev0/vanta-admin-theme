@@ -4,6 +4,7 @@
     const sidebarStateKey = 'django.admin.theme.sidebar.isCollapsed';
     const sidebarWidthStateKey = 'django.admin.theme.sidebar.width';
     const navSectionsStateKey = 'django.admin.theme.sidebar.openSections';
+    const navSectionOrderStateKey = 'django.admin.theme.sidebar.sectionOrder';
     const minSidebarWidth = 220;
     const maxSidebarWidth = 420;
     const sidebarResizeStep = 16;
@@ -17,11 +18,15 @@
     const sectionsToggle = document.getElementById('admin-sidebar-sections-toggle');
     const accountDetails = document.querySelector('.admin-sidebar__account');
     const navFilter = document.getElementById('admin-nav-filter');
+    const navGroups = document.querySelector('.admin-sidebar__groups');
     const mobileQuery = window.matchMedia('(max-width: 1024px)');
     const navSections = Array.from(document.querySelectorAll('[data-admin-nav-section]'));
+    const reorderHandles = Array.from(document.querySelectorAll('.admin-sidebar__reorder-handle'));
     const programmaticSectionToggles = new WeakSet();
     let filterBaselineOpenSections = null;
     let hadFilterQuery = false;
+    let draggedSection = null;
+    let draggedHandle = null;
     let resizeStartX = 0;
     let resizeStartWidth = 0;
 
@@ -116,6 +121,22 @@
         return section.dataset.adminNavSection;
     }
 
+    function getOrderedNavSections() {
+        if (!navGroups) {
+            return navSections;
+        }
+
+        return Array.from(navGroups.querySelectorAll('[data-admin-nav-section]'));
+    }
+
+    function isFilteringNavigation() {
+        return navFilter && normalizeFilterValue(navFilter.value).length > 0;
+    }
+
+    function canReorderSections() {
+        return navGroups && !isFilteringNavigation();
+    }
+
     function isCurrentSection(section) {
         return section.classList.contains('is-current-app');
     }
@@ -160,10 +181,60 @@
         }
     }
 
+    function getStoredSectionOrder() {
+        try {
+            const value = JSON.parse(localStorage.getItem(navSectionOrderStateKey));
+            return Array.isArray(value) ? value.filter((sectionKey) => typeof sectionKey === 'string') : [];
+        } catch (error) {
+            return [];
+        }
+    }
+
     function persistOpenSections() {
         const openSections = Array.from(getCurrentOpenSections());
 
         localStorage.setItem(navSectionsStateKey, JSON.stringify(openSections));
+    }
+
+    function persistSectionOrder() {
+        const sectionOrder = getOrderedNavSections()
+            .map(getSectionKey)
+            .filter(Boolean);
+
+        localStorage.setItem(navSectionOrderStateKey, JSON.stringify(sectionOrder));
+    }
+
+    function applyStoredSectionOrder() {
+        if (!navGroups) {
+            return;
+        }
+
+        const storedOrder = getStoredSectionOrder();
+        if (storedOrder.length === 0) {
+            return;
+        }
+
+        const sectionsByKey = new Map();
+        navSections.forEach((section) => {
+            const sectionKey = getSectionKey(section);
+            if (sectionKey) {
+                sectionsByKey.set(sectionKey, section);
+            }
+        });
+
+        storedOrder.forEach((sectionKey) => {
+            const section = sectionsByKey.get(sectionKey);
+            if (section) {
+                navGroups.append(section);
+                sectionsByKey.delete(sectionKey);
+            }
+        });
+
+        navSections.forEach((section) => {
+            if (sectionsByKey.get(getSectionKey(section)) === section) {
+                navGroups.append(section);
+            }
+        });
     }
 
     function persistFilteredSectionToggle(section) {
@@ -218,7 +289,7 @@
         }
 
         navSections.forEach((section) => {
-            const sectionTitle = section.querySelector('.admin-sidebar__group-title span');
+            const sectionTitle = section.querySelector('.admin-sidebar__group-label');
             const modelItems = Array.from(section.querySelectorAll('.admin-sidebar__model'));
             const matchesSection = sectionTitle && getNavItemText(sectionTitle).includes(query);
             let hasVisibleModel = false;
@@ -252,7 +323,111 @@
         }
 
         hadFilterQuery = hasQuery;
+        syncReorderHandles();
         syncSectionsToggle();
+    }
+
+    function syncReorderHandles() {
+        const isDisabled = !canReorderSections();
+
+        if (sidebar) {
+            sidebar.classList.toggle('admin-sidebar--reorder-disabled', isDisabled);
+        }
+
+        reorderHandles.forEach((handle) => {
+            handle.setAttribute('aria-disabled', String(isDisabled));
+        });
+    }
+
+    function moveSection(section, targetIndex) {
+        if (!navGroups || !section) {
+            return;
+        }
+
+        const sections = getOrderedNavSections();
+        const currentIndex = sections.indexOf(section);
+        if (currentIndex === -1) {
+            return;
+        }
+
+        const sectionsWithoutCurrent = sections.filter((candidate) => candidate !== section);
+        const boundedIndex = Math.min(sectionsWithoutCurrent.length, Math.max(0, targetIndex));
+        const referenceSection = sectionsWithoutCurrent[boundedIndex] || null;
+        navGroups.insertBefore(section, referenceSection);
+        persistSectionOrder();
+    }
+
+    function moveSectionByKey(section, key) {
+        const sections = getOrderedNavSections();
+        const currentIndex = sections.indexOf(section);
+        if (currentIndex === -1) {
+            return;
+        }
+
+        if (key === 'ArrowUp') {
+            moveSection(section, currentIndex - 1);
+        } else if (key === 'ArrowDown') {
+            moveSection(section, currentIndex + 1);
+        } else if (key === 'Home') {
+            moveSection(section, 0);
+        } else if (key === 'End') {
+            moveSection(section, sections.length - 1);
+        }
+    }
+
+    function getSectionDropIndex(clientY) {
+        const sections = getOrderedNavSections().filter((section) => section !== draggedSection && !section.hidden);
+
+        for (let index = 0; index < sections.length; index += 1) {
+            const rect = sections[index].getBoundingClientRect();
+            if (clientY < rect.top + (rect.height / 2)) {
+                return index;
+            }
+        }
+
+        return sections.length;
+    }
+
+    function startSectionDrag(section, handle) {
+        draggedSection = section;
+        draggedHandle = handle;
+        section.classList.add('is-reordering');
+        if (sidebar) {
+            sidebar.classList.add('admin-sidebar--is-reordering');
+        }
+    }
+
+    function stopSectionDrag() {
+        if (draggedSection) {
+            draggedSection.classList.remove('is-reordering');
+        }
+
+        draggedSection = null;
+        draggedHandle = null;
+        if (sidebar) {
+            sidebar.classList.remove('admin-sidebar--is-reordering');
+        }
+    }
+
+    function moveDraggedSection(event) {
+        if (!draggedSection) {
+            return;
+        }
+
+        event.preventDefault();
+        moveSection(draggedSection, getSectionDropIndex(event.clientY));
+    }
+
+    function finishSectionDrag(event) {
+        if (!draggedSection) {
+            return;
+        }
+
+        persistSectionOrder();
+        if (draggedHandle && draggedHandle.hasPointerCapture(event.pointerId)) {
+            draggedHandle.releasePointerCapture(event.pointerId);
+        }
+        stopSectionDrag();
     }
 
     function applyOpenSections(openSections, shouldPersist) {
@@ -299,7 +474,9 @@
     }
     setCollapsed(storedCollapsed === 'true', false);
     setMobileOpen(false);
+    applyStoredSectionOrder();
     applyStoredOpenSections();
+    syncReorderHandles();
     syncSectionsToggle();
 
     if (resizeHandle) {
@@ -415,6 +592,52 @@
     if (navFilter) {
         navFilter.addEventListener('input', filterNavigation);
     }
+
+    reorderHandles.forEach((handle) => {
+        const section = handle.closest('[data-admin-nav-section]');
+
+        handle.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+        });
+
+        handle.addEventListener('pointerdown', (event) => {
+            if (!section || !canReorderSections()) {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+            handle.setPointerCapture(event.pointerId);
+            startSectionDrag(section, handle);
+        });
+
+        handle.addEventListener('pointercancel', () => {
+            stopSectionDrag();
+        });
+
+        handle.addEventListener('keydown', (event) => {
+            if (![' ', 'Enter', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (!section || !canReorderSections() || [' ', 'Enter'].includes(event.key)) {
+                return;
+            }
+
+            if (['ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) {
+                moveSectionByKey(section, event.key);
+                handle.focus();
+            }
+        });
+    });
+
+    document.addEventListener('pointermove', moveDraggedSection);
+    document.addEventListener('pointerup', finishSectionDrag);
+    document.addEventListener('pointercancel', stopSectionDrag);
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {

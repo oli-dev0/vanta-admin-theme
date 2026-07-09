@@ -139,7 +139,9 @@
   }
 
   ul.messagelist,
-  body.admin-sidebar-collapsed ul.messagelist {
+  #id_unusable_warning,
+  body.admin-sidebar-collapsed ul.messagelist,
+  body.admin-sidebar-collapsed #id_unusable_warning {
     top: 4.65rem;
     left: 1rem;
     right: 1rem;

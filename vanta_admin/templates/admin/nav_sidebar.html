@@ -3,6 +3,7 @@
 <svg aria-hidden="true" class="admin-svg-defs" xmlns="http://www.w3.org/2000/svg">
   <symbol id="admin-icon-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" /></symbol>
   <symbol id="admin-icon-chevrons-down" viewBox="0 0 24 24"><path d="m7 6 5 5 5-5" /><path d="m7 13 5 5 5-5" /></symbol>
+  <symbol id="admin-icon-grip" viewBox="0 0 256 256"><path d="M216 48v40a8 8 0 0 1-13.657 5.657l-40-40A8 8 0 0 1 168 40h40a8 8 0 0 1 8 8ZM53.657 162.343A8 8 0 0 0 40 168v40a8 8 0 0 0 8 8h40a8 8 0 0 0 5.657-13.657Zm157.405-1.734a8 8 0 0 0-8.719 1.734l-40 40A8 8 0 0 0 168 216h40a8 8 0 0 0 8-8v-40a8 8 0 0 0-4.938-7.391ZM88 40H48a8 8 0 0 0-8 8v40a8 8 0 0 0 13.657 5.657l40-40A8 8 0 0 0 88 40Z" /></symbol>
   <symbol id="admin-icon-arrow-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></symbol>
   <symbol id="admin-icon-chevron" viewBox="0 0 24 24"><path d="m6 15 6-6 6 6" /></symbol>
   <symbol id="admin-icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></symbol>
@@ -96,7 +97,16 @@
         {% if app.models %}
           <details class="admin-sidebar__group{% if app.app_url in request.path|urlencode %} is-current-app{% endif %}" data-admin-nav-section="{{ app.app_label }}"{% if request.resolver_match.url_name == 'index' or app.app_url in request.path|urlencode %} open{% endif %}>
             <summary class="admin-sidebar__group-title" aria-expanded="{% if request.resolver_match.url_name == 'index' or app.app_url in request.path|urlencode %}true{% else %}false{% endif %}">
-              <span>{% if app.app_label == 'auth' %}Auth{% else %}{{ app.name }}{% endif %}</span>
+              <span
+                class="admin-sidebar__reorder-handle"
+                role="button"
+                tabindex="0"
+                aria-label="Reorder {% if app.app_label == 'auth' %}Auth{% else %}{{ app.name }}{% endif %}"
+                title="Reorder category"
+              >
+                <svg aria-hidden="true"><use href="#admin-icon-grip"></use></svg>
+              </span>
+              <span class="admin-sidebar__group-label">{% if app.app_label == 'auth' %}Auth{% else %}{{ app.name }}{% endif %}</span>
               <svg class="admin-sidebar__chevron" aria-hidden="true"><use href="#admin-icon-chevron"></use></svg>
             </summary>
             <ul class="admin-sidebar__models">

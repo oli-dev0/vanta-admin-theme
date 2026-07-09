@@ -1,7 +1,7 @@
 'use strict';
 
 {
-    const adminMessages = Array.from(document.querySelectorAll('ul.messagelist li'));
+    const adminMessages = Array.from(document.querySelectorAll('ul.messagelist li, #id_unusable_warning li'));
     const adminMessageDuration = 4000;
 
     function dismissAdminMessage(message) {
@@ -9,7 +9,7 @@
         message.adminDismissTimer = null;
         message.classList.add('is-removing');
         window.setTimeout(() => {
-            const messageList = message.closest('ul.messagelist');
+            const messageList = message.closest('ul.messagelist, #id_unusable_warning');
             message.remove();
             if (messageList && messageList.children.length === 0) {
                 messageList.remove();
@@ -21,8 +21,8 @@
         window.clearTimeout(message.adminDismissTimer);
         message.adminTimerStartedAt = Date.now();
         message.adminTimerRemaining = duration;
-        message.style.transition = `background-size ${duration}ms linear, opacity 160ms ease, transform 160ms ease`;
-        message.style.backgroundSize = '100% 100%';
+        message.classList.remove('is-paused');
+        message.style.transition = 'opacity 160ms ease, transform 160ms ease';
         message.adminDismissTimer = window.setTimeout(() => dismissAdminMessage(message), duration);
     }
 
@@ -35,7 +35,7 @@
         message.adminTimerRemaining = Math.max(0, message.adminTimerRemaining - elapsed);
         window.clearTimeout(message.adminDismissTimer);
         message.adminDismissTimer = null;
-        message.style.backgroundSize = window.getComputedStyle(message).backgroundSize;
+        message.classList.add('is-paused');
         message.style.transition = 'opacity 160ms ease, transform 160ms ease';
     }
 
@@ -55,15 +55,14 @@
     }
 
     adminMessages.forEach((message) => {
-        message.classList.remove('is-counting', 'is-removing');
+        message.classList.remove('is-counting', 'is-paused', 'is-removing');
         message.style.transition = 'none';
-        message.style.backgroundSize = '0 100%';
         message.offsetWidth;
         message.addEventListener('mouseenter', () => pauseAdminMessageTimer(message));
         message.addEventListener('mouseleave', () => resumeAdminMessageTimer(message));
 
         window.requestAnimationFrame(() => {
-            message.style.transition = `background-size ${adminMessageDuration}ms linear, opacity 160ms ease, transform 160ms ease`;
+            message.style.transition = 'opacity 160ms ease, transform 160ms ease';
             window.requestAnimationFrame(() => {
                 message.classList.add('is-counting');
                 setAdminMessageTimer(message, adminMessageDuration);

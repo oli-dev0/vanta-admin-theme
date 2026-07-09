@@ -14,6 +14,8 @@ feels more deliberate in everyday use.
 - A sidebar navigation filter that lets users quickly narrow large admin menus by app or model name.
 - A resizable desktop sidebar that remembers each user's preferred width in the browser.
 - A sidebar expand/collapse-all control for quickly opening or closing visible navigation sections.
+- Draggable sidebar app sections, so users can reorder admin navigation categories in their own browser.
+- Keyboard-accessible sidebar section reordering with Arrow Up, Arrow Down, Home, and End on the reorder handle.
 - Light and dark mode, using the same calm Vanta look across the admin.
 - A more settled light-mode palette with clearer search focus states and stronger changelist table headers.
 - Less visual noise on the main admin screens, login pages, cards, filters, and

@@ -20,7 +20,10 @@ Thin local override entrypoint for admin branding and theme CSS.
     <link rel="icon" type="image/png" href="{% static 'admin/img/favicon.png' %}">
     <script>
       try {
-        if (localStorage.getItem('django.admin.theme.sidebar.openSections') !== null) {
+        if (
+          localStorage.getItem('django.admin.theme.sidebar.openSections') !== null
+          || localStorage.getItem('django.admin.theme.sidebar.sectionOrder') !== null
+        ) {
           document.documentElement.classList.add('admin-nav-state-pending');
         }
       } catch (error) {}

@@ -267,28 +267,8 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
   opacity: 0.82;
 }
 
-#nav-sidebar .admin-sidebar__filter input[type="search"]:hover {
-  background: var(--surface-hover);
-}
-
-#nav-sidebar .admin-sidebar__filter input[type="search"]:focus,
-#nav-sidebar .admin-sidebar__filter input[type="search"]:focus-visible {
-  background: var(--surface-hover);
-  outline: none;
-  box-shadow: none;
-}
-
 #nav-sidebar .admin-sidebar__filter input[type="search"]::-webkit-search-decoration {
   appearance: none;
-}
-
-html[data-theme="light"] #nav-sidebar .admin-sidebar__filter input[type="search"]:focus,
-html[data-theme="light"] #nav-sidebar .admin-sidebar__filter input[type="search"]:focus-visible {
-  background: var(--surface-hover);
-}
-
-html[data-theme="light"] #nav-sidebar .admin-sidebar__filter input[type="search"]:hover {
-  background: var(--surface-hover);
 }
 
 .admin-sidebar__groups {
@@ -312,9 +292,9 @@ html[data-theme="light"] #nav-sidebar .admin-sidebar__filter input[type="search"
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.8rem;
+  gap: 0.28rem;
   min-height: 2.05rem;
-  padding: 0.3rem 0.75rem;
+  padding: 0.3rem 0.55rem 0.3rem 0.05rem;
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
@@ -328,6 +308,75 @@ html[data-theme="light"] #nav-sidebar .admin-sidebar__filter input[type="search"
   transition:
     color 130ms var(--ease),
     transform 130ms var(--ease);
+}
+
+.admin-sidebar__group-label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.admin-sidebar__reorder-handle {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 1.08rem;
+  height: 1.35rem;
+  margin-left: -0.32rem;
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  cursor: grab;
+  opacity: 0;
+  touch-action: none;
+  transition:
+    background-color 130ms var(--ease),
+    color 130ms var(--ease),
+    opacity 130ms var(--ease),
+    transform 130ms var(--ease);
+}
+
+.admin-sidebar__reorder-handle svg {
+  width: 0.82rem;
+  height: 0.82rem;
+  fill: currentColor;
+  stroke: none;
+}
+
+.admin-sidebar__group-title:hover .admin-sidebar__reorder-handle,
+.admin-sidebar__group-title:focus-within .admin-sidebar__reorder-handle,
+.admin-sidebar__group.is-reordering .admin-sidebar__reorder-handle {
+  opacity: 1;
+}
+
+.admin-sidebar__reorder-handle:hover,
+.admin-sidebar__reorder-handle:focus-visible {
+  background: var(--surface-hover);
+  color: var(--accent);
+  outline: none;
+}
+
+.admin-sidebar__reorder-handle:active,
+.admin-sidebar__group.is-reordering .admin-sidebar__reorder-handle {
+  cursor: grabbing;
+  transform: scale(0.96);
+}
+
+.admin-sidebar__group.is-reordering {
+  opacity: 0.72;
+}
+
+.admin-sidebar--is-reordering .admin-sidebar__group-title {
+  transition: none;
+}
+
+.admin-sidebar--reorder-disabled .admin-sidebar__reorder-handle {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.admin-sidebar--reorder-disabled .admin-sidebar__reorder-handle:hover,
+.admin-sidebar--reorder-disabled .admin-sidebar__reorder-handle:focus-visible {
+  background: transparent;
+  color: var(--muted);
 }
 
 .admin-sidebar__group-title::-webkit-details-marker,
@@ -1367,7 +1416,7 @@ fieldset.module,
 .change-form .inline-group {
   display: grid;
   gap: 0.62rem;
-  padding: 0;
+  padding: 0.9rem;
   overflow: hidden;
 }
 
@@ -1379,27 +1428,26 @@ fieldset.module,
   background: transparent;
 }
 
-.change-form .inline-group h2,
-.change-form .inline-group .inline-heading {
-  margin: 0;
-  padding: 0.68rem 0.82rem;
-  border-bottom: 1px solid var(--admin-border-strong);
-  background: color-mix(in srgb, var(--admin-surface-raised) 86%, var(--admin-bg));
+.change-form :is(fieldset.module > h2, .inline-group > h2, .inline-group > .inline-heading) {
+  margin: 0 0 0.72rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: var(--admin-text);
-  font-size: 0.82rem;
-  font-weight: 800;
+  font-size: 0.94rem;
+  font-weight: 860;
   line-height: 1.2;
   letter-spacing: 0;
   text-transform: none;
 }
 
-html[data-theme="light"] .change-form .inline-group h2,
-html[data-theme="light"] .change-form .inline-group .inline-heading {
-  background: #eef6ff;
+.change-form :is(fieldset.module > h2, .inline-group > h2, .inline-group > .inline-heading) a {
+  color: inherit;
+  font-weight: inherit;
 }
 
 .change-form .inline-related {
-  margin: 0 0.72rem 0.72rem;
+  margin: 0 0 0.72rem;
   padding: 0.72rem;
   border: 1px solid var(--admin-border);
   border-radius: var(--admin-radius-md);
@@ -1450,7 +1498,7 @@ html[data-theme="light"] .change-form .inline-group .inline-heading {
 }
 
 .change-form .inline-group .tabular {
-  margin: 0.72rem;
+  margin: 0;
   overflow-x: auto;
 }
 
@@ -1555,7 +1603,7 @@ html[data-theme="light"] .change-form .inline-group .tabular thead th {
 }
 
 .change-form .inline-group .add-row {
-  margin: 0 0.72rem 0.72rem;
+  margin: 0 0 0.72rem;
   padding: 0;
   border: 0;
   background: transparent;
@@ -1590,21 +1638,6 @@ html[data-theme="light"] .change-form .inline-group .tabular thead th {
   border-radius: var(--admin-radius-sm);
   background: var(--input-bg);
   color: var(--admin-text);
-}
-
-.change-form .inline-group input:hover,
-.change-form .inline-group select:hover,
-.change-form .inline-group textarea:hover,
-.change-form .inline-group input:focus,
-.change-form .inline-group input:focus-visible,
-.change-form .inline-group select:focus,
-.change-form .inline-group select:focus-visible,
-.change-form .inline-group textarea:focus,
-.change-form .inline-group textarea:focus-visible {
-  border: 0 !important;
-  background-color: var(--surface-hover) !important;
-  outline: none;
-  box-shadow: none;
 }
 
 .change-form .inline-group .delete {
@@ -2059,18 +2092,6 @@ ul.helptext li::before,
   background: var(--input-bg);
 }
 
-.change-form p.datetime input.vDateField:hover,
-.change-form p.datetime input.vDateField:focus,
-.change-form p.datetime input.vDateField:focus-visible,
-.change-form p.datetime input.vTimeField:hover,
-.change-form p.datetime input.vTimeField:focus,
-.change-form p.datetime input.vTimeField:focus-visible {
-  border: 0 !important;
-  background-color: var(--surface-hover) !important;
-  outline: none;
-  box-shadow: none;
-}
-
 .change-form p.datetime .datetimeshortcuts {
   display: inline-flex;
   align-items: center;
@@ -2467,29 +2488,23 @@ select,
   max-width: 16.8rem;
 }
 
-html[data-theme="light"] #changelist-search input[type="text"]:focus,
-html[data-theme="light"] #changelist input[type="search"]:focus {
-  background: var(--surface-hover);
-}
-
-html[data-theme="light"] #changelist-search input[type="text"]:hover,
-html[data-theme="light"] #changelist input[type="search"]:hover {
-  background: var(--surface-hover);
-}
-
-#changelist-search input[type="text"]:hover,
-#changelist input[type="search"]:hover {
-  background: var(--surface-hover);
-}
-
 input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="file"]):hover,
 input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="file"]):focus,
 input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="file"]):focus-visible,
 textarea:hover,
 textarea:focus,
-textarea:focus-visible {
+textarea:focus-visible,
+select:hover,
+select:focus,
+select:focus-visible,
+#changelist-search input[type="text"]:hover,
+#changelist-search input[type="text"]:focus,
+#changelist-search input[type="text"]:focus-visible,
+#changelist input[type="search"]:hover,
+#changelist input[type="search"]:focus,
+#changelist input[type="search"]:focus-visible {
   border: 0;
-  background: var(--surface-hover);
+  background-color: var(--surface-hover);
   outline: none;
   box-shadow: none;
 }
@@ -2626,7 +2641,7 @@ input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):focus,
 textarea:focus,
 select:focus {
   box-shadow: none;
-  background: var(--surface-hover);
+  background-color: var(--surface-hover);
 }
 
 #changelist .actions select,
@@ -3285,15 +3300,6 @@ select:focus {
   opacity: 0.82;
 }
 
-.admin-checkbox-selector input.admin-checkbox-selector__search:hover,
-.admin-checkbox-selector input.admin-checkbox-selector__search:focus,
-.admin-checkbox-selector input.admin-checkbox-selector__search:focus-visible {
-  background: var(--surface-hover);
-  border: 0 !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
-
 .admin-checkbox-selector input.admin-checkbox-selector__search:active {
   border: 0 !important;
   outline: none !important;
@@ -3302,12 +3308,6 @@ select:focus {
 
 .admin-checkbox-selector input.admin-checkbox-selector__search::-webkit-search-decoration {
   appearance: none;
-}
-
-html[data-theme="light"] .admin-checkbox-selector input.admin-checkbox-selector__search:hover,
-html[data-theme="light"] .admin-checkbox-selector input.admin-checkbox-selector__search:focus,
-html[data-theme="light"] .admin-checkbox-selector input.admin-checkbox-selector__search:focus-visible {
-  background: var(--surface-hover);
 }
 
 .admin-checkbox-selector__bulk-button {
@@ -4552,38 +4552,6 @@ select:focus {
 :where(a, button, input:not([type="checkbox"]):not([type="radio"]), select, textarea, summary):focus-visible {
   outline: 1px solid var(--admin-accent-border);
   outline-offset: 1px;
-  box-shadow: none;
-}
-
-#nav-sidebar .admin-sidebar__filter input[type="search"]:focus,
-#nav-sidebar .admin-sidebar__filter input[type="search"]:focus-visible,
-#changelist-search input[type="text"]:focus,
-#changelist-search input[type="text"]:focus-visible,
-#changelist input[type="search"]:focus,
-#changelist input[type="search"]:focus-visible,
-input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="file"]):focus,
-input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="file"]):focus-visible,
-textarea:focus,
-textarea:focus-visible {
-  outline: none;
-  box-shadow: none;
-}
-
-.change-form p.datetime input.vDateField:hover,
-.change-form p.datetime input.vDateField:focus,
-.change-form p.datetime input.vDateField:focus-visible,
-.change-form p.datetime input.vTimeField:hover,
-.change-form p.datetime input.vTimeField:focus,
-.change-form p.datetime input.vTimeField:focus-visible,
-.change-form .inline-group input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):hover,
-.change-form .inline-group input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):focus,
-.change-form .inline-group input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):focus-visible,
-.change-form .inline-group textarea:hover,
-.change-form .inline-group textarea:focus,
-.change-form .inline-group textarea:focus-visible {
-  border: 0;
-  background-color: var(--surface-hover);
-  outline: none;
   box-shadow: none;
 }
 
