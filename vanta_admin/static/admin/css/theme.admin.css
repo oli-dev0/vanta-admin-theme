@@ -206,6 +206,42 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
   transform: translateY(-50%);
 }
 
+.admin-sidebar__filter-clear {
+  position: absolute;
+  top: calc(0.85rem + 1rem + 1px);
+  right: 3.75rem;
+  display: inline-grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  line-height: 0;
+  transform: translateY(-50%);
+}
+
+.admin-sidebar__filter-clear[hidden] {
+  display: none;
+}
+
+.admin-sidebar__filter-clear span {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 0.9;
+}
+
+.admin-sidebar__filter-clear:hover,
+.admin-sidebar__filter-clear:focus-visible {
+  background: transparent;
+  color: var(--heading);
+  outline: none;
+}
+
 #nav-sidebar .admin-sidebar__filter input[type="search"] {
   width: 100%;
   min-height: 2rem;
@@ -271,7 +307,18 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
   appearance: none;
 }
 
+#nav-sidebar .admin-sidebar__filter input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+#nav-sidebar .admin-sidebar__filter input[type="search"]::-ms-clear {
+  display: none;
+}
+
 .admin-sidebar__groups {
+  position: relative;
   flex: 1 1 auto;
   min-height: 0 !important;
   overflow-y: auto;
@@ -286,6 +333,7 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
 
 .admin-sidebar__group {
   margin-bottom: 0.18rem;
+  transition: transform 130ms var(--ease);
 }
 
 .admin-sidebar__group-title {
@@ -342,7 +390,7 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
 }
 
 .admin-sidebar__group-title:hover .admin-sidebar__reorder-handle,
-.admin-sidebar__group-title:focus-within .admin-sidebar__reorder-handle,
+.admin-sidebar__reorder-handle:focus-visible,
 .admin-sidebar__group.is-reordering .admin-sidebar__reorder-handle {
   opacity: 1;
 }
@@ -364,19 +412,82 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
   opacity: 0.72;
 }
 
+.admin-sidebar__group.is-drag-placeholder {
+  visibility: hidden;
+}
+
 .admin-sidebar--is-reordering .admin-sidebar__group-title {
   transition: none;
 }
 
+.admin-sidebar__drag-preview {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 0.28rem;
+  min-height: 2.05rem;
+  padding: 0.3rem 0.55rem 0.3rem 0.05rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--admin-surface-raised);
+  color: var(--admin-text);
+  cursor: grabbing;
+  list-style: none;
+  opacity: 0.96;
+  pointer-events: none;
+  transform: translateY(-1px);
+  transition: opacity 130ms var(--ease), transform 130ms var(--ease);
+}
+
+.admin-sidebar__drag-preview .admin-sidebar__reorder-handle {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.admin-sidebar__drag-preview .admin-sidebar__chevron {
+  transform: rotate(180deg);
+}
+
+.admin-sidebar__drop-indicator {
+  position: absolute;
+  right: 0.55rem;
+  left: 0.05rem;
+  height: 1px;
+  border-radius: 999px;
+  background: var(--accent);
+  opacity: 0.72;
+  pointer-events: none;
+  transform: translateY(-1px);
+}
+
 .admin-sidebar--reorder-disabled .admin-sidebar__reorder-handle {
-  cursor: not-allowed;
-  opacity: 0.42;
+  --admin-reorder-disabled-cursor: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='18'%20height='18'%20viewBox='0%200%2090%2090'%3E%3Ccircle%20cx='45'%20cy='45'%20r='45'%20fill='rgb%28236%2C0%2C0%29'/%3E%3Cpath%20fill='white'%20d='M28.5%2065.5c-1.024%200-2.047-.391-2.829-1.172-1.562-1.562-1.562-4.095%200-5.656l33-33c1.561-1.562%204.096-1.562%205.656%200%201.563%201.563%201.563%204.095%200%205.657l-33%2033c-.78.78-1.803%201.171-2.827%201.171Z'/%3E%3Cpath%20fill='white'%20d='M61.5%2065.5c-1.023%200-2.048-.391-2.828-1.172l-33-33c-1.562-1.563-1.562-4.095%200-5.657%201.563-1.562%204.095-1.562%205.657%200l33%2033c1.563%201.562%201.563%204.095%200%205.656-.781.781-1.806%201.172-2.829%201.172Z'/%3E%3Cpath%20fill='white'%20fill-rule='evenodd'%20d='M45%2090C20.187%2090%200%2069.813%200%2045S20.187%200%2045%200s45%2020.187%2045%2045-20.187%2045-45%2045Zm0-82C24.598%208%208%2024.598%208%2045s16.598%2037%2037%2037%2037-16.598%2037-37S65.402%208%2045%208Z'/%3E%3C/svg%3E") 9 9, not-allowed;
+  cursor: var(--admin-reorder-disabled-cursor);
+  opacity: 0;
+}
+
+.admin-sidebar--reorder-disabled .admin-sidebar__group-title:hover .admin-sidebar__reorder-handle {
+  opacity: 1;
+}
+
+.admin-sidebar--reorder-disabled .admin-sidebar__reorder-handle * {
+  cursor: var(--admin-reorder-disabled-cursor);
 }
 
 .admin-sidebar--reorder-disabled .admin-sidebar__reorder-handle:hover,
 .admin-sidebar--reorder-disabled .admin-sidebar__reorder-handle:focus-visible {
   background: transparent;
   color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-sidebar__group,
+  .admin-sidebar__drag-preview,
+  .admin-sidebar__group-title,
+  .admin-sidebar__reorder-handle {
+    transition: none;
+  }
 }
 
 .admin-sidebar__group-title::-webkit-details-marker,
@@ -2173,9 +2284,10 @@ ul.helptext li::before,
 #changelist .actions {
   position: absolute;
   top: 0.18rem;
-  right: 0.72rem;
-  left: 0.72rem;
+  right: 0;
+  left: 4rem;
   z-index: 8;
+  width: auto;
   max-width: none;
   padding-left: 0.87rem;
   border: 1px solid var(--border-strong);
@@ -2207,52 +2319,14 @@ html[data-theme="light"] #changelist .actions {
   position: fixed;
   top: 0.75rem;
   right: auto;
-  left: var(--admin-actions-fixed-left, 0.72rem);
+  left: var(--admin-actions-fixed-left, 4rem);
   width: var(--admin-actions-fixed-width, auto);
+  max-width: calc(100vw - var(--admin-actions-fixed-left, 4rem));
   z-index: 30;
 }
 
 #changelist .actions.admin-actions--duplicate {
   display: none;
-}
-
-#changelist .actions .admin-actions__clear {
-  position: relative;
-  display: inline-grid;
-  place-items: center;
-  flex: 0 0 1.5rem;
-  width: 1.5rem;
-  min-width: 1.5rem;
-  min-height: 1.5rem;
-  padding: 0;
-  border: 1px solid color-mix(in srgb, var(--admin-error) 72%, var(--border-strong));
-  border-radius: var(--radius-sm);
-  background: color-mix(in srgb, var(--admin-error) 76%, var(--surface-muted));
-  color: var(--admin-error-text);
-}
-
-#changelist .actions .admin-actions__clear::before,
-#changelist .actions .admin-actions__clear::after {
-  content: "";
-  position: absolute;
-  width: 0.62rem;
-  height: 2px;
-  border-radius: 999px;
-  background: currentColor;
-}
-
-#changelist .actions .admin-actions__clear::before {
-  transform: rotate(45deg);
-}
-
-#changelist .actions .admin-actions__clear::after {
-  transform: rotate(-45deg);
-}
-
-#changelist .actions .admin-actions__clear:hover,
-#changelist .actions .admin-actions__clear:focus-visible {
-  color: var(--admin-error-text);
-  background: var(--admin-error);
 }
 
 #changelist .admin-changelist-card-header #changelist-search > div {
@@ -2469,7 +2543,7 @@ select,
   min-height: 2.15rem;
   border: 0;
   border-radius: 0.27rem;
-  background: var(--surface-muted);
+  background: var(--input-bg);
   color: var(--text);
   padding: 0.35rem 0.7rem;
   font-size: 0.82rem;
@@ -3526,6 +3600,66 @@ input[type="checkbox"]:focus-visible {
   padding: 0 0.8rem;
 }
 
+#changelist .actions input[type="submit"],
+#changelist .actions button.button {
+  border: 0;
+  background: var(--admin-accent);
+  color: var(--admin-button-text);
+  transition:
+    background-color var(--admin-transition),
+    color var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+#changelist .actions input[type="submit"]:hover,
+#changelist .actions input[type="submit"]:focus-visible,
+#changelist .actions button.button:hover,
+#changelist .actions button.button:focus-visible {
+  border: 0;
+  background: var(--admin-accent-strong);
+  color: var(--admin-button-text);
+  outline: none;
+  box-shadow: none;
+  transform: translateY(-2px);
+}
+
+#changelist .actions input[type="submit"]:active,
+#changelist .actions button.button:active {
+  transform: scale(0.97);
+}
+
+#changelist .actions .admin-actions__clear {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 1.35rem;
+  width: 1.35rem;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  min-height: 1.35rem;
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 760;
+  line-height: 1;
+  box-shadow: none;
+  cursor: pointer;
+  transition:
+    background-color var(--admin-transition),
+    color var(--admin-transition);
+}
+
+#changelist .actions .admin-actions__clear:hover,
+#changelist .actions .admin-actions__clear:focus-visible {
+  background: transparent;
+  color: var(--heading);
+  outline: none;
+  box-shadow: none;
+}
+
 body:not(.change-form) .submit-row input[type="submit"],
 body:not(.change-form) .submit-row button,
 body:not(.change-form) .submit-row .button {
@@ -4409,6 +4543,25 @@ html[data-theme="light"] #changelist-filter {
 
 #changelist-filter details .admin-filter-options--stacked li {
   width: 100%;
+}
+
+#changelist-filter details .admin-filter-options--inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 0.2rem;
+  row-gap: 0.02rem;
+}
+
+#changelist-filter details .admin-filter-options--inline li {
+  width: auto;
+}
+
+#changelist-filter details .admin-filter-options--inline:has(> li:nth-child(3):last-child) > li:not(:first-child)::before {
+  content: "|";
+  margin-inline: 0.02rem 0.2rem;
+  color: var(--admin-muted);
+  font-weight: 500;
 }
 
 #changelist-filter details li {

@@ -12,10 +12,11 @@ feels more deliberate in everyday use.
 - A cleaner admin layout with a fixed sidebar that remembers how you left it.
 - A redesigned admin landing page with a welcome message, recent activity, project placeholders, and compact system context.
 - A sidebar navigation filter that lets users quickly narrow large admin menus by app or model name.
+- A clear button for the sidebar navigation filter, so users can reset large admin menus quickly.
 - A resizable desktop sidebar that remembers each user's preferred width in the browser.
 - A sidebar expand/collapse-all control for quickly opening or closing visible navigation sections.
-- Draggable sidebar app sections, so users can reorder admin navigation categories in their own browser.
-- Keyboard-accessible sidebar section reordering with Arrow Up, Arrow Down, Home, and End on the reorder handle.
+- Draggable sidebar app sections, so users can reorder admin navigation categories in their own browser with a clearer drag preview and drop position.
+- Keyboard-accessible sidebar section reordering with Arrow Up, Arrow Down, Home, and End on the reorder handle, plus Escape to cancel a drag.
 - Light and dark mode, using the same calm Vanta look across the admin.
 - A more settled light-mode palette with clearer search focus states and stronger changelist table headers.
 - Less visual noise on the main admin screens, login pages, cards, filters, and
@@ -29,7 +30,8 @@ feels more deliberate in everyday use.
 - Admin messages that appear clearly, pause while hovered, and dismiss
   themselves after a short time.
 - Changelist actions that appear only when rows are selected, stay available
-  while scrolling, and include a clear-selected control.
+  while scrolling, include a clear-selected control, and use a more deliberate
+  sticky action-bar treatment.
 - Changelist filters that open from a compact toolbar button instead of taking a
   permanent right-side column.
 - Active-filter indicators in the toolbar, including a count when filters are

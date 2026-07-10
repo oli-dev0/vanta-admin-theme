@@ -131,36 +131,35 @@
                 return;
             }
 
-            const left = Math.max(contentRect.left + 12, 12);
-            const rightEdge = Math.min(contentRect.right - 12, window.innerWidth - 12);
-            const width = Math.max(rightEdge - left, 0);
+            const actionOffset = 64;
+            const left = Math.max(contentRect.left + actionOffset, actionOffset);
             primaryActionBar.style.setProperty('--admin-actions-fixed-left', `${left}px`);
-            primaryActionBar.style.setProperty('--admin-actions-fixed-width', `${width}px`);
+            primaryActionBar.style.setProperty('--admin-actions-fixed-width', `${Math.max(contentRect.width - actionOffset, 0)}px`);
         }
 
         actions.forEach((actionBar, index) => {
             actionBar.classList.toggle('admin-actions--duplicate', index > 0);
-
-            if (index === 0 && !actionBar.querySelector('.admin-actions__clear')) {
-                const clearButton = document.createElement('button');
-                clearButton.type = 'button';
-                clearButton.className = 'admin-actions__clear';
-                clearButton.setAttribute('aria-label', 'Clear selected rows');
-                clearButton.addEventListener('click', () => {
-                    checkboxes.forEach((checkbox) => {
-                        checkbox.checked = false;
-                        checkbox.closest('tr')?.classList.remove('selected');
-                        checkbox.dispatchEvent(new Event('change', { bubbles: true }));
-                    });
-                    const actionToggle = form.querySelector('#action-toggle');
-                    if (actionToggle) {
-                        actionToggle.checked = false;
-                    }
-                    updateActionsVisibility();
-                });
-                actionBar.prepend(clearButton);
-            }
         });
+
+        const clearButton = document.createElement('button');
+        clearButton.type = 'button';
+        clearButton.className = 'admin-actions__clear';
+        clearButton.setAttribute('aria-label', 'Clear selected rows');
+        clearButton.setAttribute('title', 'Clear selected rows');
+        clearButton.innerHTML = '<span aria-hidden="true">×</span>';
+        clearButton.addEventListener('click', () => {
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = false;
+                checkbox.closest('tr')?.classList.remove('selected');
+                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+            const actionToggle = form.querySelector('#action-toggle');
+            if (actionToggle) {
+                actionToggle.checked = false;
+            }
+            updateActionsVisibility();
+        });
+        primaryActionBar.append(clearButton);
 
         function updateActionsVisibility() {
             const hasSelectedRows = checkboxes.some((checkbox) => checkbox.checked);

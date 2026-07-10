@@ -18,6 +18,7 @@
     const sectionsToggle = document.getElementById('admin-sidebar-sections-toggle');
     const accountDetails = document.querySelector('.admin-sidebar__account');
     const navFilter = document.getElementById('admin-nav-filter');
+    const navFilterClear = document.getElementById('admin-nav-filter-clear');
     const navGroups = document.querySelector('.admin-sidebar__groups');
     const mobileQuery = window.matchMedia('(max-width: 1024px)');
     const navSections = Array.from(document.querySelectorAll('[data-admin-nav-section]'));
@@ -27,6 +28,11 @@
     let hadFilterQuery = false;
     let draggedSection = null;
     let draggedHandle = null;
+    let draggedPreview = null;
+    let draggedOpenSections = null;
+    let draggedSectionOrder = null;
+    let dragDropIndicator = null;
+    let draggedPointerOffsetY = 0;
     let resizeStartX = 0;
     let resizeStartWidth = 0;
 
@@ -272,6 +278,14 @@
         return value.trim().toLowerCase();
     }
 
+    function syncNavFilterClear() {
+        if (!navFilter || !navFilterClear) {
+            return;
+        }
+
+        navFilterClear.hidden = navFilter.value.length === 0;
+    }
+
     function getNavItemText(element) {
         return element.textContent.trim().toLowerCase();
     }
@@ -323,6 +337,7 @@
         }
 
         hadFilterQuery = hasQuery;
+        syncNavFilterClear();
         syncReorderHandles();
         syncSectionsToggle();
     }
@@ -339,7 +354,32 @@
         });
     }
 
-    function moveSection(section, targetIndex) {
+    function animateSectionMove(previousPositions) {
+        if (!previousPositions) {
+            return;
+        }
+
+        const currentSections = getOrderedNavSections();
+        currentSections.forEach((section) => {
+            const previousTop = previousPositions.get(section);
+            if (previousTop === undefined) {
+                return;
+            }
+
+            const currentTop = section.getBoundingClientRect().top;
+            const offset = previousTop - currentTop;
+            if (Math.abs(offset) < 1) {
+                return;
+            }
+
+            section.style.transform = `translateY(${offset}px)`;
+            requestAnimationFrame(() => {
+                section.style.transform = '';
+            });
+        });
+    }
+
+    function moveSection(section, targetIndex, shouldPersist = true) {
         if (!navGroups || !section) {
             return;
         }
@@ -350,11 +390,18 @@
             return;
         }
 
+        const previousPositions = new Map(
+            sections.map((candidate) => [candidate, candidate.getBoundingClientRect().top]),
+        );
         const sectionsWithoutCurrent = sections.filter((candidate) => candidate !== section);
         const boundedIndex = Math.min(sectionsWithoutCurrent.length, Math.max(0, targetIndex));
         const referenceSection = sectionsWithoutCurrent[boundedIndex] || null;
         navGroups.insertBefore(section, referenceSection);
-        persistSectionOrder();
+        animateSectionMove(previousPositions);
+
+        if (shouldPersist) {
+            persistSectionOrder();
+        }
     }
 
     function moveSectionByKey(section, key) {
@@ -388,22 +435,135 @@
         return sections.length;
     }
 
+    function createDragPreview(section) {
+        const summary = section.querySelector('.admin-sidebar__group-title');
+        if (!summary) {
+            return;
+        }
+
+        const preview = summary.cloneNode(true);
+        const summaryRect = summary.getBoundingClientRect();
+        preview.classList.add('admin-sidebar__drag-preview');
+        preview.setAttribute('aria-hidden', 'true');
+        preview.removeAttribute('aria-expanded');
+        preview.removeAttribute('tabindex');
+        preview.removeAttribute('role');
+        const previewHandle = preview.querySelector('.admin-sidebar__reorder-handle');
+        if (previewHandle) {
+            previewHandle.removeAttribute('aria-label');
+            previewHandle.removeAttribute('tabindex');
+            previewHandle.removeAttribute('role');
+        }
+        preview.style.width = `${Math.min(summaryRect.width, window.innerWidth - 24)}px`;
+        preview.style.left = `${summaryRect.left}px`;
+        preview.style.top = `${summaryRect.top}px`;
+        document.body.append(preview);
+
+        draggedPreview = preview;
+        draggedPointerOffsetY = summaryRect.height / 2;
+    }
+
+    function updateDragPreview(clientX, clientY) {
+        if (!draggedPreview) {
+            return;
+        }
+
+        const previewWidth = draggedPreview.getBoundingClientRect().width;
+        const left = Math.min(
+            Math.max(12, clientX - (previewWidth / 2)),
+            Math.max(12, window.innerWidth - previewWidth - 12),
+        );
+        const top = Math.max(12, clientY - draggedPointerOffsetY);
+        draggedPreview.style.left = `${left}px`;
+        draggedPreview.style.top = `${top}px`;
+    }
+
+    function updateDropIndicator(dropIndex) {
+        if (!navGroups || !dragDropIndicator) {
+            return;
+        }
+
+        const sections = getOrderedNavSections().filter((section) => section !== draggedSection && !section.hidden);
+        const referenceSection = sections[dropIndex] || null;
+        const groupsRect = navGroups.getBoundingClientRect();
+        const referenceRect = referenceSection
+            ? referenceSection.getBoundingClientRect()
+            : sections[sections.length - 1]?.getBoundingClientRect();
+        const indicatorTop = referenceRect
+            ? (referenceSection ? referenceRect.top : referenceRect.bottom) - groupsRect.top + navGroups.scrollTop
+            : navGroups.scrollTop;
+
+        navGroups.append(dragDropIndicator);
+        dragDropIndicator.style.top = `${indicatorTop}px`;
+
+        dragDropIndicator.hidden = false;
+    }
+
+    function restoreSectionOrder() {
+        if (!navGroups || !draggedSectionOrder) {
+            return;
+        }
+
+        draggedSectionOrder.forEach((section) => {
+            navGroups.append(section);
+        });
+    }
+
     function startSectionDrag(section, handle) {
         draggedSection = section;
         draggedHandle = handle;
+        draggedOpenSections = getCurrentOpenSections();
+        draggedSectionOrder = getOrderedNavSections();
+
+        navSections.forEach((candidate) => {
+            setSectionOpen(candidate, false, false);
+        });
+
+        dragDropIndicator = document.createElement('div');
+        dragDropIndicator.className = 'admin-sidebar__drop-indicator';
+        dragDropIndicator.setAttribute('aria-hidden', 'true');
+        navGroups.append(dragDropIndicator);
+
+        createDragPreview(section);
         section.classList.add('is-reordering');
+        section.classList.add('is-drag-placeholder');
         if (sidebar) {
             sidebar.classList.add('admin-sidebar--is-reordering');
         }
+
+        updateDropIndicator(getSectionDropIndex(handle.getBoundingClientRect().top));
+        syncSectionsToggle();
     }
 
-    function stopSectionDrag() {
+    function stopSectionDrag({cancel = false} = {}) {
+        if (cancel) {
+            restoreSectionOrder();
+        }
+
         if (draggedSection) {
             draggedSection.classList.remove('is-reordering');
+            draggedSection.classList.remove('is-drag-placeholder');
+        }
+
+        if (draggedOpenSections) {
+            applyOpenSections(draggedOpenSections, false);
+        }
+
+        if (draggedPreview) {
+            draggedPreview.remove();
+        }
+
+        if (dragDropIndicator) {
+            dragDropIndicator.remove();
         }
 
         draggedSection = null;
         draggedHandle = null;
+        draggedPreview = null;
+        draggedOpenSections = null;
+        draggedSectionOrder = null;
+        dragDropIndicator = null;
+        draggedPointerOffsetY = 0;
         if (sidebar) {
             sidebar.classList.remove('admin-sidebar--is-reordering');
         }
@@ -415,7 +575,10 @@
         }
 
         event.preventDefault();
-        moveSection(draggedSection, getSectionDropIndex(event.clientY));
+        updateDragPreview(event.clientX, event.clientY);
+        const dropIndex = getSectionDropIndex(event.clientY);
+        moveSection(draggedSection, dropIndex, false);
+        updateDropIndicator(dropIndex);
     }
 
     function finishSectionDrag(event) {
@@ -428,6 +591,12 @@
             draggedHandle.releasePointerCapture(event.pointerId);
         }
         stopSectionDrag();
+    }
+
+    function cancelSectionDrag() {
+        if (draggedSection) {
+            stopSectionDrag({cancel: true});
+        }
     }
 
     function applyOpenSections(openSections, shouldPersist) {
@@ -591,6 +760,19 @@
 
     if (navFilter) {
         navFilter.addEventListener('input', filterNavigation);
+        syncNavFilterClear();
+    }
+
+    if (navFilterClear) {
+        navFilterClear.addEventListener('click', () => {
+            if (!navFilter) {
+                return;
+            }
+
+            navFilter.value = '';
+            filterNavigation();
+            navFilter.focus();
+        });
     }
 
     reorderHandles.forEach((handle) => {
@@ -613,7 +795,7 @@
         });
 
         handle.addEventListener('pointercancel', () => {
-            stopSectionDrag();
+            cancelSectionDrag();
         });
 
         handle.addEventListener('keydown', (event) => {
@@ -637,9 +819,14 @@
 
     document.addEventListener('pointermove', moveDraggedSection);
     document.addEventListener('pointerup', finishSectionDrag);
-    document.addEventListener('pointercancel', stopSectionDrag);
+    document.addEventListener('pointercancel', cancelSectionDrag);
 
     document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && draggedSection) {
+            cancelSectionDrag();
+            return;
+        }
+
         if (event.key === 'Escape') {
             setMobileOpen(false);
             if (accountDetails) {
