@@ -31,7 +31,7 @@ NON_FILTER_CHANGE_LIST_PARAMS = {
     "_popup",
     "is_facets",
 }
-RECENT_ACTIVITY_LIMIT = 10
+RECENT_ACTIVITY_LIMIT = 50
 RECENT_ACTIVITY_QUERY_LIMIT = 60
 RECENT_ACTIVITY_GROUPS = ("today", "yesterday")
 UNAVAILABLE_VALUE = _("Unavailable")
@@ -121,6 +121,7 @@ MODEL_ICON_MAP = {
     "session": "admin-icon-lock",
     "setting": "admin-icon-lock",
     "site": "admin-icon-external",
+    "staticdevice": "admin-icon-2fa-backup-codes",
     "subscriber": "admin-icon-user",
     "subscription": "admin-icon-card",
     "supportticket": "admin-icon-envelope",
@@ -526,7 +527,7 @@ def grouped_admin_nav_apps(available_apps):
             if auth_group is None:
                 auth_group = {
                     "app_label": "auth",
-                    "name": "Auth",
+                    "name": "Admin",
                     "app_url": _admin_context_value(app_copy, "app_url"),
                     "has_module_perms": True,
                     "models": [],

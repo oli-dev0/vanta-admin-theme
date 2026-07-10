@@ -99,7 +99,10 @@
     }
 
     function updateTableTimeFormat(timeFormat) {
-        document.querySelectorAll('#changelist table tbody th, #changelist table tbody td').forEach((cell) => {
+        document.querySelectorAll(
+            '#changelist table tbody th, #changelist table tbody td, '
+            + '#change-history table tbody th:first-child',
+        ).forEach((cell) => {
             if (cell.childElementCount !== 0) {
                 return;
             }

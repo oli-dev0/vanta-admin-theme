@@ -34,29 +34,38 @@
     </header>
 
     {% if recent_activity.has_activity %}
-      {% for group in recent_activity.groups %}
-        {% if group.items %}
-          <section class="admin-activity-group" aria-labelledby="admin-activity-{{ group.key }}">
-            <h3 id="admin-activity-{{ group.key }}">{{ group.label }}</h3>
-            <ol class="admin-activity-list">
-              {% for item in group.items %}
-                <li class="admin-activity-item">
-                  <time
-                    class="admin-activity-item__time"
-                    datetime="{{ item.iso_time }}"
-                    data-admin-recent-time
-                  >{{ item.time }}</time>
-                  {% if item.url %}
-                    <a class="admin-activity-item__label" href="{{ item.url }}">{{ item.label }}</a>
-                  {% else %}
-                    <span class="admin-activity-item__label">{{ item.label }}</span>
-                  {% endif %}
-                </li>
-              {% endfor %}
-            </ol>
-          </section>
-        {% endif %}
-      {% endfor %}
+      <div
+        class="admin-activity-scroll"
+        tabindex="0"
+        aria-label="{% translate 'Recent activity entries' %}"
+      >
+        {% for group in recent_activity.groups %}
+          {% if group.items %}
+            <section
+              class="admin-activity-group admin-activity-group--{{ group.key }}"
+              aria-labelledby="admin-activity-{{ group.key }}"
+            >
+              <h3 id="admin-activity-{{ group.key }}">{{ group.label }}</h3>
+              <ol class="admin-activity-list">
+                {% for item in group.items %}
+                  <li class="admin-activity-item">
+                    <time
+                      class="admin-activity-item__time"
+                      datetime="{{ item.iso_time }}"
+                      data-admin-recent-time
+                    >{{ item.time }}</time>
+                    {% if item.url %}
+                      <a class="admin-activity-item__label" href="{{ item.url }}">{{ item.label }}</a>
+                    {% else %}
+                      <span class="admin-activity-item__label">{{ item.label }}</span>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ol>
+            </section>
+          {% endif %}
+        {% endfor %}
+      </div>
     {% else %}
       <p class="admin-landing-empty">{% translate "You have no recent admin activity today or yesterday." %}</p>
     {% endif %}

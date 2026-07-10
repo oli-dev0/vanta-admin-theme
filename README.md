@@ -10,7 +10,8 @@ feels more deliberate in everyday use.
 ## What It Adds
 
 - A cleaner admin layout with a fixed sidebar that remembers how you left it.
-- A redesigned admin landing page with a welcome message, recent activity, project placeholders, and compact system context.
+- A Vanta-styled object history page, so audit trails feel like part of the same admin interface.
+- A redesigned admin landing page with a welcome message, a larger scrollable recent-activity panel, project placeholders, and compact system context.
 - A sidebar navigation filter that lets users quickly narrow large admin menus by app or model name.
 - A clear button for the sidebar navigation filter, so users can reset large admin menus quickly.
 - A resizable desktop sidebar that remembers each user's preferred width in the browser.
@@ -30,7 +31,7 @@ feels more deliberate in everyday use.
 - Admin messages that appear clearly, pause while hovered, and dismiss
   themselves after a short time.
 - Changelist actions that appear only when rows are selected, stay available
-  while scrolling, include a clear-selected control, and use a more deliberate
+  while scrolling, include a clear cancel button, and use a more deliberate
   sticky action-bar treatment.
 - Changelist filters that open from a compact toolbar button instead of taking a
   permanent right-side column.

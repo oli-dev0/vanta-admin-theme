@@ -262,6 +262,26 @@
     padding: 0.85rem;
   }
 
+  .admin-activity-scroll {
+    display: block;
+  }
+
+  .admin-activity-group--today,
+  .admin-activity-group--yesterday {
+    grid-column: auto;
+  }
+
+  .admin-activity-group--yesterday {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .admin-activity-group + .admin-activity-group {
+    margin-top: 0.85rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+
   .admin-app-model-row,
   .admin-activity-item,
   .admin-landing-facts__row {

@@ -134,20 +134,20 @@
             const actionOffset = 64;
             const left = Math.max(contentRect.left + actionOffset, actionOffset);
             primaryActionBar.style.setProperty('--admin-actions-fixed-left', `${left}px`);
-            primaryActionBar.style.setProperty('--admin-actions-fixed-width', `${Math.max(contentRect.width - actionOffset, 0)}px`);
+            primaryActionBar.style.setProperty('--admin-actions-fixed-width', `${Math.max(contentRect.width - (actionOffset * 2), 0)}px`);
         }
 
         actions.forEach((actionBar, index) => {
             actionBar.classList.toggle('admin-actions--duplicate', index > 0);
         });
 
-        const clearButton = document.createElement('button');
-        clearButton.type = 'button';
-        clearButton.className = 'admin-actions__clear';
-        clearButton.setAttribute('aria-label', 'Clear selected rows');
-        clearButton.setAttribute('title', 'Clear selected rows');
-        clearButton.innerHTML = '<span aria-hidden="true">×</span>';
-        clearButton.addEventListener('click', () => {
+        const cancelButton = document.createElement('button');
+        cancelButton.type = 'button';
+        cancelButton.className = 'admin-actions__cancel';
+        cancelButton.setAttribute('aria-label', 'Cancel selection');
+        cancelButton.setAttribute('title', 'Cancel selection');
+        cancelButton.textContent = 'Cancel';
+        cancelButton.addEventListener('click', () => {
             checkboxes.forEach((checkbox) => {
                 checkbox.checked = false;
                 checkbox.closest('tr')?.classList.remove('selected');
@@ -159,7 +159,12 @@
             }
             updateActionsVisibility();
         });
-        primaryActionBar.append(clearButton);
+        const actionSubmit = primaryActionBar.querySelector('button.button, input[type="submit"]');
+        if (actionSubmit) {
+            actionSubmit.after(cancelButton);
+        } else {
+            primaryActionBar.append(cancelButton);
+        }
 
         function updateActionsVisibility() {
             const hasSelectedRows = checkboxes.some((checkbox) => checkbox.checked);
