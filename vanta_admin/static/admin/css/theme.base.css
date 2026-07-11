@@ -145,7 +145,7 @@ ul.messagelist li,
   width: fit-content;
   max-width: 100%;
   margin: 0;
-  padding: 0.62rem 1rem 0.62rem 3.85rem;
+  padding: 0.62rem 2.8rem 0.62rem 3.85rem;
   border: 0;
   border-left: 0.45rem solid var(--admin-message-accent);
   border-radius: var(--admin-radius-xl);
@@ -162,6 +162,46 @@ ul.messagelist li,
   transition:
     opacity 160ms ease,
     transform 160ms ease;
+}
+
+.admin-message-dismiss {
+  position: absolute;
+  top: 50%;
+  right: 0.55rem;
+  z-index: 2;
+  display: inline-grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  min-width: 1.35rem;
+  min-height: 1.35rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--admin-message-text);
+  cursor: pointer;
+  line-height: 0;
+  opacity: 0.72;
+  transform: translateY(-50%);
+  transition:
+    color var(--admin-transition),
+    opacity var(--admin-transition);
+}
+
+.admin-message-dismiss span {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 0.9;
+}
+
+.admin-message-dismiss:hover,
+.admin-message-dismiss:focus-visible {
+  background: transparent;
+  color: var(--admin-message-text);
+  outline: none;
+  opacity: 1;
 }
 
 ul.messagelist li::before,

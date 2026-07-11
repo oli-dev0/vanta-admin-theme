@@ -29,7 +29,9 @@ feels more deliberate in everyday use.
 - Cleaner buttons for saving, deleting, viewing history, and changing passwords.
 - Clearer form errors on admin pages, login, and two-factor auth screens.
 - Admin messages that appear clearly, pause while hovered, and dismiss
-  themselves after a short time.
+  themselves after a short time, with a Vanta-styled manual close button.
+- A recent-activity dashboard that keeps Today and Yesterday visible and
+  explains when either period has no activity.
 - Changelist actions that appear only when rows are selected, stay available
   while scrolling, include a clear cancel button, and use a more deliberate
   sticky action-bar treatment.

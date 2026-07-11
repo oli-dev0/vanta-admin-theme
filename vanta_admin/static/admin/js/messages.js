@@ -58,6 +58,7 @@
         message.classList.remove('is-counting', 'is-paused', 'is-removing');
         message.style.transition = 'none';
         message.offsetWidth;
+        message.querySelector('.admin-message-dismiss')?.addEventListener('click', () => dismissAdminMessage(message));
         message.addEventListener('mouseenter', () => pauseAdminMessageTimer(message));
         message.addEventListener('mouseleave', () => resumeAdminMessageTimer(message));
 

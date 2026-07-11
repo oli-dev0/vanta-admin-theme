@@ -33,19 +33,18 @@
       {% endif %}
     </header>
 
-    {% if recent_activity.has_activity %}
-      <div
-        class="admin-activity-scroll"
-        tabindex="0"
-        aria-label="{% translate 'Recent activity entries' %}"
-      >
-        {% for group in recent_activity.groups %}
+    <div
+      class="admin-activity-scroll"
+      tabindex="0"
+      aria-label="{% translate 'Recent activity entries' %}"
+    >
+      {% for group in recent_activity.groups %}
+        <section
+          class="admin-activity-group admin-activity-group--{{ group.key }}"
+          aria-labelledby="admin-activity-{{ group.key }}"
+        >
+          <h3 id="admin-activity-{{ group.key }}">{{ group.label }}</h3>
           {% if group.items %}
-            <section
-              class="admin-activity-group admin-activity-group--{{ group.key }}"
-              aria-labelledby="admin-activity-{{ group.key }}"
-            >
-              <h3 id="admin-activity-{{ group.key }}">{{ group.label }}</h3>
               <ol class="admin-activity-list">
                 {% for item in group.items %}
                   <li class="admin-activity-item">
@@ -62,13 +61,18 @@
                   </li>
                 {% endfor %}
               </ol>
-            </section>
+          {% else %}
+            <p class="admin-landing-empty">
+              {% if group.key == "today" %}
+                {% translate "No activities today." %}
+              {% else %}
+                {% translate "No activities yesterday." %}
+              {% endif %}
+            </p>
           {% endif %}
-        {% endfor %}
-      </div>
-    {% else %}
-      <p class="admin-landing-empty">{% translate "You have no recent admin activity today or yesterday." %}</p>
-    {% endif %}
+        </section>
+      {% endfor %}
+    </div>
   </section>
 
   <div class="admin-landing__grid admin-landing__grid--top">
