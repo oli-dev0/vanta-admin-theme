@@ -806,6 +806,17 @@ html[data-theme="light"] .admin-sidebar__font-size-button[aria-pressed="true"] {
   gap: 0.02rem;
 }
 
+.admin-sidebar__logout-section {
+  display: flex;
+  align-items: center;
+  gap: 0.02rem;
+}
+
+.admin-sidebar__logout-section form {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .admin-sidebar__account-links a,
 .admin-sidebar__account-links button,
 .admin-sidebar__logout-section button {
@@ -836,19 +847,25 @@ html[data-theme="light"] .admin-sidebar__font-size-button[aria-pressed="true"] {
   color: var(--muted);
 }
 
-.admin-sidebar__account-links .admin-sidebar__donation-link {
-  color: var(--accent-strong);
-}
-
-.admin-sidebar__donation-link .donation-button__label {
-  min-width: 0;
-  order: 2;
+.admin-sidebar__logout-section .admin-sidebar__donation-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 2.05rem;
+  min-height: 1.72rem;
+  padding: 0.22rem 0.46rem;
+  border-radius: 0.28rem;
+  background: transparent;
+  color: var(--muted);
+  transition:
+    color 130ms var(--ease),
+    background-color 130ms var(--ease),
+    transform 130ms var(--ease);
 }
 
 .admin-sidebar__donation-link .donation-button__cup {
   position: relative;
-  order: 3;
-  margin-left: auto;
   width: 0.92rem;
   height: 0.72rem;
   border: 2px solid currentColor;
@@ -907,17 +924,14 @@ html[data-theme="light"] .admin-sidebar__font-size-button[aria-pressed="true"] {
   animation-delay: 0.5s;
 }
 
-.admin-sidebar__account-links .admin-sidebar__external-icon {
-  order: 1;
-  margin-left: 0;
-}
-
 .admin-sidebar__account-links a:hover,
 .admin-sidebar__account-links a:focus,
 .admin-sidebar__account-links button:hover,
 .admin-sidebar__account-links button:focus,
 .admin-sidebar__logout-section button:hover,
-.admin-sidebar__logout-section button:focus {
+.admin-sidebar__logout-section button:focus,
+.admin-sidebar__logout-section .admin-sidebar__donation-link:hover,
+.admin-sidebar__logout-section .admin-sidebar__donation-link:focus {
   color: var(--accent-strong);
   background: var(--accent-softer);
   transform: translateX(1px);
