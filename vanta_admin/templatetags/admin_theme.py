@@ -7,6 +7,7 @@ from urllib.parse import urlencode
 from django import get_version, template
 from django.conf import settings
 from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
+from django.contrib.admin.views.main import PAGE_VAR
 from django.db import connection
 from django.urls import NoReverseMatch, reverse
 from django.utils import timezone
@@ -169,6 +170,30 @@ def admin_display_name(user):
         return username
 
     return str(user) if user else _("admin")
+
+
+@register.simple_tag
+def pagination_summary(cl):
+    result_count = cl.result_count
+    if result_count:
+        start = ((cl.page_num - 1) * cl.paginator.per_page) + 1
+        end = start + len(cl.result_list) - 1
+    else:
+        start = end = 0
+
+    label = cl.opts.verbose_name if result_count == 1 else cl.opts.verbose_name_plural
+    return format_html(
+        _("Showing {start} to {end} of {count} {label}"),
+        start=start,
+        end=end,
+        count=result_count,
+        label=label,
+    )
+
+
+@register.simple_tag
+def pagination_url(cl, page_number):
+    return cl.get_query_string({PAGE_VAR: page_number})
 
 
 def _visible_admin_model_keys(app_list):

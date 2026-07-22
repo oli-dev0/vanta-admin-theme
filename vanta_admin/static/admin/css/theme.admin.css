@@ -4399,52 +4399,177 @@ html[data-theme="light"] #changelist table thead th.sorted .sortoptions {
 }
 
 #changelist .paginator {
-  display: grid;
-  gap: 0.45rem;
-  justify-items: start;
-}
-
-#changelist .admin-pagination-pages {
+  flex: 1 1 auto;
+  min-width: 0;
+  position: relative;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.22rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
-#changelist .admin-pagination-count {
+#changelist .admin-pagination-summary {
+  flex: 1 1 auto;
+  min-width: 0;
   color: var(--muted);
   line-height: 1.35;
 }
 
-#changelist .admin-pagination-count .showall {
+#changelist .admin-pagination-summary .showall {
+  margin-left: 0.45rem;
   min-height: 0;
   padding: 0;
 }
 
-#changelist .paginator a {
+#changelist .admin-pagination-pages-group,
+#changelist .admin-pagination-pages {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.22rem;
+}
+
+#changelist .paginator a,
+#changelist .paginator .admin-pagination-control {
   display: inline-flex;
   align-items: center;
-  min-height: 1.8rem;
-  padding: 0 0.48rem;
+  justify-content: center;
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: 0 0.34rem;
+  border: 0;
   border-radius: 0.27rem;
+  background: var(--surface-muted);
   color: var(--text);
   font-weight: 650;
+  transition: color var(--admin-transition), background-color var(--admin-transition), transform var(--admin-transition), filter var(--admin-transition);
+}
+
+#changelist .paginator .admin-pagination-control--arrow {
+  font-size: 1.55rem;
+  line-height: 1;
 }
 
 #changelist .paginator a:hover,
-#changelist .paginator a:focus {
+#changelist .paginator a:focus-visible {
   color: var(--accent-strong);
-  background: var(--accent-softer);
+  background: var(--surface-hover);
+  transform: translateY(-2px);
 }
 
-#changelist .paginator .this-page {
-  display: inline-flex;
-  align-items: center;
-  min-height: 1.8rem;
-  padding: 0 0.48rem;
-  border-radius: 0.27rem;
+#changelist .paginator a:focus-visible {
+  outline: 2px solid var(--admin-focus, var(--accent));
+  outline-offset: 2px;
+}
+
+#changelist .paginator .admin-pagination-pages a[aria-current="page"] {
   background: var(--accent-soft);
   color: var(--accent-strong);
   font-weight: 720;
+}
+
+#changelist .paginator .admin-pagination-pages a[aria-current="page"]:hover,
+#changelist .paginator .admin-pagination-pages a[aria-current="page"]:focus-visible {
+  background: var(--accent-soft);
+}
+
+html[data-theme="light"] #changelist .paginator .admin-pagination-pages a[aria-current="page"] {
+  background: var(--accent);
+  color: #fff;
+}
+
+html[data-theme="light"] #changelist .paginator .admin-pagination-pages a[aria-current="page"]:hover,
+html[data-theme="light"] #changelist .paginator .admin-pagination-pages a[aria-current="page"]:focus-visible {
+  background: var(--accent-2);
+  color: #fff;
+}
+
+#changelist .paginator .admin-pagination-pages a:not([aria-current="page"]) {
+  min-width: 2rem;
+}
+
+#changelist .paginator .admin-pagination-pages a:not([aria-current="page"]),
+#changelist .paginator .admin-pagination-pages a[aria-current="page"] {
+  padding: 0 0.34rem;
+}
+
+#changelist .paginator .admin-pagination-pages {
+  gap: 0.14rem;
+}
+
+#changelist .admin-pagination-pages-group {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  flex-wrap: nowrap;
+  transform: translate(-50%, -50%);
+}
+
+#changelist .admin-pagination-jump {
+  display: inline-flex;
+  margin-left: auto;
+  align-items: center;
+  gap: 0.28rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+#changelist .admin-pagination-jump input {
+  width: 3rem;
+  min-height: 2rem;
+  padding: 0 0.3rem;
+  border: 0;
+  border-radius: 0.27rem;
+  background: var(--surface-muted);
+  color: var(--text);
+  font: inherit;
+  text-align: center;
+}
+
+#changelist .admin-pagination-jump input::-webkit-inner-spin-button,
+#changelist .admin-pagination-jump input::-webkit-outer-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+#changelist .admin-pagination-jump input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+#changelist .admin-pagination-jump input:focus-visible {
+  outline: 2px solid var(--admin-focus, var(--accent));
+  outline-offset: 2px;
+}
+
+#changelist .admin-pagination-jump-total {
+  color: var(--subtle);
+}
+
+#changelist .admin-pagination-jump button {
+  min-height: 2rem;
+  padding: 0 0.55rem;
+  border: 0;
+  border-radius: 0.27rem;
+  background: var(--surface-muted);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  transition: color var(--admin-transition), background-color var(--admin-transition), transform var(--admin-transition);
+}
+
+#changelist .admin-pagination-jump button:hover,
+#changelist .admin-pagination-jump button:focus-visible {
+  background: var(--surface-hover);
+  color: var(--accent-strong);
+  transform: translateY(-2px);
+}
+
+#changelist .admin-pagination-jump button:focus-visible {
+  outline: 2px solid var(--admin-focus, var(--accent));
+  outline-offset: 2px;
 }
 
 /* Filters */

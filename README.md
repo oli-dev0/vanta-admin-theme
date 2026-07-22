@@ -49,6 +49,8 @@ feels more deliberate in everyday use.
   grouped many-to-many selectors.
 - Styled select controls for common admin dropdowns, plus a clearer enhanced
   horizontal selector for many-to-many fields.
+- Vanta-styled changelist pagination with result summaries, previous and next
+  controls, and a direct page jump.
 - Built-in icons for common admin areas, models, and recent actions.
 - A cleaner account menu with display preferences, project links, password
   access, 2FA settings, logout, and a Vanta support link.

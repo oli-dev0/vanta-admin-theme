@@ -1,8 +1,30 @@
 /* Responsive */
 
-@media (max-width: 1200px) {
+@media (max-width: 1280px) {
   :root {
     --admin-sidebar-width: 260px;
+  }
+
+  #changelist .paginator {
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  #changelist .admin-pagination-summary {
+    flex-basis: 100%;
+  }
+
+  #changelist .admin-pagination-pages-group {
+    position: static;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    transform: none;
+  }
+
+  #changelist .admin-pagination-jump {
+    align-self: flex-end;
+    margin-left: auto;
   }
 
   #content.colMS {
@@ -307,6 +329,21 @@
 
   #changelist-search input[type="text"] {
     flex: 1 1 12rem;
+  }
+
+  #changelist .paginator {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  #changelist .admin-pagination-pages-group {
+    width: 100%;
+    justify-content: center;
+  }
+
+  #changelist .admin-pagination-jump {
+    align-self: flex-end;
   }
 
   .change-form p.datetime {

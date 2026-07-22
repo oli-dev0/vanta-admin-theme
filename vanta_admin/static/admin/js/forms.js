@@ -1,12 +1,6 @@
 'use strict';
 
 {
-    const customSelects = Array.from(document.querySelectorAll('select')).filter((select) => (
-        !select.multiple
-        && (!select.size || select.size <= 1)
-        && select.dataset.vantaEnhanced !== 'true'
-    ));
-
     function enhanceActionSelect(select, index) {
         const label = select.closest('label');
         if (select.dataset.vantaEnhanced === 'true') {
@@ -165,9 +159,28 @@
         return dropdown;
     }
 
-    const customDropdowns = customSelects
-        .map(enhanceActionSelect)
-        .filter(Boolean);
+    const customDropdowns = [];
+    let customSelectIndex = 0;
+
+    function enhanceCustomSelects(root = document) {
+        const selects = Array.from(root.querySelectorAll('select')).filter((select) => (
+            !select.multiple
+            && (!select.size || select.size <= 1)
+            && select.dataset.vantaEnhanced !== 'true'
+        ));
+
+        customDropdowns.push(
+            ...selects.map((select) => enhanceActionSelect(select, customSelectIndex++)).filter(Boolean),
+        );
+    }
+
+    enhanceCustomSelects();
+
+    document.addEventListener('formset:added', (event) => {
+        if (event.target instanceof Element) {
+            enhanceCustomSelects(event.target);
+        }
+    });
 
     function parseStructuredLabel(text) {
         const parts = text.split('|').map((part) => part.trim()).filter(Boolean);

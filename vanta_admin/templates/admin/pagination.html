@@ -1,19 +1,37 @@
-{% load i18n admin_list %}
-{% if pagination_required %}
-  <div class="admin-pagination-pages">
-    {% for i in page_range %}
-      {% paginator_number cl i %}
-    {% endfor %}
+{% load i18n admin_list admin_theme %}
+<nav class="paginator" aria-labelledby="pagination">
+  <h2 id="pagination" class="visually-hidden">
+    {% blocktranslate with name=cl.opts.verbose_name_plural %}Pagination {{ name }}{% endblocktranslate %}
+  </h2>
+  <div class="admin-pagination-summary">
+    {% pagination_summary cl %}
+    {% if show_all_url %}
+      <a href="{{ show_all_url }}" class="showall">{% translate "Show all" %}</a>
+    {% endif %}
   </div>
-{% endif %}
-<div class="admin-pagination-count">
-  {{ cl.result_count }}
-  {% if cl.result_count == 1 %}
-    {{ cl.opts.verbose_name }}
-  {% else %}
-    {{ cl.opts.verbose_name_plural }}
+  {% if pagination_required %}
+    <div class="admin-pagination-pages-group">
+      {% if cl.page_num > 1 %}
+        <a href="{% pagination_url cl cl.page_num|add:'-1' %}" class="admin-pagination-control admin-pagination-control--arrow" aria-label="{% translate 'Previous page' %}">
+          <span aria-hidden="true">‹</span>
+        </a>
+      {% endif %}
+      <div class="admin-pagination-pages">
+        {% for i in page_range %}
+          {% paginator_number cl i %}
+        {% endfor %}
+      </div>
+      {% if cl.page_num < cl.paginator.num_pages %}
+        <a href="{% pagination_url cl cl.page_num|add:'1' %}" class="admin-pagination-control admin-pagination-control--arrow" aria-label="{% translate 'Next page' %}">
+          <span aria-hidden="true">›</span>
+        </a>
+      {% endif %}
+    </div>
+    <div class="admin-pagination-jump" role="group" aria-label="{% translate 'Go to page' %}" data-admin-pagination-jump>
+      <label for="admin-pagination-page">{% translate "Page" %}</label>
+      <input id="admin-pagination-page" name="p" type="number" min="1" max="{{ cl.paginator.num_pages }}" value="{{ cl.page_num }}" inputmode="numeric">
+      <span class="admin-pagination-jump-total">{% blocktranslate with total=cl.paginator.num_pages %}of {{ total }}{% endblocktranslate %}</span>
+      <button type="button" data-admin-pagination-go>{% translate "Go" %}</button>
+    </div>
   {% endif %}
-  {% if show_all_url %}
-    <a href="{{ show_all_url }}" class="showall">{% translate "Show all" %}</a>
-  {% endif %}
-</div>
+</nav>
