@@ -4325,6 +4325,15 @@ html[data-theme="light"] #changelist table thead th.sorted .sortoptions {
   vertical-align: middle;
 }
 
+/* Keep Django boolean values compact when Vanta's larger replacement SVGs win
+   the shared admin/img static namespace. */
+#changelist table tbody img[alt="True"],
+#changelist table tbody img[alt="False"],
+#changelist table tbody img[alt="None"] {
+  width: 15px;
+  height: 15px;
+}
+
 #changelist table tbody tr:nth-child(even) th,
 #changelist table tbody tr:nth-child(even) td {
   background: var(--row-bg-alt);
