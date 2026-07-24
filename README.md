@@ -103,6 +103,24 @@ pip install "git+https://github.com/oli-dev0/vanta-admin-theme.git@main"
 uv add "git+https://github.com/oli-dev0/vanta-admin-theme.git@main"
 ```
 
+## Updating
+
+### With uv
+From your project root, resolve the newest Vanta Admin release and sync the environment:
+
+```bash
+uv lock --upgrade-package vanta-admin
+uv sync
+```
+
+This works with the normal constraint created by `uv add vanta-admin`. If you
+have deliberately pinned an exact Vanta Admin version, update that pin first.
+
+### With pip
+```bash
+pip install --upgrade vanta-admin
+```
+
 ## Django Setup
 In your Django settings file, add `vanta_admin` to `INSTALLED_APPS` before
 `django.contrib.admin` so its templates override the default admin templates.

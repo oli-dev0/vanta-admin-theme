@@ -258,6 +258,12 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
     color var(--admin-transition);
 }
 
+#nav-sidebar .admin-sidebar__filter input[type="search"]:hover,
+#nav-sidebar .admin-sidebar__filter input[type="search"]:focus,
+#nav-sidebar .admin-sidebar__filter input[type="search"]:focus-visible {
+  background-color: var(--surface-hover);
+}
+
 .admin-sidebar__sections-toggle {
   display: inline-grid;
   place-items: center;
