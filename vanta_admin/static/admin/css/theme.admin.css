@@ -2091,6 +2091,7 @@ html[data-theme="light"] .change-form .inline-group .tabular thead th {
 }
 
 .change-form .submit-row input,
+.change-form .submit-row a.closelink,
 .change-form .submit-row a.deletelink {
   display: inline-flex;
   align-items: center;
@@ -2145,6 +2146,8 @@ html[data-theme="light"] .change-form .submit-row input:not(.default):not([name=
 
 .change-form .submit-row input:hover,
 .change-form .submit-row input:focus-visible,
+.change-form .submit-row a.closelink:hover,
+.change-form .submit-row a.closelink:focus-visible,
 .change-form .submit-row a.deletelink:hover,
 .change-form .submit-row a.deletelink:focus-visible {
   border-color: var(--admin-accent-border);
@@ -2442,6 +2445,260 @@ ul.helptext li::before,
   color: var(--admin-muted-soft);
   font-size: 0.68rem;
   line-height: 1.2;
+}
+
+/* Django's dynamically generated date and time popups. */
+body .calendarbox.module,
+body .clockbox.module {
+  z-index: 1000;
+  overflow: hidden;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-lg);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-family: var(--admin-font-family);
+  font-size: 0.86rem;
+  line-height: 1.3;
+}
+
+body .calendarbox.module {
+  width: min(19rem, calc(100vw - 1rem));
+}
+
+body .calendarbox .calendar {
+  width: 100%;
+}
+
+body .calendarbox .calendar table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 0;
+  table-layout: fixed;
+}
+
+body .calendarbox .calendar caption {
+  position: relative;
+  padding: 0.6rem 2.8rem;
+  background: var(--admin-accent);
+  color: var(--admin-button-text);
+  font-size: 0.94rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+body .calendarbox > div:first-child {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 1;
+  height: 2.64rem;
+  pointer-events: none;
+}
+
+body .calendarbox .calendarnav-previous,
+body .calendarbox .calendarnav-next {
+  position: absolute;
+  top: 0.28rem;
+  display: grid;
+  width: 1.9rem;
+  height: 1.9rem;
+  place-items: center;
+  border-radius: var(--admin-radius-sm);
+  background: transparent !important;
+  color: var(--admin-button-text);
+  font-size: 0;
+  line-height: 1;
+  text-decoration: none;
+  pointer-events: auto;
+  transition:
+    background-color var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+body .calendarbox .calendarnav-previous::before,
+body .calendarbox .calendarnav-next::before {
+  width: 0.48rem;
+  height: 0.48rem;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  content: "";
+}
+
+body .calendarbox .calendarnav-previous::before {
+  transform: translateX(0.1rem) rotate(-135deg);
+}
+
+body .calendarbox .calendarnav-next::before {
+  transform: translateX(-0.1rem) rotate(45deg);
+}
+
+body .calendarbox .calendarnav-previous {
+  left: 0.42rem;
+}
+
+body .calendarbox .calendarnav-next {
+  right: 0.42rem;
+}
+
+body .calendarbox .calendarnav-previous:hover,
+body .calendarbox .calendarnav-previous:focus-visible,
+body .calendarbox .calendarnav-next:hover,
+body .calendarbox .calendarnav-next:focus-visible {
+  background: color-mix(in srgb, var(--admin-button-text) 14%, transparent);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+body .calendarbox .calendar th {
+  padding: 0.34rem 0.15rem;
+  background: var(--admin-surface-muted);
+  color: var(--admin-muted);
+  font-size: 0.74rem;
+  font-weight: 760;
+  text-transform: uppercase;
+}
+
+body .calendarbox .calendar td {
+  padding: 0;
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  text-align: center;
+}
+
+body .calendarbox .calendar td.nonday {
+  background: var(--admin-surface-muted);
+}
+
+body .calendarbox .calendar td a {
+  display: grid;
+  min-height: 1.95rem;
+  place-items: center;
+  color: var(--admin-text);
+  font-weight: 620;
+  text-decoration: none;
+  transition:
+    background-color var(--admin-transition),
+    color var(--admin-transition);
+}
+
+body .calendarbox .calendar td a:hover,
+body .calendarbox .calendar td a:focus-visible {
+  background: var(--surface-hover);
+  color: var(--admin-link-strong);
+  outline: none;
+}
+
+body .calendarbox .calendar td.today a {
+  background: var(--admin-accent-soft);
+  color: var(--admin-link-strong);
+  font-weight: 800;
+}
+
+body .calendarbox .calendar-shortcuts {
+  display: flex;
+  justify-content: center;
+  gap: 0.38rem;
+  padding: 0.42rem 0.5rem;
+  background: var(--admin-surface);
+  color: var(--admin-muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+body .calendarbox .calendar-shortcuts a,
+body .clockbox .timelist a,
+body .calendarbox .calendar-cancel a,
+body .clockbox .calendar-cancel a {
+  color: var(--admin-link);
+  text-decoration: none;
+  transition:
+    background-color var(--admin-transition),
+    color var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+body .calendarbox .calendar-shortcuts a:hover,
+body .calendarbox .calendar-shortcuts a:focus-visible,
+body .clockbox .timelist a:hover,
+body .clockbox .timelist a:focus-visible,
+body .calendarbox .calendar-cancel a:hover,
+body .calendarbox .calendar-cancel a:focus-visible,
+body .clockbox .calendar-cancel a:hover,
+body .clockbox .calendar-cancel a:focus-visible {
+  color: var(--admin-link-strong);
+  outline: none;
+}
+
+body .calendarbox .calendar-shortcuts a:hover,
+body .calendarbox .calendar-shortcuts a:focus-visible {
+  transform: translateY(-2px);
+}
+
+body .calendarbox .calendar-cancel,
+body .clockbox .calendar-cancel {
+  margin: 0;
+  border-top: 1px solid var(--admin-border);
+  background: var(--admin-surface-muted);
+  text-align: center;
+  transition: background-color var(--admin-transition);
+}
+
+body .calendarbox .calendar-cancel a,
+body .clockbox .calendar-cancel a {
+  display: block;
+  padding: 0.48rem 0.75rem;
+  color: var(--admin-text);
+  font-weight: 720;
+}
+
+body .calendarbox .calendar-cancel:hover,
+body .calendarbox .calendar-cancel:focus-within,
+body .clockbox .calendar-cancel:hover,
+body .clockbox .calendar-cancel:focus-within {
+  background: var(--surface-hover);
+}
+
+body .calendarbox .calendar-cancel a:hover,
+body .calendarbox .calendar-cancel a:focus-visible,
+body .clockbox .calendar-cancel a:hover,
+body .clockbox .calendar-cancel a:focus-visible {
+  background: transparent;
+}
+
+body .clockbox.module {
+  width: 12rem;
+}
+
+body .clockbox h2 {
+  margin: 0;
+  padding: 0.72rem 0.85rem;
+  border-bottom: 1px solid var(--admin-border);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-size: 0.94rem;
+  font-weight: 760;
+  line-height: 1.25;
+}
+
+body .clockbox .timelist {
+  margin: 0;
+  padding: 0.18rem 0;
+  list-style: none;
+}
+
+body .clockbox .timelist a {
+  display: block;
+  padding: 0.28rem 0.75rem;
+  color: var(--admin-text);
+  font-size: 0.92rem;
+  font-weight: 620;
+  text-align: center;
+}
+
+body .clockbox .timelist a:hover,
+body .clockbox .timelist a:focus-visible {
+  background: var(--surface-hover);
 }
 
 #changelist #toolbar,
@@ -5025,6 +5282,13 @@ button,
 a.button {
   border-radius: var(--radius-sm);
   font-weight: 760;
+}
+
+input.button:hover,
+input.button:focus-visible {
+  background: var(--admin-accent-strong);
+  color: var(--admin-button-text);
+  transform: translateY(-2px);
 }
 
 code,

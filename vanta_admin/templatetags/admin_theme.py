@@ -597,7 +597,7 @@ def format_admin_facet_label(value, autoescape=True):
     label = escaper(match.group("label"))
     compact_count = _format_compact_count(match.group("count"))
     return format_html(
-        '{}&nbsp;-&nbsp;<span class="admin-facet-count">{}</span>',
+        '{}&nbsp;·&nbsp;<span class="admin-facet-count">{}</span>',
         label,
         compact_count,
     )
