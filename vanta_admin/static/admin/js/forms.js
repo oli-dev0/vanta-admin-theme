@@ -9,6 +9,7 @@
 
         const options = Array.from(select.options);
         const isActionSelect = select.matches('#changelist .actions select[name="action"]');
+        const isNavigationalSelect = select.dataset.vantaNavigate === 'true';
         const insertAfter = label && label.contains(select) ? label : select;
         const dropdown = document.createElement('div');
         const button = document.createElement('button');
@@ -29,7 +30,7 @@
 
         dropdown.className = isActionSelect
             ? 'admin-action-select'
-            : 'admin-action-select admin-action-select--field';
+            : `admin-action-select admin-action-select--field${isNavigationalSelect ? ' admin-filter-select-dropdown' : ''}`;
         button.type = 'button';
         button.className = 'admin-action-select__button';
         button.disabled = select.disabled;
@@ -76,6 +77,11 @@
             select.dispatchEvent(new Event('change', { bubbles: true }));
             dropdown.classList.remove('has-error');
             syncButtonLabel();
+
+            if (isNavigationalSelect) {
+                window.location.assign(optionButton.dataset.value);
+                return;
+            }
 
             if (shouldClose) {
                 setOpen(false);

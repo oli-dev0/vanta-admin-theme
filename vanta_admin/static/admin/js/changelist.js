@@ -220,6 +220,12 @@
             }
         });
 
+        filterPanel.addEventListener('change', (event) => {
+            if (event.target.matches('select[data-vanta-navigate="true"]')) {
+                rememberFilterPanelReopen();
+            }
+        });
+
         document.addEventListener('keydown', (event) => {
             if (
                 event.key === 'Escape'

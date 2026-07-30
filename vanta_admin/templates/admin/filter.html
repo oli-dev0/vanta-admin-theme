@@ -3,10 +3,15 @@
   <summary>
     {% blocktranslate with filter_title=title %} By {{ filter_title }} {% endblocktranslate %}
   </summary>
-  <ul class="{% admin_filter_choice_layout choices %}">
+  <select
+    class="admin-filter-select"
+    data-vanta-navigate="true"
+    aria-label="{% blocktranslate with filter_title=title %}Filter by {{ filter_title }}{% endblocktranslate %}"
+  >
   {% for choice in choices %}
-    <li{% if choice.selected %} class="selected"{% endif %}>
-    <a href="{{ choice.query_string|iriencode }}">{{ choice.display|format_admin_facet_label }}</a></li>
+    <option value="{{ choice.query_string|iriencode }}"{% if choice.selected %} selected{% endif %}>
+      {{ choice.display|format_admin_facet_label }}
+    </option>
   {% endfor %}
-  </ul>
+  </select>
 </details>

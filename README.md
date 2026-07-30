@@ -13,6 +13,7 @@ feels more deliberate in everyday use.
 - A Vanta-styled object history page, so audit trails feel like part of the same admin interface.
 - A redesigned admin landing page with a welcome message, a larger scrollable recent-activity panel, project placeholders, and compact system context.
 - A sidebar navigation filter that lets users quickly narrow large admin menus by app or model name.
+- Easier-to-use changelist filters with compact choices for narrowing results.
 - A clear button for the sidebar navigation filter, so users can reset large admin menus quickly.
 - A resizable desktop sidebar that remembers each user's preferred width in the browser.
 - A sidebar expand/collapse-all control for quickly opening or closing visible navigation sections.

@@ -567,7 +567,7 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
   padding: 0.08rem 0.75rem;
   border: 0;
   border-radius: var(--admin-radius-md);
-  color: var(--admin-muted);
+  color: var(--admin-nav-item-text);
   font-size: 0.84375rem;
   font-weight: 540;
   overflow-wrap: anywhere;
@@ -1158,6 +1158,18 @@ html[data-theme="light"] .admin-activity-group h3 {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.admin-landing-card .admin-landing-list {
+  display: grid;
+  gap: 0.42rem;
+  margin: 0;
+  padding-inline-start: 1.2rem;
+  list-style-type: disc;
+}
+
+.admin-landing-card .admin-landing-list > li {
+  list-style-type: disc;
 }
 
 .admin-activity-item {
@@ -2038,8 +2050,9 @@ html[data-theme="light"] .change-form .inline-group .tabular thead th {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.55rem;
-  border: 1px solid var(--admin-border-strong);
-  background: color-mix(in srgb, var(--admin-surface-raised) 88%, var(--admin-accent-soft));
+  overflow: visible;
+  border: 0;
+  background: var(--admin-submit-row-bg);
 }
 
 .change-form .submit-row {
@@ -2110,6 +2123,8 @@ html[data-theme="light"] .change-form .inline-group .tabular thead th {
   text-decoration: none;
   box-shadow: none;
   cursor: pointer;
+  position: relative;
+  z-index: 1;
   transition:
     background-color var(--admin-transition),
     border-color var(--admin-transition),
@@ -2155,6 +2170,7 @@ html[data-theme="light"] .change-form .submit-row input:not(.default):not([name=
   color: var(--admin-text);
   filter: brightness(1.04);
   transform: translateY(-2px);
+  z-index: 2;
 }
 
 html[data-theme="light"] .change-form .submit-row input:not(.default):not([name="_save"]):not(:first-child):hover,
@@ -4388,7 +4404,7 @@ body.theme-dark:not(.change-form) .submit-row .button:focus-visible {
 }
 
 html[data-theme="light"] #changelist table thead th {
-  background: #d5e3f1;
+  background: #e4f1ff;
 }
 
 #changelist table thead th:first-child {
@@ -4437,7 +4453,7 @@ html[data-theme="light"] #changelist table thead th {
 
 html[data-theme="light"] #changelist table thead th a:hover,
 html[data-theme="light"] #changelist table thead th a:focus {
-  background: #c7d9eb;
+  background: #d7eaff;
 }
 
 #changelist table thead th a:focus-visible {
@@ -4460,7 +4476,7 @@ html[data-theme="light"] #changelist table thead th a:focus {
 
 html[data-theme="light"] #changelist table thead th.sorted .text,
 html[data-theme="light"] #changelist table thead th.sorted .sortoptions {
-  background: #b8cfe7 !important;
+  background: #cfe4fb !important;
 }
 
 #changelist table thead th.sorted .text {
@@ -4844,6 +4860,56 @@ html[data-theme="light"] #changelist .paginator .admin-pagination-pages a[aria-c
   outline-offset: 2px;
 }
 
+#changelist nav.toplinks {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 0.28rem 0 0.25rem;
+  padding: 0.1rem 0;
+  padding-inline-start: 1rem;
+  border-bottom: 0;
+}
+
+#changelist nav.toplinks a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.45rem;
+  padding: 0.08rem 0.68rem;
+  color: var(--admin-link);
+  font-size: 0.72rem;
+  font-weight: 540;
+  line-height: 1.2;
+  transition:
+    background-color 130ms var(--ease),
+    color 130ms var(--ease),
+    transform 130ms var(--ease);
+}
+
+#changelist nav.toplinks a + a {
+  border-left: 1px solid var(--admin-border-strong);
+}
+
+html[data-theme="dark"] #changelist nav.toplinks a + a {
+  border-left-color: color-mix(in srgb, var(--admin-border-strong) 78%, var(--admin-text) 22%);
+}
+
+#changelist nav.toplinks a.date-back {
+  color: var(--admin-accent-strong);
+  font-weight: 720;
+}
+
+#changelist nav.toplinks a:hover,
+#changelist nav.toplinks a:focus-visible {
+  color: var(--admin-text);
+  transform: translateY(-1px);
+}
+
+#changelist nav.toplinks a:focus-visible {
+  outline: 2px solid var(--admin-accent-soft);
+  outline-offset: 1px;
+}
+
 /* Filters */
 
 #changelist-filter {
@@ -4856,7 +4922,6 @@ html[data-theme="light"] #changelist .paginator .admin-pagination-pages a[aria-c
   align-items: center;
   width: fit-content;
   max-width: min(14.5rem, calc(100% - 1.44rem));
-  max-height: min(42rem, calc(100vh - 6rem));
   min-width: 0;
   margin: 0;
   flex: initial;
@@ -4867,7 +4932,7 @@ html[data-theme="light"] #changelist .paginator .admin-pagination-pages a[aria-c
   box-shadow: none;
   color: var(--admin-text);
   opacity: 0;
-  overflow: auto;
+  overflow: visible;
   text-align: left;
   transform: translateY(-0.28rem);
   transition:
@@ -4980,7 +5045,7 @@ html[data-theme="light"] #changelist-filter {
 
 #changelist-filter details summary {
   justify-self: stretch;
-  margin: 0.45rem 0 0.18rem;
+  margin: 0.45rem 0 0;
   padding: 0;
   font-size: 0.74rem;
   font-weight: 800;
@@ -4991,6 +5056,7 @@ html[data-theme="light"] #changelist-filter {
 
 #changelist-filter details {
   display: grid;
+  gap: 0.12rem;
   justify-items: stretch;
   width: 100%;
 }
@@ -5022,6 +5088,43 @@ html[data-theme="light"] #changelist-filter {
 
 #changelist-filter a {
   color: var(--admin-link);
+}
+
+#changelist-filter .admin-filter-select {
+  width: 100%;
+  max-width: 100%;
+}
+
+#changelist-filter .admin-filter-select-dropdown {
+  width: calc(100% - 0.82rem);
+  max-width: calc(100% - 0.82rem);
+  margin-left: 0.82rem;
+}
+
+#changelist-filter .admin-filter-select-dropdown .admin-action-select__button {
+  min-height: 1.04rem;
+  padding: 0 0.4rem;
+  color: var(--admin-text);
+  font-size: 0.62rem;
+}
+
+#changelist-filter .admin-filter-select-dropdown .admin-action-select__menu {
+  gap: 0.04rem;
+  padding: 0.28rem;
+}
+
+#changelist-filter .admin-filter-select-dropdown .admin-action-select__option {
+  min-height: 1.04rem;
+  padding: 0 0.4rem;
+  font-size: 0.62rem;
+}
+
+html[data-theme="dark"] #changelist-filter .admin-filter-select-dropdown .admin-action-select__option {
+  color: var(--admin-muted);
+}
+
+html[data-theme="dark"] #changelist-filter .admin-filter-select-dropdown:not(.is-open) .admin-action-select__button {
+  background: color-mix(in srgb, var(--admin-surface-raised) 92%, var(--admin-text) 8%);
 }
 
 .vanta-filter-actions {

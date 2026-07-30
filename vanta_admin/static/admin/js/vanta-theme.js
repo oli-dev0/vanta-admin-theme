@@ -98,6 +98,10 @@
         return formatTableDateText(formattedTime);
     }
 
+    function isDjangoAdminDateTimeText(text) {
+        return /\b(?:January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}, \d{4}, \d{1,2}(?::\d{2})? (?:a\.m\.|p\.m\.)(?=$|[^\w])/.test(text);
+    }
+
     function updateTableTimeFormat(timeFormat) {
         document.querySelectorAll(
             '#changelist table tbody th, #changelist table tbody td, '
@@ -141,6 +145,27 @@
         });
     }
 
+    function updateReadonlyTimeFormat(timeFormat) {
+        document.querySelectorAll('.readonly').forEach((element) => {
+            if (element.childElementCount !== 0) {
+                return;
+            }
+
+            if (!element.dataset.adminOriginalTimeText) {
+                element.dataset.adminOriginalTimeText = element.textContent;
+            }
+
+            const originalText = element.dataset.adminOriginalTimeText;
+            if (!isDjangoAdminDateTimeText(originalText)) {
+                return;
+            }
+
+            element.textContent = timeFormat === '24'
+                ? formatTableTimeText(originalText)
+                : formatTableDateText(originalText);
+        });
+    }
+
     function applyTimeFormat(timeFormat) {
         if (!validTimeFormatValues.has(timeFormat)) {
             return;
@@ -150,6 +175,7 @@
         updateTimeFormatButtons(timeFormat);
         updateTableTimeFormat(timeFormat);
         updateRecentActivityTimeFormat(timeFormat);
+        updateReadonlyTimeFormat(timeFormat);
     }
 
     const storedTheme = localStorage.getItem('theme');
@@ -171,6 +197,7 @@
     updateTimeFormatButtons(initialTimeFormat);
     updateTableTimeFormat(initialTimeFormat);
     updateRecentActivityTimeFormat(initialTimeFormat);
+    updateReadonlyTimeFormat(initialTimeFormat);
 
     timeFormatButtons.forEach((button) => {
         button.addEventListener('click', () => {
