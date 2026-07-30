@@ -166,6 +166,39 @@
         });
     }
 
+    function enhanceFileInputs(root = document) {
+        root.querySelectorAll('input[type="file"]:not([data-vanta-file-input])').forEach((input) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'vanta-file-input';
+            input.parentNode.insertBefore(wrapper, input);
+            wrapper.append(input);
+
+            const filename = document.createElement('span');
+            filename.className = 'vanta-file-input__name';
+            filename.setAttribute('aria-live', 'polite');
+            wrapper.append(filename);
+
+            const button = document.createElement('button');
+            button.className = 'vanta-file-input__button';
+            button.type = 'button';
+            button.textContent = 'Choose file';
+            button.addEventListener('click', () => input.click());
+            wrapper.append(button);
+
+            input.classList.add('vanta-file-input__native');
+            input.tabIndex = -1;
+            input.dataset.vantaFileInput = 'true';
+
+            const updateFilename = () => {
+                const names = Array.from(input.files || [], (file) => file.name);
+                filename.textContent = names.length ? names.join(', ') : 'No file chosen';
+            };
+
+            input.addEventListener('change', updateFilename);
+            updateFilename();
+        });
+    }
+
     function applyTimeFormat(timeFormat) {
         if (!validTimeFormatValues.has(timeFormat)) {
             return;
@@ -214,4 +247,7 @@
             applyFontSize(button.dataset.adminFontSizeValue);
         });
     });
+
+    enhanceFileInputs();
+    new MutationObserver(() => enhanceFileInputs()).observe(document.body, {childList: true, subtree: true});
 }

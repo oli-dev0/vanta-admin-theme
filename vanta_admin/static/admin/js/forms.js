@@ -19,6 +19,7 @@
         const optionButtons = [];
         const isRequired = select.required;
 
+        select.dataset.vantaRequired = String(isRequired);
         select.dataset.vantaEnhanced = 'true';
         select.classList.add('admin-action-select__native');
         select.tabIndex = -1;
@@ -180,10 +181,29 @@
         );
     }
 
+    function resetClonedCustomSelects(root) {
+        root.querySelectorAll('select[data-vanta-enhanced="true"]').forEach((select) => {
+            const label = select.closest('label');
+            const insertAfter = label && label.contains(select) ? label : select;
+            const dropdown = insertAfter.nextElementSibling;
+            if (dropdown?.classList.contains('admin-action-select')) {
+                dropdown.remove();
+            }
+
+            select.required = select.dataset.vantaRequired === 'true';
+            select.classList.remove('admin-action-select__native');
+            select.removeAttribute('aria-hidden');
+            select.removeAttribute('tabindex');
+            delete select.dataset.vantaEnhanced;
+            delete select.dataset.vantaRequired;
+        });
+    }
+
     enhanceCustomSelects();
 
     document.addEventListener('formset:added', (event) => {
         if (event.target instanceof Element) {
+            resetClonedCustomSelects(event.target);
             enhanceCustomSelects(event.target);
         }
     });
@@ -646,6 +666,19 @@
     });
 
     document.addEventListener('click', (event) => {
+        const historyBackLink = event.target instanceof Element
+            ? event.target.closest('[data-admin-history-back]')
+            : null;
+        if (historyBackLink) {
+            event.preventDefault();
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.assign(historyBackLink.href);
+            }
+            return;
+        }
+
         customDropdowns.forEach((dropdown) => {
             if (!dropdown.contains(event.target)) {
                 dropdown.classList.remove('is-open');

@@ -1796,6 +1796,110 @@ html:not([data-theme="light"]) #change-history thead th {
   display: none;
 }
 
+/* Content-editor order machines use the same Vanta card language as normal inlines. */
+.change-form .tabs.regions {
+  margin: 0;
+  padding: 0 0 0.72rem;
+  border: 0;
+  background: transparent;
+}
+
+.change-form .tabs.regions .tab {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--admin-text);
+  cursor: default;
+  font-size: 0.94rem;
+  font-weight: 860;
+  line-height: 1.2;
+  float: none;
+  transition: none;
+  user-select: text;
+}
+
+.change-form .tabs.regions .tab.active {
+  color: var(--admin-text);
+  border: 0;
+  background: transparent;
+}
+
+.change-form .tabs.regions:has(> .tab:only-of-type) .tab {
+  pointer-events: none;
+}
+
+.change-form .order-machine-wrapper {
+  margin: 0;
+  padding: 0.75rem 0.75rem 0.45rem 2.35rem;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-md);
+  background: var(--admin-surface);
+}
+
+.change-form .order-machine {
+  padding: 0;
+  border: 0;
+}
+
+.change-form .order-machine .inline-related {
+  margin: 0 0 0.65rem;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-md);
+  background: var(--admin-surface-raised);
+}
+
+.change-form .order-machine .inline-related > h3 {
+  min-height: 2.5rem;
+  height: auto;
+  margin: -0.7rem -0.75rem 0.65rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--admin-radius-md) var(--admin-radius-md) 0 0;
+  background: var(--admin-surface-muted);
+  color: var(--admin-text);
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.change-form .order-machine .inline-related > h3 .inline_label,
+.change-form .order-machine .inline-related > h3 > b {
+  color: var(--admin-text);
+}
+
+.change-form .order-machine .inline-related > h3 .delete {
+  flex: 0 0 auto;
+  margin-left: auto;
+  color: var(--admin-muted);
+}
+
+.change-form .order-machine .order-machine-insert-target {
+  background: var(--admin-accent);
+  color: var(--admin-button-text);
+  box-shadow: none;
+  opacity: 1;
+}
+
+.change-form .order-machine .order-machine-insert-target::before {
+  content: "";
+  width: 0.9rem;
+  height: 0.9rem;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z'/%3E%3C/svg%3E") center / contain no-repeat;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.change-form .order-machine .order-machine-insert-target:hover,
+.change-form .order-machine .order-machine-insert-target.selected {
+  background: var(--admin-accent-strong);
+}
+
+.change-form .order-machine-help {
+  margin: 0.3rem 0 0.15rem;
+  color: var(--admin-muted);
+}
+
 .change-form .inline-group .tabular {
   margin: 0;
   overflow-x: auto;
@@ -2103,6 +2207,21 @@ html[data-theme="light"] .change-form .inline-group .tabular thead th {
   line-height: 1.25;
 }
 
+.change-form .inline-group tr.row-form-errors .errorlist {
+  margin: 0;
+  padding: 0.18rem 0.65rem 0.18rem 1.9rem;
+  border: 1px solid var(--admin-error-border);
+  border-left: 3px solid var(--admin-error-border);
+  border-radius: var(--admin-radius-sm);
+  background: var(--admin-error-bg);
+  color: var(--admin-error-text);
+}
+
+.change-form .inline-group tr.row-form-errors .errorlist li {
+  margin: 0;
+  color: var(--admin-error-text);
+}
+
 .change-form .submit-row input,
 .change-form .submit-row a.closelink,
 .change-form .submit-row a.deletelink {
@@ -2159,6 +2278,12 @@ html[data-theme="light"] .change-form .submit-row input:not(.default):not([name=
   color: var(--admin-error-text);
 }
 
+.change-form .submit-row a.closelink {
+  border: 0;
+  background: var(--admin-surface);
+  color: var(--admin-text);
+}
+
 .change-form .submit-row input:hover,
 .change-form .submit-row input:focus-visible,
 .change-form .submit-row a.closelink:hover,
@@ -2173,9 +2298,51 @@ html[data-theme="light"] .change-form .submit-row input:not(.default):not([name=
   z-index: 2;
 }
 
+.change-form .submit-row a.closelink:hover,
+.change-form .submit-row a.closelink:focus-visible {
+  border: 0;
+  background: var(--surface-hover);
+  color: var(--admin-text);
+}
+
+.app-blog.model-blogpost.change-form #content-main fieldset.module.aligned > .form-row + .form-row {
+  margin-top: 0.65rem;
+}
+
 html[data-theme="light"] .change-form .submit-row input:not(.default):not([name="_save"]):not(:first-child):hover,
 html[data-theme="light"] .change-form .submit-row input:not(.default):not([name="_save"]):not(:first-child):focus-visible {
   border-color: #9bbbd8;
+  background: #d3e2f0;
+}
+
+html[data-theme="light"] .change-form .submit-row a.closelink {
+  background: #dfeaf5;
+}
+
+html[data-theme="light"] .change-form .submit-row a.closelink:hover,
+html[data-theme="light"] .change-form .submit-row a.closelink:focus-visible {
+  background: #d3e2f0;
+}
+
+.add-form .submit-row a.closelink {
+  border: 0;
+  background: var(--admin-surface);
+  color: var(--admin-text);
+}
+
+.add-form .submit-row a.closelink:hover,
+.add-form .submit-row a.closelink:focus-visible {
+  border: 0;
+  background: var(--surface-hover);
+  color: var(--admin-text);
+}
+
+html[data-theme="light"] .add-form .submit-row a.closelink {
+  background: #dfeaf5;
+}
+
+html[data-theme="light"] .add-form .submit-row a.closelink:hover,
+html[data-theme="light"] .add-form .submit-row a.closelink:focus-visible {
   background: #d3e2f0;
 }
 
@@ -2998,9 +3165,87 @@ select,
   font-size: 0.82rem;
   font-weight: 650;
   outline: none;
+    transition:
+      border-color var(--admin-transition),
+      background-color var(--admin-transition);
+}
+
+.vanta-file-input {
+  display: flex;
+  align-items: stretch;
+  gap: 0.65rem;
+  max-width: 42rem;
+}
+
+.vanta-file-input__name {
+  min-height: 2.15rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--admin-border);
+  border-radius: 0.22rem;
+  background: var(--input-bg);
+  color: var(--text);
+  padding: 0.42rem 0.7rem;
+  font-size: 0.82rem;
+  font-weight: 650;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vanta-file-input__button {
+  min-height: 2.05rem;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--admin-accent);
+  color: var(--admin-button-text);
+  padding: 0 0.8rem;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 760;
+  line-height: 1.2;
+  cursor: pointer;
   transition:
-    border-color var(--admin-transition),
-    background-color var(--admin-transition);
+    background-color var(--admin-transition),
+    color var(--admin-transition),
+    filter var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+.vanta-file-input__button:hover,
+.vanta-file-input__button:focus-visible {
+  background: var(--admin-accent-strong);
+  color: var(--admin-button-text);
+  filter: brightness(1.04);
+  transform: translateY(-2px);
+}
+
+.vanta-file-input__button:focus-visible {
+  outline: 2px solid var(--admin-accent-soft);
+  outline-offset: 2px;
+}
+
+.vanta-file-input__native {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .vanta-file-input {
+    flex-wrap: wrap;
+  }
+
+  .vanta-file-input__name {
+    flex-basis: 100%;
+  }
 }
 
 #changelist-search input[type="text"],
@@ -5387,11 +5632,48 @@ a.button {
   font-weight: 760;
 }
 
+button.button,
+input.button,
+a.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.05rem;
+  margin: 0;
+  padding: 0 0.8rem;
+  border: 0;
+  background: var(--admin-accent);
+  color: var(--admin-button-text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 760;
+  line-height: 1.2;
+  text-decoration: none;
+  box-shadow: none;
+  transition:
+    background-color var(--admin-transition),
+    color var(--admin-transition),
+    filter var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+button.button:hover,
+button.button:focus-visible,
 input.button:hover,
-input.button:focus-visible {
+input.button:focus-visible,
+a.button:hover,
+a.button:focus-visible {
   background: var(--admin-accent-strong);
   color: var(--admin-button-text);
+  filter: brightness(1.04);
   transform: translateY(-2px);
+}
+
+button.button:active,
+input.button:active,
+a.button:active {
+  transform: translateY(0);
 }
 
 code,
