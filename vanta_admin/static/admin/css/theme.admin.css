@@ -5355,6 +5355,8 @@ html[data-theme="light"] #changelist-filter {
 
 #changelist-filter .admin-filter-select-dropdown .admin-action-select__menu {
   gap: 0.04rem;
+  width: max-content;
+  min-width: 100%;
   padding: 0.28rem;
 }
 
@@ -5362,6 +5364,7 @@ html[data-theme="light"] #changelist-filter {
   min-height: 1.04rem;
   padding: 0 0.4rem;
   font-size: 0.62rem;
+  white-space: nowrap;
 }
 
 html[data-theme="dark"] #changelist-filter .admin-filter-select-dropdown .admin-action-select__option {
@@ -5370,6 +5373,36 @@ html[data-theme="dark"] #changelist-filter .admin-filter-select-dropdown .admin-
 
 html[data-theme="dark"] #changelist-filter .admin-filter-select-dropdown:not(.is-open) .admin-action-select__button {
   background: color-mix(in srgb, var(--admin-surface-raised) 92%, var(--admin-text) 8%);
+}
+
+#changelist-filter .admin-filter-select-dropdown.is-open .admin-action-select__option,
+#changelist-filter .admin-filter-select-dropdown.is-open .admin-action-select__option:hover,
+#changelist-filter .admin-filter-select-dropdown.is-open .admin-action-select__option:focus {
+  border-radius: 0;
+  background: transparent;
+  transform: none;
+}
+
+#changelist-filter .admin-filter-select-dropdown.is-open .admin-action-select__option:hover {
+  color: var(--admin-accent-strong);
+  transform: translateX(2px);
+}
+
+#changelist-filter .admin-filter-select-dropdown.is-open .admin-action-select__option.is-selected {
+  position: relative;
+  padding-inline-start: 1rem;
+  color: var(--admin-accent-strong);
+}
+
+#changelist-filter .admin-filter-select-dropdown.is-open .admin-action-select__option.is-selected::before {
+  content: "";
+  position: absolute;
+  left: 0.35rem;
+  width: 0;
+  height: 0;
+  border-top: 0.22rem solid transparent;
+  border-bottom: 0.22rem solid transparent;
+  border-left: 0.28rem solid currentColor;
 }
 
 .vanta-filter-actions {

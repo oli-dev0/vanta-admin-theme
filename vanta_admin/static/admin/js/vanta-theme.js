@@ -75,7 +75,7 @@
 
     function formatDateOrder(text) {
         return text.replace(
-            /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{1,2}), (\d{4}), ([^,]+)/g,
+            /\b(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\.? (\d{1,2}), (\d{4}), ([^,]+)/g,
             (match, month, day, year, time) => `${day} ${month} ${year} ${time}`,
         );
     }
@@ -86,12 +86,12 @@
 
     function formatTableTimeText(text) {
         const formattedMinuteTime = text.replace(
-            /(\b[A-Z][a-z]+ \d{1,2}, \d{4}, )(\d{1,2}):(\d{2}) (a\.m\.|p\.m\.)(?=$|[^\w])/g,
+            /(\b(?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\.? \d{1,2}, \d{4}, )(\d{1,2}):(\d{2}) (a\.m\.|p\.m\.)(?=$|[^\w])/g,
             (match, datePrefix, hour, minute, meridiem) => `${datePrefix}${formatHour(hour, meridiem)}:${minute}`,
         );
 
         const formattedTime = formattedMinuteTime.replace(
-            /(\b[A-Z][a-z]+ \d{1,2}, \d{4}, )(\d{1,2}) (a\.m\.|p\.m\.)(?=$|[^\w])/g,
+            /(\b(?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\.? \d{1,2}, \d{4}, )(\d{1,2}) (a\.m\.|p\.m\.)(?=$|[^\w])/g,
             (match, datePrefix, hour, meridiem) => `${datePrefix}${Number(formatHour(hour, meridiem))}h`,
         );
 
@@ -99,7 +99,7 @@
     }
 
     function isDjangoAdminDateTimeText(text) {
-        return /\b(?:January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}, \d{4}, \d{1,2}(?::\d{2})? (?:a\.m\.|p\.m\.)(?=$|[^\w])/.test(text);
+        return /\b(?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\.? \d{1,2}, \d{4}, \d{1,2}(?::\d{2})? (?:a\.m\.|p\.m\.)(?=$|[^\w])/.test(text);
     }
 
     function updateTableTimeFormat(timeFormat) {

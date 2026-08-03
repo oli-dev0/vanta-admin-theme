@@ -13,7 +13,7 @@ feels more deliberate in everyday use.
 - A Vanta-styled object history page, so audit trails feel like part of the same admin interface.
 - A redesigned admin landing page with a welcome message, a larger scrollable recent-activity panel, project placeholders, and compact system context.
 - A sidebar navigation filter that lets users quickly narrow large admin menus by app or model name.
-- Easier-to-use changelist filters with compact choices for narrowing results.
+- Filter dropdown menus that fit their option text, keep labels on one line, and use clearer selected and hover states.
 - A clear button for the sidebar navigation filter, so users can reset large admin menus quickly.
 - A resizable desktop sidebar that remembers each user's preferred width in the browser.
 - A sidebar expand/collapse-all control for quickly opening or closing visible navigation sections.
@@ -61,8 +61,8 @@ feels more deliberate in everyday use.
   stored in the browser for each admin user.
 - A small, normal, and large font-size preference for the admin interface, stored
   in the browser for each admin user.
-- Shorter changelist date formatting that makes date-heavy tables easier to
-  scan.
+- More consistent changelist date formatting for Django's full and abbreviated
+  month names.
 - Simpler breadcrumbs on edit pages, so the page path feels less cluttered.
 - A packaged favicon for the admin.
 - A mobile sidebar overlay that makes the admin easier to use on smaller
