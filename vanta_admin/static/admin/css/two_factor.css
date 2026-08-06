@@ -2,10 +2,7 @@
 
 body.vanta-two-factor {
   min-height: 100vh;
-  margin: 0;
   background: var(--shell-bg);
-  color: var(--admin-text);
-  font-family: var(--site-font-body);
 }
 
 .vanta-two-factor-shell {
@@ -24,7 +21,6 @@ body.vanta-two-factor {
   box-shadow: none;
 }
 
-
 .vanta-two-factor-header {
   display: flex;
   align-items: flex-start;
@@ -33,11 +29,10 @@ body.vanta-two-factor {
   margin: 0;
 }
 
-.vanta-two-factor-admin-link {
+.vanta-two-factor-admin-link,
+.vanta-two-factor-back-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.16rem;
-  margin-top: 0.08rem;
   color: var(--admin-link);
   font-size: 0.8rem;
   font-weight: 700;
@@ -49,44 +44,29 @@ body.vanta-two-factor {
     transform var(--admin-transition);
 }
 
-.vanta-two-factor-admin-link:hover,
-.vanta-two-factor-admin-link:focus-visible {
-  color: var(--admin-link-strong);
-  transform: translateY(-2px);
-}
-
-.vanta-two-factor-admin-link__arrow {
-  display: inline-block;
-  font-size: 1.08rem;
-  line-height: 1;
+.vanta-two-factor-admin-link {
+  gap: 0.16rem;
+  margin-top: 0.08rem;
 }
 
 .vanta-two-factor-back-link {
-  display: inline-flex;
-  align-items: center;
   gap: 0.18rem;
-  color: var(--admin-link);
-  font-size: 0.8rem;
-  font-weight: 700;
-  line-height: 1.2;
-  text-decoration: none;
-  transition:
-    color var(--admin-transition),
-    transform var(--admin-transition);
 }
 
+.vanta-two-factor-admin-link:hover,
+.vanta-two-factor-admin-link:focus-visible,
 .vanta-two-factor-back-link:hover,
 .vanta-two-factor-back-link:focus-visible {
   color: var(--admin-link-strong);
   transform: translateY(-2px);
 }
 
+.vanta-two-factor-admin-link__arrow,
 .vanta-two-factor-back-link__arrow {
   display: inline-block;
   font-size: 1.08rem;
   line-height: 1;
 }
-
 
 .vanta-two-factor-brand {
   display: inline-flex;
@@ -167,7 +147,6 @@ body.vanta-two-factor {
   height: 0.9rem;
   flex: 0 0 auto;
 }
-
 
 .vanta-two-factor input[hidden] {
   display: none !important;
@@ -312,11 +291,6 @@ body.vanta-two-factor {
 .vanta-two-factor a.btn-info:hover,
 .vanta-two-factor a.btn-info:focus-visible {
   color: var(--admin-text);
-}
-
-.vanta-two-factor a.btn-danger:hover,
-.vanta-two-factor a.btn-danger:focus-visible {
-  color: var(--admin-error-text);
 }
 
 .vanta-two-factor .btn:hover,

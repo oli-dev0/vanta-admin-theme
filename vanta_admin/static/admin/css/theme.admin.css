@@ -319,10 +319,6 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
   -webkit-appearance: none;
 }
 
-#nav-sidebar .admin-sidebar__filter input[type="search"]::-ms-clear {
-  display: none;
-}
-
 .admin-sidebar__groups {
   position: relative;
   flex: 1 1 auto;
@@ -550,8 +546,7 @@ body.admin-sidebar-collapsed .admin-sidebar__collapse-arrow {
   list-style: none;
 }
 
-.admin-sidebar__model,
-.admin-recent-list li {
+.admin-sidebar__model {
   padding: 0;
   background: none;
   list-style: none;
@@ -1028,6 +1023,7 @@ body.dashboard #content.colMS {
 
 .admin-landing-card {
   min-width: 0;
+  padding: 1rem;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-lg);
   background: var(--surface);
@@ -1055,10 +1051,6 @@ body.dashboard #content.colMS {
   color: var(--muted);
   font-size: 0.94rem;
   font-weight: 610;
-}
-
-.admin-landing-card {
-  padding: 1rem;
 }
 
 .admin-landing-card--activity {
@@ -1103,10 +1095,12 @@ body.dashboard #content.colMS {
   transition: color 130ms var(--ease), transform 130ms var(--ease);
 }
 
-.admin-landing-card__action:hover,
-.admin-landing-card__action:focus-visible {
+body #container a.admin-landing-card__action:hover,
+body #container a.admin-landing-card__action:focus-visible {
   color: var(--accent-strong);
   outline: none;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
   transform: translateY(-2px);
 }
 
@@ -1204,8 +1198,8 @@ a.admin-activity-item__label {
   transition: color 130ms var(--ease), transform 130ms var(--ease);
 }
 
-a.admin-activity-item__label:hover,
-a.admin-activity-item__label:focus-visible {
+body #container a.admin-activity-item__label:hover,
+body #container a.admin-activity-item__label:focus-visible {
   color: var(--accent-strong);
   text-decoration: underline;
   text-underline-offset: 0.18em;
@@ -1934,6 +1928,7 @@ html:not([data-theme="light"]) #change-history thead th {
 
 .change-form .inline-group .tabular thead th:last-child {
   width: 4.25rem;
+  border-radius: 0 var(--admin-radius-sm) var(--admin-radius-sm) 0;
   text-align: center;
 }
 
@@ -1943,10 +1938,6 @@ html[data-theme="light"] .change-form .inline-group .tabular thead th {
 
 .change-form .inline-group .tabular thead th:first-child {
   border-radius: var(--admin-radius-sm) 0 0 var(--admin-radius-sm);
-}
-
-.change-form .inline-group .tabular thead th:last-child {
-  border-radius: 0 var(--admin-radius-sm) var(--admin-radius-sm) 0;
 }
 
 .change-form .inline-group .tabular tbody tr {
@@ -2284,14 +2275,14 @@ html[data-theme="light"] .change-form .submit-row input:not(.default):not([name=
   color: var(--admin-text);
 }
 
-.change-form .submit-row input:hover,
-.change-form .submit-row input:focus-visible,
+.change-form .submit-row input:not(.default):not([name="_save"]):not(:first-child):hover,
+.change-form .submit-row input:not(.default):not([name="_save"]):not(:first-child):focus-visible,
 .change-form .submit-row a.closelink:hover,
 .change-form .submit-row a.closelink:focus-visible,
 .change-form .submit-row a.deletelink:hover,
 .change-form .submit-row a.deletelink:focus-visible {
   border-color: var(--admin-accent-border);
-  background: var(--admin-surface-hover);
+  background: var(--surface-hover);
   color: var(--admin-text);
   filter: brightness(1.04);
   transform: translateY(-2px);
@@ -2321,28 +2312,6 @@ html[data-theme="light"] .change-form .submit-row a.closelink {
 
 html[data-theme="light"] .change-form .submit-row a.closelink:hover,
 html[data-theme="light"] .change-form .submit-row a.closelink:focus-visible {
-  background: #d3e2f0;
-}
-
-.add-form .submit-row a.closelink {
-  border: 0;
-  background: var(--admin-surface);
-  color: var(--admin-text);
-}
-
-.add-form .submit-row a.closelink:hover,
-.add-form .submit-row a.closelink:focus-visible {
-  border: 0;
-  background: var(--surface-hover);
-  color: var(--admin-text);
-}
-
-html[data-theme="light"] .add-form .submit-row a.closelink {
-  background: #dfeaf5;
-}
-
-html[data-theme="light"] .add-form .submit-row a.closelink:hover,
-html[data-theme="light"] .add-form .submit-row a.closelink:focus-visible {
   background: #d3e2f0;
 }
 
@@ -2475,14 +2444,10 @@ ul.helptext li::before,
 
 .delete-confirmation form .cancel-link:hover,
 .delete-confirmation form .cancel-link:focus-visible {
-  filter: brightness(1.04);
-  transform: translateY(-2px);
-}
-
-.delete-confirmation form .cancel-link:hover,
-.delete-confirmation form .cancel-link:focus-visible {
   background: var(--admin-accent-strong);
   color: var(--admin-button-text);
+  filter: brightness(1.04);
+  transform: translateY(-2px);
 }
 
 .delete-confirmation form input[type="submit"]:active,
@@ -3368,29 +3333,6 @@ input[type="radio"]:focus-visible {
   box-shadow: none;
 }
 
-#changelist .actions select {
-  appearance: none;
-  min-height: 1.5rem;
-  max-height: 1.5rem;
-  padding: 0.08rem 1.55rem 0.08rem 0.55rem;
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M2 2.25L6 6L10 2.25' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") right 0.55rem center / 0.58rem 0.38rem no-repeat,
-    var(--surface-muted);
-  line-height: 1.15;
-}
-
-#changelist .actions select:focus {
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M2 2.25L6 6L10 2.25' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") right 0.55rem center / 0.58rem 0.38rem no-repeat,
-    var(--surface);
-}
-
-#changelist .actions select:open {
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M2 5.75L6 2L10 5.75' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") right 0.55rem center / 0.58rem 0.38rem no-repeat,
-    var(--surface);
-}
-
 #changelist .actions button,
 #changelist .actions input[type="submit"] {
   min-height: 1.7rem;
@@ -3414,10 +3356,15 @@ select:focus {
 
 #changelist .actions select,
 #changelist .actions select:focus {
+  appearance: none;
+  min-height: 1.5rem;
+  max-height: 1.5rem;
+  padding: 0.08rem 1.55rem 0.08rem 0.55rem;
   background:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M2 2.25L6 6L10 2.25' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") right 0.55rem center / 0.58rem 0.38rem no-repeat,
     var(--surface);
   box-shadow: none;
+  line-height: 1.15;
 }
 
 #changelist .actions select:open {
@@ -3606,7 +3553,6 @@ select:focus {
   background: var(--admin-nav-item-active-bg);
   transform: translateX(1px);
 }
-
 
 .admin-action-select__option:focus-visible {
   outline: 2px solid var(--admin-accent-border);
@@ -3964,6 +3910,7 @@ select:focus {
   gap: 0.18rem;
   min-height: 0 !important;
   margin: 0;
+  padding: 0.12rem 0.5rem;
   border: 0 !important;
   border-radius: var(--admin-radius-md);
   background: transparent;
@@ -3979,10 +3926,6 @@ select:focus {
     background-color var(--admin-transition),
     color var(--admin-transition),
     transform var(--admin-transition);
-}
-
-.admin-checkbox-selector button.admin-checkbox-selector__category {
-  padding: 0.12rem 0.5rem;
 }
 
 .admin-checkbox-selector__category:hover,
@@ -4777,10 +4720,6 @@ html[data-theme="light"] #changelist table thead th.sorted .sortoptions {
   order: 1;
 }
 
-#changelist table thead th.sorted .sortpriority {
-  order: 2;
-}
-
 #changelist table thead th.sorted .sortremove {
   order: 3;
 }
@@ -4817,6 +4756,7 @@ html[data-theme="light"] #changelist table thead th.sorted .sortoptions {
 
 #changelist table thead th.sorted .sortpriority {
   display: inline-grid;
+  order: 2;
   place-items: center;
   min-width: 0.72rem;
   height: 0.92rem;
@@ -5013,7 +4953,7 @@ html[data-theme="light"] #changelist .paginator .admin-pagination-pages a[aria-c
 
 html[data-theme="light"] #changelist .paginator .admin-pagination-pages a[aria-current="page"]:hover,
 html[data-theme="light"] #changelist .paginator .admin-pagination-pages a[aria-current="page"]:focus-visible {
-  background: var(--accent-2);
+  background: var(--accent-strong);
   color: #fff;
 }
 
@@ -5618,21 +5558,6 @@ html[data-theme="light"] #changelist-filter details li:not(.selected) a {
   outline: 2px solid var(--admin-accent-soft);
   outline-offset: 2px;
   background-color: transparent;
-}
-
-#changelist-filter .admin-filter-counts-wrap a:hover,
-#changelist-filter .admin-filter-counts-wrap a:active,
-#changelist-filter .admin-filter-clear-link:hover,
-#changelist-filter .admin-filter-clear-link:active {
-  background-color: transparent;
-}
-
-#changelist-filter .admin-filter-counts-wrap a:focus-visible,
-#changelist-filter .admin-filter-clear-link:focus-visible {
-  background-color: transparent;
-  outline: 2px solid var(--admin-accent-soft);
-  outline-offset: 2px;
-  box-shadow: none;
 }
 
 /* Focus */

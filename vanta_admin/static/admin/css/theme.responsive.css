@@ -381,25 +381,3 @@
     animation: none;
   }
 }
-
-/* Links are clean by default; only text-content links opt into hover underlines. */
-a,
-a *,
-a:link,
-a:visited,
-a:hover,
-a:focus,
-a:active,
-a:hover *,
-a:focus *,
-a:active * {
-  text-decoration: none !important;
-  text-decoration-line: none !important;
-}
-
-.admin-landing-card__action:hover,
-.admin-landing-card__action:focus-visible {
-  text-decoration: underline !important;
-  text-decoration-line: underline !important;
-  text-underline-offset: 0.18em;
-}
