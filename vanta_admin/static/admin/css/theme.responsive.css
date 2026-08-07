@@ -277,6 +277,14 @@
     font-size: clamp(1.55rem, 8vw, 2rem);
   }
 
+  .change-form .object-tools {
+    position: static;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+    white-space: normal;
+  }
+
   .admin-landing__grid {
     gap: 0.75rem;
   }
