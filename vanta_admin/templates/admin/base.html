@@ -1,6 +1,6 @@
-{% load static %}<!DOCTYPE html>
+{% load static vanta_csp %}<!DOCTYPE html>
 {% comment %}
-Local copy of Django 6.0.6's admin/base.html.
+Local copy of Django 6.1's admin/base.html.
 It intentionally removes Django's default nav_sidebar.css/nav_sidebar.js and
 dark-mode auto theme assets because this project owns those admin shell pieces.
 Check this file when upgrading Django.
@@ -9,13 +9,13 @@ Check this file when upgrading Django.
 <head>
 <meta charset="utf-8">
 <title>{% block title %}{% endblock %}</title>
-<link rel="stylesheet" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}">
+<link rel="stylesheet" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}" {% vanta_csp_nonce_attr %}>
 {% block dark-mode-vars %}{% endblock %}
 {% block extrastyle %}{% endblock %}
 {% block extrahead %}{% endblock %}
 {% block responsive %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static "admin/css/responsive.css" %}">
+    <link rel="stylesheet" href="{% static "admin/css/responsive.css" %}" {% vanta_csp_nonce_attr %}>
 {% endblock %}
 {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
 </head>
@@ -92,9 +92,9 @@ Check this file when upgrading Django.
             {% block pretitle %}{% endblock %}
             {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
             {% block content_subtitle %}{% if subtitle %}<h2>{{ subtitle }}</h2>{% endif %}{% endblock %}
+            {% block object-tools %}{% endblock %}
           </div>
           {% block content %}
-            {% block object-tools %}{% endblock %}
             {{ content }}
           {% endblock %}
           {% block sidebar %}{% endblock %}

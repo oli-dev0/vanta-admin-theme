@@ -1,5 +1,5 @@
 {% extends "admin/base.html" %}
-{% load static %}
+{% load static vanta_csp %}
 
 {% comment %}
 Thin local override entrypoint for admin branding and theme CSS.
@@ -11,14 +11,19 @@ Thin local override entrypoint for admin branding and theme CSS.
 
 {% block responsive %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static "admin/css/responsive.css" %}">
-    <link rel="stylesheet" href="{% static 'admin/css/theme.css' %}">
+    <link rel="stylesheet" href="{% static "admin/css/responsive.css" %}" {% vanta_csp_nonce_attr %}>
+    <link rel="stylesheet" href="{% static 'admin/css/theme.css' %}" {% vanta_csp_nonce_attr %}>
 {% endblock %}
 
 {% block extrahead %}
     {{ block.super }}
-    <link rel="icon" type="image/png" href="{% static 'admin/img/favicon.png' %}">
-    <script>
+    {% if form and not media %}
+        <script src="{% url 'admin:jsi18n' %}" {% vanta_csp_nonce_attr %}></script>
+        <script src="{% static 'admin/js/core.js' %}" {% vanta_csp_nonce_attr %}></script>
+        {% vanta_csp_nonce_attr form.media %}
+    {% endif %}
+    <link rel="icon" type="image/png" href="{% static 'admin/img/favicon.png' %}" {% vanta_csp_nonce_attr %}>
+    <script {% vanta_csp_nonce_attr %}>
       try {
         if (
           localStorage.getItem('django.admin.theme.sidebar.openSections') !== null
@@ -28,10 +33,10 @@ Thin local override entrypoint for admin branding and theme CSS.
         }
       } catch (error) {}
     </script>
-    <script src="{% static 'admin/js/vanta-theme.js' %}" defer></script>
-    <script src="{% static 'admin/js/sidebar.js' %}" defer></script>
-    <script src="{% static 'admin/js/messages.js' %}" defer></script>
-    <script src="{% static 'admin/js/forms.js' %}" defer></script>
+    <script src="{% static 'admin/js/vanta-theme.js' %}" defer {% vanta_csp_nonce_attr %}></script>
+    <script src="{% static 'admin/js/sidebar.js' %}" defer {% vanta_csp_nonce_attr %}></script>
+    <script src="{% static 'admin/js/messages.js' %}" defer {% vanta_csp_nonce_attr %}></script>
+    <script src="{% static 'admin/js/forms.js' %}" defer {% vanta_csp_nonce_attr %}></script>
 {% endblock %}
 
 {% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:'Django site admin' }}{% endblock %}

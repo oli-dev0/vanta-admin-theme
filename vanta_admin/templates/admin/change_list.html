@@ -1,19 +1,19 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_urls static admin_list admin_theme %}
+{% load i18n admin_urls static admin_list admin_theme vanta_csp %}
 
 {% block title %}{% if cl.formset and cl.formset.errors %}{% translate "Error:" %} {% endif %}{{ block.super }}{% endblock %}
 {% block extrastyle %}
   {{ block.super }}
-  <link rel="stylesheet" href="{% static "admin/css/changelists.css" %}">
+  <link rel="stylesheet" href="{% static "admin/css/changelists.css" %}" {% vanta_csp_nonce_attr %}>
   {% if cl.formset %}
-    <link rel="stylesheet" href="{% static "admin/css/forms.css" %}">
+    <link rel="stylesheet" href="{% static "admin/css/forms.css" %}" {% vanta_csp_nonce_attr %}>
   {% endif %}
   {% if cl.formset or action_form %}
-    <script src="{% url 'admin:jsi18n' %}"></script>
+    <script src="{% url 'admin:jsi18n' %}" {% vanta_csp_nonce_attr %}></script>
   {% endif %}
-  {{ media.css }}
+  {% vanta_csp_nonce_attr media.css %}
   {% if not actions_on_top and not actions_on_bottom %}
-    <style>
+    <style {% vanta_csp_nonce_attr %}>
       #changelist table thead th:first-child { width: inherit; }
     </style>
   {% endif %}
@@ -21,10 +21,10 @@
 
 {% block extrahead %}
 {{ block.super }}
-{{ media.js }}
-<script src="{% static 'admin/js/filters.js' %}" defer></script>
-<script src="{% static 'admin/js/changelist.js' %}" defer></script>
-<script src="{% static 'admin/js/pagination-jump.js' %}" defer></script>
+{% vanta_csp_nonce_attr media.js %}
+<script src="{% static 'admin/js/filters.js' %}" defer {% vanta_csp_nonce_attr %}></script>
+<script src="{% static 'admin/js/changelist.js' %}" defer {% vanta_csp_nonce_attr %}></script>
+<script src="{% static 'admin/js/pagination-jump.js' %}" defer {% vanta_csp_nonce_attr %}></script>
 {% endblock %}
 
 {% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-list{% endblock %}

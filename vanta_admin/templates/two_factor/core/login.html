@@ -1,9 +1,9 @@
 {% extends "two_factor/_base_focus.html" %}
-{% load i18n %}
+{% load i18n vanta_csp %}
 {% load two_factor_tags %}
 
 {% block extra_media %}
-  {{ form.media }}
+  {% vanta_csp_nonce_attr form.media %}
 {% endblock %}
 
 {% block content %}

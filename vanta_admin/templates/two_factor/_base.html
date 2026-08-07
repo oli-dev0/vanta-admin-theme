@@ -1,4 +1,4 @@
-{% load static %}
+{% load static vanta_csp %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr" data-theme="dark">
 <head>
@@ -6,8 +6,8 @@
   <title>{% block title %}{% endblock %} | Vanta Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="NONE,NOARCHIVE">
-  <link rel="stylesheet" href="{% static 'admin/css/theme.css' %}">
-  <link rel="stylesheet" href="{% static 'admin/css/two_factor.css' %}">
+  <link rel="stylesheet" href="{% static 'admin/css/theme.css' %}" {% vanta_csp_nonce_attr %}>
+  <link rel="stylesheet" href="{% static 'admin/css/two_factor.css' %}" {% vanta_csp_nonce_attr %}>
   {% block extra_media %}{% endblock %}
 </head>
 <body class="login vanta-two-factor">

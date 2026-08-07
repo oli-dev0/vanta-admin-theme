@@ -75,14 +75,16 @@ two-factor authentication for you. If your project uses `django-two-factor-auth`
 Vanta provides matching templates and CSS for the visible 2FA screens.
 
 ## Tested With
-Vanta Admin was created and tested with:
+Vanta Admin supports:
 
-- Python 3.13.14
-- Django 6.0.6
+- Python 3.12 and 3.13
+- Django 6.0 and 6.1
 
-The package currently declares support for Django 5.2 up to, but not including,
-Django 7. Older supported-range versions may also work well, but they have not
-been verified as thoroughly yet.
+All four combinations are covered by the compatibility test matrix.
+
+Django 6.1 uses Django's native Content Security Policy nonce support. Django
+6.0 remains fully supported without nonce attributes and renders form assets
+normally.
 
 ## Installation
 

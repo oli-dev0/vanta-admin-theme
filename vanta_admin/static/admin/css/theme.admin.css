@@ -1836,6 +1836,10 @@ html:not([data-theme="light"]) #change-history thead th {
   border: 0;
 }
 
+.change-form .prose-editor {
+  width: 100%;
+}
+
 .change-form .order-machine .inline-related {
   margin: 0 0 0.65rem;
   padding: 0.7rem 0.75rem;
@@ -2213,9 +2217,9 @@ html[data-theme="light"] .change-form .inline-group .tabular thead th {
   color: var(--admin-error-text);
 }
 
-.change-form .submit-row input,
-.change-form .submit-row a.closelink,
-.change-form .submit-row a.deletelink {
+.submit-row input,
+.submit-row a.closelink,
+.submit-row a.deletelink {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2269,18 +2273,18 @@ html[data-theme="light"] .change-form .submit-row input:not(.default):not([name=
   color: var(--admin-error-text);
 }
 
-.change-form .submit-row a.closelink {
+.submit-row a.closelink {
   border: 0;
   background: var(--admin-surface);
   color: var(--admin-text);
 }
 
-.change-form .submit-row input:not(.default):not([name="_save"]):not(:first-child):hover,
-.change-form .submit-row input:not(.default):not([name="_save"]):not(:first-child):focus-visible,
-.change-form .submit-row a.closelink:hover,
-.change-form .submit-row a.closelink:focus-visible,
-.change-form .submit-row a.deletelink:hover,
-.change-form .submit-row a.deletelink:focus-visible {
+.submit-row input:hover,
+.submit-row input:focus-visible,
+.submit-row a.closelink:hover,
+.submit-row a.closelink:focus-visible,
+.submit-row a.deletelink:hover,
+.submit-row a.deletelink:focus-visible {
   border-color: var(--admin-accent-border);
   background: var(--surface-hover);
   color: var(--admin-text);
@@ -2289,8 +2293,8 @@ html[data-theme="light"] .change-form .submit-row input:not(.default):not([name=
   z-index: 2;
 }
 
-.change-form .submit-row a.closelink:hover,
-.change-form .submit-row a.closelink:focus-visible {
+.submit-row a.closelink:hover,
+.submit-row a.closelink:focus-visible {
   border: 0;
   background: var(--surface-hover);
   color: var(--admin-text);
@@ -2306,12 +2310,12 @@ html[data-theme="light"] .change-form .submit-row input:not(.default):not([name=
   background: #d3e2f0;
 }
 
-html[data-theme="light"] .change-form .submit-row a.closelink {
+html[data-theme="light"] .submit-row a.closelink {
   background: #dfeaf5;
 }
 
-html[data-theme="light"] .change-form .submit-row a.closelink:hover,
-html[data-theme="light"] .change-form .submit-row a.closelink:focus-visible {
+html[data-theme="light"] .submit-row a.closelink:hover,
+html[data-theme="light"] .submit-row a.closelink:focus-visible {
   background: #d3e2f0;
 }
 
@@ -2485,7 +2489,7 @@ ul.helptext li::before,
   transform: translateY(-2px);
 }
 
-.change-form p.datetime {
+body p.datetime {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -2500,15 +2504,19 @@ ul.helptext li::before,
   color: var(--admin-muted);
 }
 
+body .module.aligned > form > .form-row:has(> p.datetime) {
+  padding-block: 0.65rem;
+}
+
 .change-form .form-row > fieldset:has(p.datetime) {
   background: transparent;
 }
 
-.change-form p.datetime br {
+body p.datetime br {
   display: none;
 }
 
-.change-form .form-row p.datetime label {
+body .form-row p.datetime label {
   width: auto !important;
   min-width: 0 !important;
   flex: 0 0 auto;
@@ -2519,8 +2527,8 @@ ul.helptext li::before,
   line-height: 1.2;
 }
 
-.change-form p.datetime input.vDateField,
-.change-form p.datetime input.vTimeField {
+body p.datetime input.vDateField,
+body p.datetime input.vTimeField {
   flex: 0 0 auto;
   width: auto;
   margin: 0;
@@ -2530,7 +2538,9 @@ ul.helptext li::before,
   background: var(--input-bg);
 }
 
-.change-form p.datetime .datetimeshortcuts {
+body .datetimeshortcuts {
+  --admin-datetime-control-color: var(--admin-link);
+  --admin-datetime-control-hover-color: var(--admin-link-strong);
   display: inline-flex;
   align-items: center;
   gap: 0.24rem;
@@ -2541,7 +2551,7 @@ ul.helptext li::before,
   white-space: nowrap;
 }
 
-.change-form p.datetime .datetimeshortcuts a {
+body .datetimeshortcuts a {
   display: inline-grid;
   place-items: center;
   min-height: 1.5rem;
@@ -2549,7 +2559,7 @@ ul.helptext li::before,
   padding: 0.12rem 0.34rem;
   border-radius: var(--admin-radius-sm);
   background: transparent;
-  color: var(--admin-link);
+  color: var(--admin-datetime-control-color);
   font-weight: 760;
   line-height: 1;
   text-decoration: none;
@@ -2559,33 +2569,85 @@ ul.helptext li::before,
     transform var(--admin-transition);
 }
 
-.change-form p.datetime .datetimeshortcuts a:hover,
-.change-form p.datetime .datetimeshortcuts a:focus-visible {
+body .datetimeshortcuts a:hover,
+body .datetimeshortcuts a:focus-visible {
   background: var(--surface-hover);
-  color: var(--admin-link-strong);
+  color: var(--admin-datetime-control-hover-color);
   outline: none;
   transform: translateY(-2px);
 }
 
-.change-form p.datetime .date-icon,
-.change-form p.datetime .clock-icon {
+body .datetimeshortcuts > button[id^="calendarlink"],
+body .datetimeshortcuts > button[id^="clocklink"] {
+  display: inline-grid;
+  width: 1.85rem;
+  min-width: 1.85rem;
+  height: 1.85rem;
+  min-height: 1.85rem;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--admin-border-strong);
+  border-radius: var(--admin-radius-sm);
+  appearance: none;
+  background: var(--surface-muted);
+  color: var(--admin-datetime-control-color);
+  cursor: pointer;
+  font: inherit;
+  box-shadow: none;
+  transition:
+    background-color var(--admin-transition),
+    border-color var(--admin-transition),
+    color var(--admin-transition),
+    transform var(--admin-transition);
+}
+
+body .datetimeshortcuts > button[id^="calendarlink"]:hover,
+body .datetimeshortcuts > button[id^="clocklink"]:hover {
+  border-color: transparent;
+  background: var(--surface-hover);
+  color: var(--admin-datetime-control-hover-color);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+body .datetimeshortcuts > button[id^="calendarlink"]:focus-visible,
+body .datetimeshortcuts > button[id^="clocklink"]:focus-visible {
+  border-color: var(--admin-accent-border);
+  background: var(--surface-hover);
+  color: var(--admin-datetime-control-hover-color);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+body .datetimeshortcuts > button[id^="calendarlink"]:active,
+body .datetimeshortcuts > button[id^="clocklink"]:active {
+  transform: translateY(0);
+}
+
+body .datetimeshortcuts .date-icon,
+body .datetimeshortcuts .clock-icon {
   display: block;
   width: 1rem;
   height: 1rem;
   background: currentColor;
 }
 
-.change-form p.datetime .date-icon {
+body .datetimeshortcuts .date-icon {
   mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 2v3M17 2v3M4 9h16M6 5h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm2 8h2m4 0h2m-8 4h2m4 0h2' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
   -webkit-mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 2v3M17 2v3M4 9h16M6 5h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm2 8h2m4 0h2m-8 4h2m4 0h2' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
-.change-form p.datetime .clock-icon {
+body .datetimeshortcuts .clock-icon {
   mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
   -webkit-mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
-.change-form p.datetime .timezonewarning {
+body .datetimeshortcuts :is(.date-icon, .clock-icon) {
+  color: inherit;
+}
+
+body p.datetime .timezonewarning {
   box-sizing: border-box;
   flex: 1 0 100%;
   margin: 0.05rem 0 0 !important;
@@ -2598,6 +2660,9 @@ ul.helptext li::before,
 /* Django's dynamically generated date and time popups. */
 body .calendarbox.module,
 body .clockbox.module {
+  position: absolute;
+  margin: 0;
+  padding: 0;
   z-index: 1000;
   overflow: hidden;
   border: 1px solid var(--admin-border);
@@ -2607,6 +2672,11 @@ body .clockbox.module {
   font-family: var(--admin-font-family);
   font-size: 0.86rem;
   line-height: 1.3;
+}
+
+body .calendarbox.module::backdrop,
+body .clockbox.module::backdrop {
+  background: rgb(0 0 0 / 42%);
 }
 
 body .calendarbox.module {
@@ -3422,6 +3492,7 @@ select:focus {
 
 .admin-action-select--field {
   display: inline-block;
+  flex: 0 0 auto;
   width: min(22.25rem, 100%);
   max-width: 100%;
   vertical-align: middle;
@@ -3559,6 +3630,34 @@ select:focus {
   outline-offset: 1px;
 }
 
+/* Django 6.1 places single-field help text before its widget. */
+.change-form .form-row > .flex-container:has(> .help):has(> select) {
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 10rem) minmax(0, 1fr);
+  align-items: start;
+  column-gap: 0.8rem;
+  row-gap: 0.24rem;
+}
+
+.change-form .form-row > .flex-container:has(> .help):has(> select) > label {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.change-form .form-row > .flex-container:has(> .help):has(> select) > :is(select, .admin-action-select) {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.change-form .form-row > .flex-container:has(> .help):has(> select) > .help {
+  grid-column: 2;
+  grid-row: 2;
+  width: 100%;
+  max-width: 42rem;
+  margin: 0.3rem 0 0;
+  padding: 0;
+}
+
 .change-form .form-row > div:has(> .related-widget-wrapper),
 .change-form .form-row > fieldset:has(.related-widget-wrapper) {
   display: grid;
@@ -3576,6 +3675,20 @@ select:focus {
   width: auto;
   margin: 0;
   padding: 0.42rem 0 0;
+}
+
+.change-form .form-row > div:has(> .related-widget-wrapper) > .help,
+.change-form .form-row > div:has(> .related-widget-wrapper) > .helptext {
+  grid-column: 2;
+  grid-row: 2;
+  width: 100%;
+  max-width: 42rem;
+  margin: 0.45rem 0 0;
+  padding-left: 0;
+}
+
+.change-form .form-row > div:has(> .related-widget-wrapper) > .related-widget-wrapper {
+  grid-row: 1;
 }
 
 .change-form .form-row > fieldset:has(.related-widget-wrapper) > div,
@@ -3607,15 +3720,39 @@ select:focus {
 }
 
 .change-form .related-widget-wrapper {
-  display: contents;
+  display: flex;
+  grid-column: 2;
+  grid-row: 1 / span 8;
+  align-items: center;
+  gap: 0.28rem;
+  width: 100%;
+  min-width: 0;
   float: none;
   overflow: visible;
 }
 
 .change-form .related-widget-wrapper > :not(.related-widget-wrapper-link) {
-  grid-column: 2;
-  grid-row: 1 / span 8;
+  flex: 0 1 auto;
   min-width: 0;
+}
+
+.change-form .form-row.field-tags .related-widget-wrapper {
+  display: contents;
+}
+
+.change-form .form-row.field-tags .blog-tag-picker {
+  grid-column: 2;
+  grid-row: 1;
+  width: 100%;
+  min-width: 0;
+}
+
+.change-form .form-row.field-tags .related-widget-wrapper-link.add-related {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: start;
+  justify-self: start;
+  margin-top: 2rem;
 }
 
 .change-form .form-row:has(.admin-checkbox-selector-source) > div > .help,
@@ -3627,15 +3764,13 @@ select:focus {
 
 .change-form .related-widget-wrapper-link {
   display: inline-grid;
-  grid-column: 1;
-  grid-row: auto;
   place-items: center;
-  justify-self: start;
+  flex: 0 0 2.05rem;
   width: 2.05rem;
   min-width: 2.05rem;
   height: 2.05rem;
   min-height: 2.05rem;
-  margin: 0.16rem 0 0 0.28rem;
+  margin: 0;
   padding: 0;
   border: 0;
   border-radius: var(--admin-radius-sm);
@@ -3650,7 +3785,7 @@ select:focus {
 }
 
 .change-form .related-widget-wrapper-link + .related-widget-wrapper-link {
-  margin-left: 0.28rem;
+  margin-left: 0;
 }
 
 .change-form .related-widget-wrapper-link:hover,
@@ -3695,15 +3830,33 @@ select:focus {
 
 .change-form .related-widget-wrapper-link.delete-related {
   --admin-related-icon: url("../img/icon-deletelink.svg");
-  color: var(--admin-error-text);
+  color: var(--admin-error-bg);
 }
 
 .change-form .related-widget-wrapper-link.delete-related:hover,
 .change-form .related-widget-wrapper-link.delete-related:focus-visible {
-  color: var(--admin-error-text);
+  color: var(--admin-error-bg);
 }
 
 @media (max-width: 767px) {
+  .change-form .form-row > .flex-container:has(> .help):has(> select) {
+    grid-template-columns: 1fr;
+  }
+
+  .change-form .form-row > .flex-container:has(> .help):has(> select) > label,
+  .change-form .form-row > .flex-container:has(> .help):has(> select) > :is(select, .admin-action-select),
+  .change-form .form-row > .flex-container:has(> .help):has(> select) > .help {
+    grid-column: 1;
+  }
+
+  .change-form .form-row > .flex-container:has(> .help):has(> select) > :is(select, .admin-action-select) {
+    grid-row: 2;
+  }
+
+  .change-form .form-row > .flex-container:has(> .help):has(> select) > .help {
+    grid-row: 3;
+  }
+
   .change-form .form-row > div:has(> .related-widget-wrapper),
   .change-form .form-row > fieldset:has(.related-widget-wrapper) {
     grid-template-columns: 1fr;
@@ -3711,13 +3864,23 @@ select:focus {
 
   .change-form .form-row > div:has(> .related-widget-wrapper) > label,
   .change-form .form-row > fieldset:has(.related-widget-wrapper) > legend,
-  .change-form .related-widget-wrapper > :not(.related-widget-wrapper-link),
-  .change-form .related-widget-wrapper-link {
+  .change-form .related-widget-wrapper {
     grid-column: 1;
   }
 
-  .change-form .related-widget-wrapper > :not(.related-widget-wrapper-link) {
+  .change-form .related-widget-wrapper {
     grid-row: auto;
+  }
+
+  .change-form .form-row.field-tags .blog-tag-picker {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .change-form .form-row.field-tags .related-widget-wrapper-link.add-related {
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: 0.5rem;
   }
 
   .admin-checkbox-selector__list,
@@ -4437,21 +4600,33 @@ body.theme-dark:not(.change-form) .submit-row .button:focus-visible {
   padding: 0;
 }
 
+/* Changelist actions live in Vanta's card header. */
+.change-list .admin-content-header > .object-tools {
+  display: none;
+}
+
 .object-tools li {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+.change-form .admin-content-header {
+  position: relative;
+}
+
 .change-form .object-tools {
   position: absolute;
-  top: -2.15rem;
+  top: 5rem;
   right: 0.65rem;
   z-index: 5;
+  flex-flow: row nowrap;
   overflow: visible;
+  white-space: nowrap;
 }
 
 .change-form .object-tools li {
+  flex: 0 0 auto;
   overflow: visible;
 }
 
